@@ -1,0 +1,27 @@
+.agentbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f1f1f1;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+.agentbar-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.agentbar-button {
+  margin-left: 10px;
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
