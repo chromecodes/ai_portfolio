@@ -1,10 +1,13 @@
 import Agentbar from "./components/Agentbar";
 import Chat from "./components/Chat";
-import styles from "./page.module.css";
+import MainBg from "./components/MainBg";
+import Topbar from "./components/Topbar";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
+    <div className="dark">
+      <Topbar />
+      <MainBg />
       <Chat />
       <Agentbar />
     </div>

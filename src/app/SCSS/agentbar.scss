@@ -1,27 +1,42 @@
-.agentbar {
+.agentbar-cnt {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #f1f1f1;
-  padding: 10px;
   display: flex;
+  justify-content: center;
   align-items: center;
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-}
-.agentbar-input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-}
-.agentbar-button {
-  margin-left: 10px;
-  padding: 10px 15px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
+  padding: var(--padding-m);
+
+  .agentbar {
+    width: 80%;
+    background-color: var(--bg-secondary);
+    border: var(--primary-border);
+    padding: var(--padding-m);
+    border-radius: var(--border-circle-side);
+    display: flex;
+    align-items: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .agentbar-input {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0 var(--padding-m);
+    font-size: var(--font-m);
+    color: var(--text-primary);
+  }
+
+  .agentbar-button {
+    background-color: var(--interactive-bg-primary-default);
+    color: var(--interactive-label-primary-default);
+    border-radius: var(--border-circle-side);
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

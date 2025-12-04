@@ -1,7 +1,7 @@
 @import "./SCSS/agentbar.scss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
-:root{
+:root {
     /*** Font Sizes ***/
     --font-xxs: 8px 'Inter', sans-serif;
     --font-xs: 10px 'Inter', sans-serif;
@@ -27,8 +27,28 @@
     --letter-spacing-regular: 0em;
     --letter-spacing-loose: 0.02em;
 
-    /*** input ***/
+    /*** Border ***/
 
+    --primary-border: 1px solid var(--border-default);
+    --secondary-border: 1px solid var(--border-light);
+    --focus-border: 2px solid var(--interactive-border-focus);
+
+    /*** Input Sizes ***/
+    --input-height-s: 24px;
+    --input-height-m: 32px;
+    --input-height-l: 40px;
+
+    /*** padding Sizes ***/
+    --padding-s: 8px;
+    --padding-m: 10px;
+    --padding-l: 12px;
+    --padding-xl: 14px;
+    --padding-xxl: 16px;
+
+    /*** Border Radius ***/
+    --border-side-circle: 20px;
+    --border-circle-side: 100px;
+    --border-circle: 50%;
 
 
 }
@@ -301,10 +321,18 @@
     --utility-scrollbar: #fff3;
 }
 
-*, ::backdrop, :after, :before {
+*,
+::backdrop,
+:after,
+:before {
     border: 0 solid;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+
 }
 
+*:focus,
+*:focus-visible {
+    outline: none;
+}
