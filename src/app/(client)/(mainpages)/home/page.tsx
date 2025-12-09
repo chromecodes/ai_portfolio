@@ -1,6 +1,6 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Button } from "@/components/UI/button";
 
 export default function HomePage() {
     return (
