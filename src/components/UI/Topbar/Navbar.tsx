@@ -1,3 +1,4 @@
+import useLanguageStore from "@/utils/i18n/useLanguageStore";
 import { useState } from "react";
 
 import * as React from 'react';
@@ -12,6 +13,11 @@ export default function Navbar(props: INavbarProps) {
     const { pages, height, onNavigate } = props;
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
+
+    const lang = useLanguageStore((state) => state.language);
+    const strings = useLanguageStore((state) => state.strings);
+
+    console.log(strings);
 
     const handleNavigation = (targetIndex: number) => {
         if (isAnimating || targetIndex === currentIndex) return;
@@ -58,7 +64,7 @@ export default function Navbar(props: INavbarProps) {
                     onClick={() => handleNavigation(prevIndex)}
                 >
                     <div
-                        className="font-bold text-gray-300 select-none"
+                        className="font-bold select-none"
                         style={{
                             background: "linear-gradient(to right, transparent 0%, currentColor 60%, currentColor 100%)",
                             WebkitBackgroundClip: "text",
@@ -66,7 +72,8 @@ export default function Navbar(props: INavbarProps) {
                             backgroundClip: "text",
                         }}
                     >
-                        {pages[prevIndex]}
+                        {/* {pages[prevIndex]} */}
+                        {strings[pages[prevIndex] as keyof typeof strings]}
                     </div>
                 </div>
 
@@ -79,8 +86,8 @@ export default function Navbar(props: INavbarProps) {
                         fontSize: `${centerFontSize}px`,
                     }}
                 >
-                    <div className=" font-bold text-gray-300 select-none">
-                        {pages[currentIndex]}
+                    <div className=" font-bold select-none">
+                        {strings[pages[currentIndex] as keyof typeof strings]}
                     </div>
                 </div>
 
@@ -97,7 +104,7 @@ export default function Navbar(props: INavbarProps) {
                     onClick={() => handleNavigation(nextIndex)}
                 >
                     <div
-                        className="font-bold text-gray-300 select-none"
+                        className="font-bold select-none"
                         style={{
                             background: "linear-gradient(to left, transparent 0%, currentColor 60%, currentColor 100%)",
                             WebkitBackgroundClip: "text",
@@ -105,7 +112,8 @@ export default function Navbar(props: INavbarProps) {
                             backgroundClip: "text",
                         }}
                     >
-                        {pages[nextIndex]}
+                        {/* {pages[nextIndex]} */}
+                        {strings[pages[nextIndex] as keyof typeof strings]}
                     </div>
                 </div>
             </div>
