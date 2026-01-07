@@ -11,9 +11,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body className="bg-background text-foreground flex flex-col min-h-screen">
         <ThemeInitializer />
-        <MainBg />
+        {/* <MainBg /> */}
         <Topbar />
-        <div className="grow pt-16 pb-16">
+        <div className="flex flex-col grow min-h-0">
           {children}
         </div>
         <Footbar />
