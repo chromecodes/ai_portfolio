@@ -29,17 +29,110 @@ class ElectricPulse {
         this.generatePath(gridSpacing, width, height, maxSteps);
     }
 
+    // generatePath(gridSpacing: number, width: number, height: number, maxSteps: number) {
+    //     let x = this.gridX;
+    //     let y = this.gridY;
+    //     let lastDir: Direction | null = null;
+
+    //     for (let i = 0; i < maxSteps; i++) {
+    //         const dirs: Direction[] = [];
+    //         if (y > 0 && !(lastDir && lastDir.dy === 1)) dirs.push({ dx: 0, dy: -1 });
+    //         if (y < Math.floor(height / gridSpacing) && !(lastDir && lastDir.dy === -1)) dirs.push({ dx: 0, dy: 1 });
+    //         if (x > 0 && !(lastDir && lastDir.dx === 1)) dirs.push({ dx: -1, dy: 0 });
+    //         if (x < Math.floor(width / gridSpacing) && !(lastDir && lastDir.dx === -1)) dirs.push({ dx: 1, dy: 0 });
+
+    //         if (!dirs.length) break;
+
+    //         const dir = dirs[Math.floor(Math.random() * dirs.length)];
+    //         const nx = x + dir.dx;
+    //         const ny = y + dir.dy;
+
+    //         const seg = {
+    //             x1: x * gridSpacing,
+    //             y1: y * gridSpacing,
+    //             x2: nx * gridSpacing,
+    //             y2: ny * gridSpacing,
+    //         };
+
+    //         this.path.push(seg);
+    //         const len = Math.hypot(seg.x2 - seg.x1, seg.y2 - seg.y1);
+    //         this.segmentLengths.push(len);
+    //         this.totalDistance += len;
+
+    //         x = nx;
+    //         y = ny;
+    //         lastDir = dir;
+    //     }
+    // }
     generatePath(gridSpacing: number, width: number, height: number, maxSteps: number) {
+        const centerGX = this.gridX;
+        const centerGY = this.gridY;
         let x = this.gridX;
         let y = this.gridY;
         let lastDir: Direction | null = null;
+        const distFromCenter = (gx: number, gy: number) =>
+            Math.hypot(gx - centerGX, gy - centerGY);
 
         for (let i = 0; i < maxSteps; i++) {
             const dirs: Direction[] = [];
-            if (y > 0 && !(lastDir && lastDir.dy === 1)) dirs.push({ dx: 0, dy: -1 });
-            if (y < Math.floor(height / gridSpacing) && !(lastDir && lastDir.dy === -1)) dirs.push({ dx: 0, dy: 1 });
-            if (x > 0 && !(lastDir && lastDir.dx === 1)) dirs.push({ dx: -1, dy: 0 });
-            if (x < Math.floor(width / gridSpacing) && !(lastDir && lastDir.dx === -1)) dirs.push({ dx: 1, dy: 0 });
+            const candidates: Direction[] = [
+                { dx: 0, dy: -1 },
+                { dx: 0, dy: 1 },
+                { dx: -1, dy: 0 },
+                { dx: 1, dy: 0 },
+            ];
+
+            const currentDist = distFromCenter(x, y);
+
+            // 1️⃣ Try outward moves first
+            for (const dir of candidates) {
+                const nx = x + dir.dx;
+                const ny = y + dir.dy;
+
+                if (
+                    nx < 0 ||
+                    ny < 0 ||
+                    nx > Math.floor(width / gridSpacing) ||
+                    ny > Math.floor(height / gridSpacing)
+                ) continue;
+
+                if (lastDir && dir.dx === -lastDir.dx && dir.dy === -lastDir.dy) continue;
+
+                const nextDist = distFromCenter(nx, ny);
+                if (nextDist > currentDist) {
+                    dirs.push(dir);
+                }
+            }
+
+            // 2️⃣ Fallback: allow equal-distance moves
+            if (!dirs.length) {
+                for (const dir of candidates) {
+                    const nx = x + dir.dx;
+                    const ny = y + dir.dy;
+
+                    if (
+                        nx < 0 ||
+                        ny < 0 ||
+                        nx > Math.floor(width / gridSpacing) ||
+                        ny > Math.floor(height / gridSpacing)
+                    ) continue;
+
+                    if (lastDir && dir.dx === -lastDir.dx && dir.dy === -lastDir.dy) continue;
+
+                    const nextDist = distFromCenter(nx, ny);
+                    if (nextDist >= currentDist) {
+                        dirs.push(dir);
+                    }
+                }
+            }
+
+            // 3️⃣ FINAL fallback: allow any move except reverse
+            if (!dirs.length) {
+                for (const dir of candidates) {
+                    if (lastDir && dir.dx === -lastDir.dx && dir.dy === -lastDir.dy) continue;
+                    dirs.push(dir);
+                }
+            }
 
             if (!dirs.length) break;
 
@@ -55,6 +148,7 @@ class ElectricPulse {
             };
 
             this.path.push(seg);
+
             const len = Math.hypot(seg.x2 - seg.x1, seg.y2 - seg.y1);
             this.segmentLengths.push(len);
             this.totalDistance += len;
@@ -64,7 +158,6 @@ class ElectricPulse {
             lastDir = dir;
         }
     }
-
     update(pulseSpeed: number, pulseLengthPx: number) {
         if (!this.active) return;
 
@@ -249,7 +342,7 @@ export default function PulseBackground() {
 
         const pulseSpeed = 1;
         const pulseLengthPx = 150;
-        const maxSteps = 8;
+        const maxSteps = 16;
 
         const resizeCanvas = () => {
             if (!canvas.parentElement) return;
@@ -267,7 +360,7 @@ export default function PulseBackground() {
             for (let y = 0; y <= height; y += gridSpacing) {
                 const dist = Math.abs(y - centerY);
                 const fade = Math.max(0.3, 1 - dist / (height / 2));
-                ctx.strokeStyle = `rgba(31,36,44,${0.2 * fade})`;
+                ctx.strokeStyle = `rgba(31,36,44,${0.4 * fade})`;
                 ctx.beginPath();
                 ctx.moveTo(0, y);
                 ctx.lineTo(width, y);
@@ -277,7 +370,7 @@ export default function PulseBackground() {
             for (let x = 0; x <= width; x += gridSpacing) {
                 const dist = Math.abs(x - centerX);
                 const fade = Math.max(0.3, 1 - dist / (width / 2));
-                ctx.strokeStyle = `rgba(31,36,44,${0.2 * fade})`;
+                ctx.strokeStyle = `rgba(31,36,44,${0.4 * fade})`;
                 ctx.beginPath();
                 ctx.moveTo(x, 0);
                 ctx.lineTo(x, height);
