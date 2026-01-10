@@ -10,7 +10,7 @@ export default function Footbar() {
 
 
     return (
-        <footer className="flex items-center justify-between border-t px-6 py-3  backdrop-blur-md dark:bg-slate-950">
+        <footer className="flex items-center justify-between border-t px-6 py-3 bg-background backdrop-blur-md">
             <Leftwing />
             <Agentbar />
             <Rightwing />

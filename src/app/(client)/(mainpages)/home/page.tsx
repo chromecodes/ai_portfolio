@@ -16,7 +16,7 @@ export default function HomePage() {
         //     <Button>Get Started</Button>
         // </motion.div>
 
-        <main className="flex flex-1 justify-center bg-[#0B0C10]">
+        <main className="flex flex-1 justify-center">
             <section className="relative w-full max-w-6xl flex items-center justify-center p-6">
                 {/* Pulse Background */}
                 <PulseBackground />

@@ -7,6 +7,7 @@ interface Point { x: number; y: number; }
 interface PathSegment { x1: number; y1: number; x2: number; y2: number; }
 interface Direction { dx: number; dy: number; }
 
+
 // --- Animation Class (Moved outside to fix Next.js Compilation warning) ---
 class ElectricPulse {
     gridX: number;
