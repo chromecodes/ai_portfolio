@@ -45,7 +45,7 @@ export default function Navbar(props: INavbarProps) {
     // const dotSize = Math.floor(height * 0.15);
 
     return (
-        <div className="w-96 flex flex-col items-center gap-3">
+        <div className="w-96 text-foreground flex flex-col items-center gap-3">
             {/* Navbar */}
             <div
                 className="relative w-full max-w-2xl flex items-center justify-center overflow-hidden"

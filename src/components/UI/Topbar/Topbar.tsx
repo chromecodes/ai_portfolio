@@ -13,7 +13,7 @@ export default function Topbar() {
     const router = useRouter();
 
     return (
-        <header className="flex items-center justify-between border-b px-6 py-3  backdrop-blur-md ">
+        <header className="flex items-center justify-between border-b border-borderColor px-6 py-3 bg-background">
             <LogoViewer />
             <Navbar
                 pages={pages}

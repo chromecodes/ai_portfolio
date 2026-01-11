@@ -1,11 +1,29 @@
 "use client";
 
+import useThemeStore from "@/lib/useThemeStore";
 import { useEffect, useRef } from "react";
 
 // --- Types (Fixes 'any' warnings) ---
 interface Point { x: number; y: number; }
 interface PathSegment { x1: number; y1: number; x2: number; y2: number; }
 interface Direction { dx: number; dy: number; }
+
+const THEMES = {
+    dark: {
+        background: "#0B0C10",
+        grid: "rgba(30,30,30,OPACITY)",
+        pulseCore: "rgba(255, 255, 255, 1)",
+        pulseGlow: "#bfbfbfff",
+        pulseFade: "rgba(192,248,255,0)",
+    },
+    light: {
+        background: "#F7F8FA",
+        grid: "rgba(245,245,245,OPACITY)",
+        pulseCore: "rgba(0, 0, 0, 1)",
+        pulseGlow: "#585858ff",
+        pulseFade: "rgba(40,120,255,0)",
+    },
+};
 
 
 // --- Animation Class (Moved outside to fix Next.js Compilation warning) ---
@@ -29,42 +47,6 @@ class ElectricPulse {
         this.gridY = Math.round(centerY / gridSpacing);
         this.generatePath(gridSpacing, width, height, maxSteps);
     }
-
-    // generatePath(gridSpacing: number, width: number, height: number, maxSteps: number) {
-    //     let x = this.gridX;
-    //     let y = this.gridY;
-    //     let lastDir: Direction | null = null;
-
-    //     for (let i = 0; i < maxSteps; i++) {
-    //         const dirs: Direction[] = [];
-    //         if (y > 0 && !(lastDir && lastDir.dy === 1)) dirs.push({ dx: 0, dy: -1 });
-    //         if (y < Math.floor(height / gridSpacing) && !(lastDir && lastDir.dy === -1)) dirs.push({ dx: 0, dy: 1 });
-    //         if (x > 0 && !(lastDir && lastDir.dx === 1)) dirs.push({ dx: -1, dy: 0 });
-    //         if (x < Math.floor(width / gridSpacing) && !(lastDir && lastDir.dx === -1)) dirs.push({ dx: 1, dy: 0 });
-
-    //         if (!dirs.length) break;
-
-    //         const dir = dirs[Math.floor(Math.random() * dirs.length)];
-    //         const nx = x + dir.dx;
-    //         const ny = y + dir.dy;
-
-    //         const seg = {
-    //             x1: x * gridSpacing,
-    //             y1: y * gridSpacing,
-    //             x2: nx * gridSpacing,
-    //             y2: ny * gridSpacing,
-    //         };
-
-    //         this.path.push(seg);
-    //         const len = Math.hypot(seg.x2 - seg.x1, seg.y2 - seg.y1);
-    //         this.segmentLengths.push(len);
-    //         this.totalDistance += len;
-
-    //         x = nx;
-    //         y = ny;
-    //         lastDir = dir;
-    //     }
-    // }
     generatePath(gridSpacing: number, width: number, height: number, maxSteps: number) {
         const centerGX = this.gridX;
         const centerGY = this.gridY;
@@ -210,57 +192,8 @@ class ElectricPulse {
         return null;
     }
 
-    // draw(ctx: CanvasRenderingContext2D, pulseLengthPx: number) {
-    //     if (!this.active) return;
 
-    //     const tailDist = Math.max(0, this.headDist - pulseLengthPx);
-    //     const headPt = this.getPointAt(this.headDist);
-    //     const tailPt = this.getPointAt(tailDist);
-    //     if (!headPt || !tailPt) return;
-
-    //     ctx.save();
-    //     ctx.lineWidth = 2;
-    //     ctx.lineCap = "round";
-    //     ctx.lineJoin = "miter";
-
-    //     const gradient = ctx.createLinearGradient(tailPt.x, tailPt.y, headPt.x, headPt.y);
-    //     gradient.addColorStop(0, "rgba(192,248,255,0)");
-    //     gradient.addColorStop(0.4, "rgba(192,248,255,0.4)");
-    //     gradient.addColorStop(1, "rgba(192,248,255,1)");
-
-    //     ctx.strokeStyle = gradient;
-    //     ctx.shadowColor = "#2EE6FF";
-    //     ctx.shadowBlur = 18;
-    //     ctx.globalAlpha = this.opacity;
-
-    //     ctx.beginPath();
-    //     ctx.moveTo(tailPt.x, tailPt.y);
-
-    //     let d = tailDist;
-    //     for (let i = 0; i < this.path.length; i++) {
-    //         const seg = this.path[i];
-    //         const len = this.segmentLengths[i];
-    //         if (d > len) {
-    //             d -= len;
-    //             continue;
-    //         }
-    //         const startT = Math.max(0, d) / len;
-    //         ctx.lineTo(seg.x1 + (seg.x2 - seg.x1) * startT, seg.y1 + (seg.y2 - seg.y1) * startT);
-
-    //         const segmentEndDistance = this.segmentLengths.slice(0, i).reduce((a, b) => a + b, 0) + len;
-    //         if (this.headDist <= segmentEndDistance) {
-    //             ctx.lineTo(headPt.x, headPt.y);
-    //             break;
-    //         }
-    //         ctx.lineTo(seg.x2, seg.y2);
-    //         d = 0;
-    //     }
-
-    //     ctx.stroke();
-    //     ctx.restore();
-    // }
-
-    draw(ctx: CanvasRenderingContext2D, pulseLengthPx: number) {
+    draw(ctx: CanvasRenderingContext2D, pulseLengthPx: number, colors: typeof THEMES.dark) {
         if (!this.active) return;
 
         // const tailDist = this.tailDist;
@@ -269,18 +202,20 @@ class ElectricPulse {
         const tailPt = this.getPointAt(tailDist);
         if (!headPt || !tailPt) return;
 
+        const gradient = ctx.createLinearGradient(tailPt.x, tailPt.y, headPt.x, headPt.y);
+        gradient.addColorStop(0, "rgba(192,248,255,0)");
+        gradient.addColorStop(0.4, colors.pulseGlow);
+        gradient.addColorStop(1, colors.pulseCore);
+
         ctx.save();
         ctx.lineWidth = 2;
         ctx.lineCap = "round";
         ctx.lineJoin = "miter";
 
-        const gradient = ctx.createLinearGradient(tailPt.x, tailPt.y, headPt.x, headPt.y);
-        gradient.addColorStop(0, "rgba(192,248,255,0)");
-        gradient.addColorStop(0.4, "rgba(192,248,255,0.4)");
-        gradient.addColorStop(1, "rgba(192,248,255,1)");
+
 
         ctx.strokeStyle = gradient;
-        ctx.shadowColor = "#2EE6FF";
+        ctx.shadowColor = colors.pulseGlow;
         ctx.shadowBlur = 18;
         ctx.globalAlpha = this.opacity;
 
@@ -324,15 +259,15 @@ class ElectricPulse {
 
 export default function PulseBackground() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const { theme } = useThemeStore(); // subscribe to theme
 
     useEffect(() => {
+        const colors = THEMES[theme];
         const canvas = canvasRef.current;
         if (!canvas) return;
+
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
-
-        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (prefersReducedMotion) return;
 
         let width = 0;
         let height = 0;
@@ -342,7 +277,7 @@ export default function PulseBackground() {
         let animationFrameId: number;
 
         const pulseSpeed = 1;
-        const pulseLengthPx = 150;
+        const pulseLengthPx = 100;
         const maxSteps = 16;
 
         const resizeCanvas = () => {
@@ -361,7 +296,8 @@ export default function PulseBackground() {
             for (let y = 0; y <= height; y += gridSpacing) {
                 const dist = Math.abs(y - centerY);
                 const fade = Math.max(0.3, 1 - dist / (height / 2));
-                ctx.strokeStyle = `rgba(31,36,44,${0.4 * fade})`;
+                // ctx.strokeStyle = `rgba(31,36,44,${0.4 * fade})`;
+                ctx.strokeStyle = colors.grid.replace("OPACITY", String(0.4 * fade));
                 ctx.beginPath();
                 ctx.moveTo(0, y);
                 ctx.lineTo(width, y);
@@ -371,7 +307,8 @@ export default function PulseBackground() {
             for (let x = 0; x <= width; x += gridSpacing) {
                 const dist = Math.abs(x - centerX);
                 const fade = Math.max(0.3, 1 - dist / (width / 2));
-                ctx.strokeStyle = `rgba(31,36,44,${0.4 * fade})`;
+                // ctx.strokeStyle = `rgba(31,36,44,${0.4 * fade})`;
+                ctx.strokeStyle = colors.grid.replace("OPACITY", String(0.4 * fade));
                 ctx.beginPath();
                 ctx.moveTo(x, 0);
                 ctx.lineTo(x, height);
@@ -380,13 +317,15 @@ export default function PulseBackground() {
         };
 
         const animate = (timestamp: number) => {
+            // ctx.fillStyle = colors.background;
             ctx.clearRect(0, 0, width, height);
+            // ctx.fillRect(0, 0, width, height);
             drawGrid();
 
             pulses = pulses.filter((p) => p.active);
             pulses.forEach((p) => {
                 p.update(pulseSpeed, pulseLengthPx);
-                p.draw(ctx, pulseLengthPx);
+                p.draw(ctx, pulseLengthPx, colors);
             });
 
             if (timestamp - lastPulseTime > 5000 + Math.random() * 3000) {
@@ -412,7 +351,7 @@ export default function PulseBackground() {
             window.removeEventListener("resize", resizeCanvas);
             cancelAnimationFrame(animationFrameId);
         };
-    }, []);
+    }, [theme]);
 
     return (
         <canvas

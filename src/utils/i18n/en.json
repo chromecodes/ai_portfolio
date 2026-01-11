@@ -2,5 +2,12 @@
   "home": "Home",
   "projects": "Projects",
   "experience": "Experience",
-  "about": "About"
+  "about": "About",
+  "footerLeftWingText": "Powered by AI",
+  "agentbarPlaceholder": "Ask anything...",
+  "footerRightWingText": "© Portfolio 2026",
+  "homePageGreeting": "Hi — I'm",
+  "homePageName": "HAMEED HUSSAIN",
+  "homePageTitle": "Full-Stack Software Engineer",
+  "homePageIntro": "I'm a full-stack engineer who enjoys building clean, scalable web products that solve real problems with elegant solutions."
 }

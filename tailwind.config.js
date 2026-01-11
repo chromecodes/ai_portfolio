@@ -1,3 +1,6 @@
+const { color } = require('framer-motion');
+const { button } = require('framer-motion/client');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: ["class"],
@@ -52,8 +55,17 @@ module.exports = {
 					'3': 'hsl(var(--chart-3))',
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
-				}
-			}
+				},
+				buttonColor: 'hsl(var(--buttonColor))',
+				buttonTextColor: 'hsl(var(--buttonTextColor))',
+				borderColor: 'hsla(var(--borderColor))',
+				borderColorVariant: 'hsla(var(--borderColorVariant))',
+				fontColor: 'hsl(var(--fontColor))',
+			},
+			fontFamily: {
+				// This replaces the default 'sans' stack or adds a new 'inter' stack
+				sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
