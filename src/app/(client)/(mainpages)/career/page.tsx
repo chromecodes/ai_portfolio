@@ -11,10 +11,10 @@ export default function HomePage() {
             className="p-8 max-w-5xl mx-auto"
         >
             <h1 className="text-4xl font-bold mb-6">
-                Experience
+                Career
             </h1>
             <p className="mb-4">
-                This is a placeholder for your Experience page. Add your work history, skills, and achievements here.
+                This is a placeholder for your Career page. Add your work history, skills, and achievements here.
             </p>
         </motion.div>
     );

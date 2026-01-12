@@ -4,17 +4,18 @@ import { motion } from "framer-motion";
 
 export default function DiagonalSlash() {
     return (
-        <div className="fixed inset-0 z-[9999] bg-black pointer-events-none overflow-hidden">
+        <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
 
             {/* Glow */}
             <motion.div
                 className="absolute"
                 style={{
                     width: "200%",
-                    height: "20%",
+                    height: "160px",
                     left: "-60%",
-                    bottom: "-60%",
-                    background: "rgba(217, 216, 216, 1)",
+                    bottom: "-40%",
+                    background: "rgba(255,255,255,0.25)",
+                    filter: "blur(40px)",
                     transform: "rotate(40deg)",
                 }}
                 animate={{
@@ -22,7 +23,7 @@ export default function DiagonalSlash() {
                     bottom: "140%",
                 }}
                 transition={{
-                    duration: 0.8,
+                    duration: 1.1,
                     ease: "easeOut",
                 }}
             />
@@ -31,10 +32,11 @@ export default function DiagonalSlash() {
             <motion.div
                 className="absolute bg-white"
                 style={{
-                    width: "200%",
-                    height: "20%",
-                    left: "-70%",
-                    bottom: "-70%",
+                    width: "160%",
+                    height: "70px",
+                    left: "-50%",
+                    bottom: "-25%",
+                    borderRadius: "999px",
                     boxShadow: "0 0 32px rgba(255,255,255,0.9)",
                     transform: "rotate(40deg)",
                 }}
@@ -44,7 +46,7 @@ export default function DiagonalSlash() {
                 }}
                 transition={{
                     duration: 0.9,
-                    ease: "easeOut",
+                    ease: "easeInOut",
                 }}
             />
         </div>

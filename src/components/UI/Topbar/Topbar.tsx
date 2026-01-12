@@ -7,7 +7,7 @@ import ToolBar from "./ToolBar";
 import { useRouter } from "next/navigation";
 
 export default function Topbar() {
-    const pages = ["home", "experience", "projects", "about"];
+    const pages = ["home", "career", "projects", "about"];
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const router = useRouter();
