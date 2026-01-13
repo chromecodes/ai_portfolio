@@ -1,5 +1,6 @@
 
 "use client";
+import CareerMapCanvas from "@/components/UI/Career/CareerMapCanvas";
 import { motion } from "framer-motion";
 
 export default function HomePage() {
@@ -10,12 +11,7 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="p-8 max-w-5xl mx-auto"
         >
-            <h1 className="text-4xl font-bold mb-6">
-                Career
-            </h1>
-            <p className="mb-4">
-                This is a placeholder for your Career page. Add your work history, skills, and achievements here.
-            </p>
+            <CareerMapCanvas />
         </motion.div>
     );
 }
