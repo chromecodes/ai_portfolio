@@ -20,7 +20,7 @@ export default function AnimationTester() {
                     height: "20%",
                     left: "-60%",
                     bottom: "-60%",
-                    background: "rgba(217, 216, 216, 1)",
+                    background: "rgba(217, 216, 216, 0.5)",
                     transform: "rotate(40deg)",
                 }}
                 animate={{
@@ -38,10 +38,10 @@ export default function AnimationTester() {
                 className="absolute bg-white"
                 style={{
                     width: "200%",
-                    height: "20%",
+                    height: "0%",
                     left: "-60%",
                     bottom: "-60%",
-                    boxShadow: "0 0 32px rgba(255,255,255,0.9)",
+                    boxShadow: "0 0 32px rgba(255,255,255,0.4)",
                     transform: "rotate(40deg)",
                 }}
                 animate={{
