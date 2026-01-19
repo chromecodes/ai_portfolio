@@ -1,138 +1,252 @@
 "use client"
 
-import React, { useRef, useEffect, useState } from "react"
+import { useEffect, useRef } from "react"
 
-// --------------------- Types ---------------------
-interface Node {
+/* ---------------- Types ---------------- */
+
+type Vec = { x: number; y: number }
+
+type Particle = Vec & {
     id: string
-    position: { x: number; y: number }
-    type: "career" | "particle"
+    vx: number
+    vy: number
 }
 
-interface Path {
-    nodes: Node[]
-    color: string
+type CareerNode = Vec & {
+    id: string
+    radius: number
 }
 
-// --------------------- Config ---------------------
-const COLORS = ["#22c55e", "#3b82f6", "#a855f7"] // 1,2,3 hop paths
-const PARTICLE_COUNT = 100
-const MAX_HOPS = 3
+/* ---------------- Config ---------------- */
 
-// --------------------- Helper Functions ---------------------
-function pickRandomParticles(particles: Node[], count: number, used: Set<string>): Node[] {
-    const available = particles.filter(p => !used.has(p.id))
-    const selected: Node[] = []
-    for (let i = 0; i < count && available.length > 0; i++) {
-        const idx = Math.floor(Math.random() * available.length)
-        selected.push(available[idx])
-        available.splice(idx, 1)
-    }
-    return selected
-}
+const PARTICLE_COUNT = 160
+const PARTICLE_SPEED = 0.6 // ← main control (px per frame)
 
-// --------------------- Component ---------------------
-const CareerMapCanvas: React.FC<{ careerNodes: Node[] }> = ({ careerNodes }) => {
-    const canvasRef = useRef<HTMLCanvasElement>(null)
-    const [particleNodes] = useState<Node[]>(() =>
-        Array.from({ length: PARTICLE_COUNT }).map((_, i) => ({
-            id: `particle-${i}`,
-            position: { x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight },
-            type: "particle",
-            vx: (Math.random() - 0.5) * 0.3,
-            vy: (Math.random() - 0.5) * 0.3,
+const CAREER_NODE_COUNT = 5
+const NODE_RADIUS = 10
+const NODE_MIN_DISTANCE = 140
+const NEAREST_PARTICLES = 14
+const MAX_STOPS = 4 // 0=direct, 1=one stop, 2=two stops
+
+const PATH_STYLES = [
+    { color: "rgba(0,255,140,0.9)", width: 1.9 }, // 0 stop
+    { color: "rgba(80,160,255,0.7)", width: 1.6 }, // 1 stop
+    { color: "rgba(255,170,60,0.5)", width: 1.3 }, // 2 stops
+    { color: "rgba(255,80,200,0.45)", width: 1.1 }, // 3 stops
+    { color: "rgba(200,200,200,0.35)", width: 0.9 }, // 4 stops
+    { color: "rgba(126, 60, 60, 0.8)", width: 0.7 }, // 5 stops
+    { color: "rgba(223, 47, 47, 0.7)", width: 0.5 }, // 6 stops
+    { color: "rgba(238, 26, 26, 0.7)", width: 0.5 }, // 7 stops
+    { color: "rgba(255, 0, 0, 1)", width: 0.5 }, // 8 stops
+
+
+]
+
+/* ---------------- Utils ---------------- */
+
+const dist = (a: Vec, b: Vec) => Math.hypot(a.x - b.x, a.y - b.y)
+
+function findShortestPathWithStops(
+    A: Vec,
+    B: Vec,
+    particles: Particle[],
+    stops: number,
+    blocked: Set<string>,
+    limit: number
+): Particle[] | null {
+    const candidates = particles
+        .filter(p => !blocked.has(p.id))
+        .map(p => ({
+            p,
+            d: dist(A, p) + dist(p, B),
         }))
-    )
+        .sort((a, b) => a.d - b.d)
+        .slice(0, limit)
+        .map(x => x.p)
 
-    // --------------------- Generate Paths ---------------------
-    const generatePaths = (): Path[] => {
-        const paths: Path[] = []
-        const usedPerHop: Set<string>[] = Array.from({ length: MAX_HOPS }, () => new Set<string>())
+    let best: Particle[] | null = null
+    let bestDist = Infinity
 
-        for (let i = 0; i < careerNodes.length - 1; i++) {
-            const from = careerNodes[i]
-            const to = careerNodes[i + 1]
-
-            for (let hop = 1; hop <= MAX_HOPS; hop++) {
-                const selectedParticles = pickRandomParticles(particleNodes, hop - 1, usedPerHop[hop - 1])
-                const pathNodes = [from, ...selectedParticles, to]
-                pathNodes.forEach(n => {
-                    if (n.type === "particle") usedPerHop[hop - 1].add(n.id)
-                })
-                paths.push({ nodes: pathNodes, color: COLORS[hop - 1] })
+    const dfs = (
+        path: Particle[],
+        remaining: Particle[],
+        depth: number
+    ) => {
+        if (depth === stops) {
+            let d = dist(A, path[0])
+            for (let i = 0; i < path.length - 1; i++) {
+                d += dist(path[i], path[i + 1])
             }
+            d += dist(path[path.length - 1], B)
+
+            if (d < bestDist) {
+                bestDist = d
+                best = [...path]
+            }
+            return
         }
-        return paths
+
+        for (let i = 0; i < remaining.length; i++) {
+            dfs(
+                [...path, remaining[i]],
+                remaining.filter((_, idx) => idx !== i),
+                depth + 1
+            )
+        }
     }
 
-    // --------------------- Animation ---------------------
+    dfs([], candidates, 0)
+    return best
+}
+
+
+/* ---------------- Component ---------------- */
+
+export default function CareerMapCanvas() {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null)
+    const particles = useRef<Particle[]>([])
+    const careerNodes = useRef<CareerNode[]>([])
+
     useEffect(() => {
         const canvas = canvasRef.current!
         const ctx = canvas.getContext("2d")!
-        let width = canvas.width = canvas.offsetWidth
-        let height = canvas.height = canvas.offsetHeight
 
         const resize = () => {
-            width = canvas.width = canvas.offsetWidth
-            height = canvas.height = canvas.offsetHeight
+            const p = canvas.parentElement!
+            canvas.width = p.clientWidth
+            canvas.height = p.clientHeight
         }
+        resize()
         window.addEventListener("resize", resize)
 
-        const animate = () => {
-            ctx.clearRect(0, 0, width, height)
+        const angle = Math.random() * Math.PI * 2
 
-            // Move particles
-            particleNodes.forEach(p => {
-                // Random wandering
-                p.vx += (Math.random() - 0.5) * 0.05
-                p.vy += (Math.random() - 0.5) * 0.05
-                // Dampen for smooth motion
-                p.vx *= 0.98
-                p.vy *= 0.98
-                p.position.x = (p.position.x + p.vx + width) % width
-                p.position.y = (p.position.y + p.vy + height) % height
+
+        /* ---------- Particles ---------- */
+        particles.current = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
+            id: `p${i}`,
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: Math.cos(angle),
+            vy: Math.sin(angle),
+        }))
+
+        /* ---------- Career Nodes ---------- */
+        const nodes: CareerNode[] = []
+        while (nodes.length < CAREER_NODE_COUNT) {
+            const c = {
+                id: `career-${nodes.length}`,
+                x: Math.random() * (canvas.width - 200) + 100,
+                y: Math.random() * (canvas.height - 200) + 100,
+                radius: NODE_RADIUS,
+            }
+            if (nodes.every(n => dist(n, c) > NODE_MIN_DISTANCE)) nodes.push(c)
+        }
+        nodes.sort((a, b) => a.x - b.x)
+        careerNodes.current = nodes
+
+        /* ---------- Animation ---------- */
+        let raf: number
+
+        const draw = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+            /* Move particles */
+            particles.current.forEach(p => {
+                p.x += p.vx * PARTICLE_SPEED
+                p.y += p.vy * PARTICLE_SPEED
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1
             })
 
-            // Draw career nodes
-            careerNodes.forEach(node => {
+            // const slowRadius = 120
+
+            // particles.current.forEach(p => {
+            //     let speedFactor = 1
+
+            //     careerNodes.current.forEach(n => {
+            //         const d = dist(p, n)
+            //         if (d < slowRadius) {
+            //             speedFactor *= d / slowRadius
+            //         }
+            //     })
+
+            //     p.x += p.vx * PARTICLE_SPEED * speedFactor
+            //     p.y += p.vy * PARTICLE_SPEED * speedFactor
+            // })
+
+            /* Draw paths */
+            for (let i = 0; i < careerNodes.current.length - 1; i++) {
+                const A = careerNodes.current[i]
+                const B = careerNodes.current[i + 1]
+
+                const used = new Set<string>()
+
+                for (let stops = 0; stops <= MAX_STOPS; stops++) {
+                    if (stops === 0) {
+                        // direct
+                        // ctx.strokeStyle = PATH_STYLES[0].color
+                        // ctx.lineWidth = PATH_STYLES[0].width
+                        // ctx.beginPath()
+                        // ctx.moveTo(A.x, A.y)
+                        // ctx.lineTo(B.x, B.y)
+                        // ctx.stroke()
+                        continue
+                    }
+
+                    const path = findShortestPathWithStops(
+                        A,
+                        B,
+                        particles.current,
+                        stops,
+                        used,
+                        NEAREST_PARTICLES
+                    )
+
+                    if (!path) continue
+
+                    path.forEach(p => used.add(p.id))
+
+                    const style = PATH_STYLES[stops]
+                    ctx.strokeStyle = style.color
+                    ctx.lineWidth = style.width
+
+                    ctx.beginPath()
+                    ctx.moveTo(A.x, A.y)
+                    path.forEach(p => ctx.lineTo(p.x, p.y))
+                    ctx.lineTo(B.x, B.y)
+                    ctx.stroke()
+                }
+
+            }
+
+            /* Particles */
+            ctx.fillStyle = "rgba(255,255,255,0.4)"
+            particles.current.forEach(p => {
                 ctx.beginPath()
-                ctx.arc(node.position.x, node.position.y, 12, 0, Math.PI * 2)
+                ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2)
+                ctx.fill()
+            })
+
+            /* Career Nodes */
+            careerNodes.current.forEach(n => {
+                ctx.beginPath()
+                ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2)
                 ctx.fillStyle = "#fff"
                 ctx.fill()
-                ctx.closePath()
             })
 
-            // Draw particle nodes
-            particleNodes.forEach(p => {
-                ctx.beginPath()
-                ctx.arc(p.position.x, p.position.y, 4, 0, Math.PI * 2)
-                ctx.fillStyle = "#888"
-                ctx.fill()
-                ctx.closePath()
-            })
-
-            // Draw paths
-            const paths = generatePaths()
-            paths.forEach(path => {
-                ctx.beginPath()
-                path.nodes.forEach((node, idx) => {
-                    if (idx === 0) ctx.moveTo(node.position.x, node.position.y)
-                    else ctx.lineTo(node.position.x, node.position.y)
-                })
-                ctx.strokeStyle = path.color
-                ctx.lineWidth = 2
-                ctx.stroke()
-                ctx.closePath()
-            })
-
-            requestAnimationFrame(animate)
+            raf = requestAnimationFrame(draw)
         }
 
-        animate()
-        return () => window.removeEventListener("resize", resize)
-    }, [careerNodes, particleNodes])
+        draw()
 
-    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+        return () => {
+            cancelAnimationFrame(raf)
+            window.removeEventListener("resize", resize)
+        }
+    }, [])
+
+    return <canvas ref={canvasRef} className="" />
 }
-
-export default CareerMapCanvas
