@@ -1,10 +1,30 @@
+export type Vec =  {
+    x: number
+    y: number
+}
+
+export type Particle =  {
+    id: string
+    x: number
+    y: number
+    vx: number
+    vy: number
+}
 export type CareerNode = {
   id: string
-  label: string
-  company: string
-  year: string
-  x?: number
-  y?: number
+  x: number
+  y: number
+  radius: number
+  data: CareerData
+}
+
+export type CareerData = {
+  id: string
+  company_name: string
+  time_period: number // months
+  icon: string
+  description: string
+  projects: string[]
 }
 
 export type CareerEdge = {
