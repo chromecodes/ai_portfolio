@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { CAREER_DATA } from "./data/careerData"
 import { CareerNode, Particle, Vec } from "./types"
+import CareerTooltip from "./CareerTooltip"
 
 
 /* ---------------- Config ---------------- */
@@ -87,6 +88,12 @@ export default function CareerMapCanvas() {
     const imageCache = useRef<Record<string, HTMLImageElement>>({})
 
     const router = useRouter()
+
+    const [tooltip, setTooltip] = useState<{
+        node: CareerNode
+        x: number
+        y: number
+    } | null>(null)
 
     useEffect(() => {
         const canvas = canvasRef.current!
@@ -219,12 +226,32 @@ export default function CareerMapCanvas() {
             })
 
             /* Hover detection */
-            hoveredNode.current = null
+            // hoveredNode.current = null
+            // careerNodes.current.forEach(n => {
+            //     if (dist(mouse.current, n) <= n.radius) {
+            //         hoveredNode.current = n
+            //     }
+            // })
+            let found: CareerNode | null = null
+
             careerNodes.current.forEach(n => {
                 if (dist(mouse.current, n) <= n.radius) {
-                    hoveredNode.current = n
+                    found = n
                 }
             })
+
+            hoveredNode.current = found
+
+            if (found) {
+                setTooltip({
+                    node: found,
+                    x: mouse.current.x,
+                    y: mouse.current.y,
+                })
+            } else {
+                setTooltip(null)
+            }
+
 
             /* Draw career nodes */
             careerNodes.current.forEach(n => {
@@ -258,5 +285,22 @@ export default function CareerMapCanvas() {
         }
     }, [router])
 
-    return <canvas ref={canvasRef} className="w-full h-full block" />
+    return (
+        <>
+            <canvas ref={canvasRef} className="flex flex-1 grow" />
+
+            {tooltip && (
+                <div
+                    className="pointer-events-none absolute z-50"
+                    style={{
+                        left: tooltip.x + 16,
+                        top: tooltip.y + 16,
+                    }}
+                >
+                    <CareerTooltip node={tooltip.node} />
+                </div>
+            )}
+        </>
+    )
+
 }
