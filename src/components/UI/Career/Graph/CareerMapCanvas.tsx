@@ -293,8 +293,8 @@ export default function CareerMapCanvas() {
                 <div
                     className="pointer-events-none absolute z-50"
                     style={{
-                        left: tooltip.x + 16,
-                        top: tooltip.y + 16,
+                        left: tooltip.x + 8,
+                        top: tooltip.y + 8,
                     }}
                 >
                     <CareerTooltip node={tooltip.node} />
