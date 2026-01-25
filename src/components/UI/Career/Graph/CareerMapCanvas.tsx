@@ -15,6 +15,11 @@ const PARTICLE_SPEED = 0.1
 const NEAREST_PARTICLES = 14
 const MAX_STOPS = 4
 
+
+const TOOLTIP_WIDTH = 260
+const TOOLTIP_HEIGHT = 160
+const OFFSET = 16
+
 const PATH_STYLES = [
     { color: "rgba(0,255,140,0.9)", width: 2 },   // 1 hop
     { color: "rgba(80,160,255,0.7)", width: 1.6 }, // 2 hops
@@ -76,6 +81,34 @@ function findShortestPathWithStops(
     dfs([], candidates)
     return best
 }
+
+function getTooltipPosition(
+    x: number,
+    y: number
+) {
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+
+    let left = x + OFFSET
+    let top = y + OFFSET
+
+    // --- Horizontal flip ---
+    if (left + TOOLTIP_WIDTH > vw) {
+        left = x - TOOLTIP_WIDTH - OFFSET
+    }
+
+    // --- Vertical flip ---
+    if (top + TOOLTIP_HEIGHT > vh) {
+        top = y - TOOLTIP_HEIGHT - OFFSET
+    }
+
+    // --- Clamp as safety ---
+    left = Math.max(8, Math.min(left, vw - TOOLTIP_WIDTH - 8))
+    top = Math.max(8, Math.min(top, vh - TOOLTIP_HEIGHT - 8))
+
+    return { left, top }
+}
+
 
 /* ---------------- Component ---------------- */
 
@@ -242,11 +275,13 @@ export default function CareerMapCanvas() {
 
             hoveredNode.current = found
 
+            const pos = getTooltipPosition(mouse.current.x, mouse.current.y,)
+
             if (found) {
                 setTooltip({
                     node: found,
-                    x: mouse.current.x,
-                    y: mouse.current.y,
+                    x: pos.left,
+                    y: pos.top,
                 })
             } else {
                 setTooltip(null)
@@ -284,6 +319,8 @@ export default function CareerMapCanvas() {
             window.removeEventListener("resize", resize)
         }
     }, [router])
+
+
 
     return (
         <>
