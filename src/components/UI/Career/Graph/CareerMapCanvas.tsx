@@ -6,36 +6,49 @@ import { CAREER_DATA } from "./data/careerData"
 import { CareerNode, Particle, Vec } from "./types"
 import CareerTooltip from "./CareerTooltip"
 
+/* ================= CONFIG ================= */
 
-/* ---------------- Config ---------------- */
-
-const PARTICLE_COUNT = 160
-const PARTICLE_SPEED = 0.1
+const PARTICLE_COUNT = 180
+const PARTICLE_SPEED = 0.3
 
 const NEAREST_PARTICLES = 14
 const MAX_STOPS = 4
 
+const PADDING_X = 80
+const PADDING_Y = 80
 
-const TOOLTIP_WIDTH = 260
+const GAP_X_MIN = 120
+const GAP_X_MAX = 600
+const GAP_Y_MIN = 140
+const GAP_Y_MAX = 600
+
+const MAX_ROW_WIDTH_RATIO = 0.85
+
+const TOOLTIP_OFFSET = 16
+const TOOLTIP_WIDTH = 360
 const TOOLTIP_HEIGHT = 160
-const OFFSET = 16
 
 const PATH_STYLES = [
-    { color: "rgba(0,255,140,0.9)", width: 2 },   // 1 hop
-    { color: "rgba(80,160,255,0.7)", width: 1.6 }, // 2 hops
-    { color: "rgba(255,170,60,0.55)", width: 1.3 }, // 3 hops
-    { color: "rgba(255,80,200,0.45)", width: 1.1 }, // 4 hops
+    { color: "rgba(0,255,140,0.9)", width: 2 },
+    { color: "rgba(80,160,255,0.7)", width: 1.6 },
+    { color: "rgba(255,170,60,0.55)", width: 1.3 },
+    { color: "rgba(255,80,200,0.45)", width: 1.1 },
 ]
 
-/* ---------------- Utils ---------------- */
+/* ================= UTILS ================= */
 
-const dist = (a: Vec, b: Vec) => Math.hypot(a.x - b.x, a.y - b.y)
+const dist = (a: Vec, b: Vec) =>
+    Math.hypot(a.x - b.x, a.y - b.y)
 
 function experienceToRadius(months: number) {
-    const MIN = 10
-    const MAX = 26
-    return Math.min(MAX, MIN + Math.sqrt(months) * 2.2)
+    return Math.min(26, 10 + Math.sqrt(months) * 2.2)
 }
+
+function clamp(v: number, min: number, max: number) {
+    return Math.max(min, Math.min(max, v))
+}
+
+/* ================= PATH FINDING ================= */
 
 function findShortestPathWithStops(
     A: Vec,
@@ -82,51 +95,102 @@ function findShortestPathWithStops(
     return best
 }
 
-function getTooltipPosition(
-    x: number,
-    y: number
-) {
-    const vw = window.innerWidth
-    const vh = window.innerHeight
+/* ================= LAYOUT ================= */
 
-    let left = x + OFFSET
-    let top = y + OFFSET
+function layoutCareerNodes(
+    data: typeof CAREER_DATA,
+    canvasWidth: number,
+    canvasHeight: number
+): CareerNode[] {
+    const nodes: CareerNode[] = []
 
-    // --- Horizontal flip ---
-    if (left + TOOLTIP_WIDTH > vw) {
-        left = x - TOOLTIP_WIDTH - OFFSET
+    let x = PADDING_X
+    let y = PADDING_Y
+    let rowHeight = 0
+
+    const maxRowWidth = canvasWidth * MAX_ROW_WIDTH_RATIO
+
+    for (const item of data) {
+        const radius = experienceToRadius(item.time_period)
+        const diameter = radius * 2
+
+        const gapX =
+            GAP_X_MIN + Math.random() * (GAP_X_MAX - GAP_X_MIN)
+        const gapY =
+            GAP_Y_MIN + Math.random() * (GAP_Y_MAX - GAP_Y_MIN)
+
+        if (x + diameter > maxRowWidth) {
+            x = PADDING_X
+            y += rowHeight + gapY
+            rowHeight = 0
+        }
+
+        const jitterX = (Math.random() - 0.5) * 40
+        const jitterY = (Math.random() - 0.5) * 40
+
+        const cx = clamp(
+            x + radius + jitterX,
+            radius + 20,
+            canvasWidth - radius - 20
+        )
+
+        const cy = clamp(
+            y + radius + jitterY,
+            radius + 20,
+            canvasHeight - radius - 20
+        )
+
+        nodes.push({
+            id: item.id,
+            x: cx,
+            y: cy,
+            radius,
+            data: item,
+        })
+
+        x += diameter + gapX
+        rowHeight = Math.max(rowHeight, diameter)
     }
 
-    // --- Vertical flip ---
-    if (top + TOOLTIP_HEIGHT > vh) {
-        top = y - TOOLTIP_HEIGHT - OFFSET
-    }
-
-    // --- Clamp as safety ---
-    left = Math.max(8, Math.min(left, vw - TOOLTIP_WIDTH - 8))
-    top = Math.max(8, Math.min(top, vh - TOOLTIP_HEIGHT - 8))
-
-    return { left, top }
+    return nodes
 }
 
+/* ================= TOOLTIP ================= */
 
-/* ---------------- Component ---------------- */
+function getTooltipPosition(
+    x: number,
+    y: number,
+    rect: DOMRect
+) {
+    let left = x + TOOLTIP_OFFSET
+    let top = y + TOOLTIP_OFFSET
+
+    if (left + TOOLTIP_WIDTH > rect.width) {
+        left = x - TOOLTIP_WIDTH - TOOLTIP_OFFSET
+    }
+    if (top + TOOLTIP_HEIGHT > rect.height) {
+        top = y - TOOLTIP_HEIGHT - TOOLTIP_OFFSET
+    }
+
+    return {
+        left: clamp(left, 8, rect.width - TOOLTIP_WIDTH - 8),
+        top: clamp(top, 8, rect.height - TOOLTIP_HEIGHT - 8),
+    }
+}
+
+/* ================= COMPONENT ================= */
 
 export default function CareerMapCanvas() {
-    const canvasRef = useRef<HTMLCanvasElement | null>(null)
+    const canvasRef = useRef<HTMLCanvasElement>(null)
+
     const particles = useRef<Particle[]>([])
     const careerNodes = useRef<CareerNode[]>([])
     const hoveredNode = useRef<CareerNode | null>(null)
     const mouse = useRef<Vec>({ x: 0, y: 0 })
     const imageCache = useRef<Record<string, HTMLImageElement>>({})
-
     const router = useRouter()
 
-    const [tooltip, setTooltip] = useState<{
-        node: CareerNode
-        x: number
-        y: number
-    } | null>(null)
+    const [tooltip, setTooltip] = useState<any>(null)
 
     useEffect(() => {
         const canvas = canvasRef.current!
@@ -137,65 +201,44 @@ export default function CareerMapCanvas() {
             const parent = canvas.parentElement!
             canvas.width = parent.clientWidth
             canvas.height = parent.clientHeight
+
+            careerNodes.current = layoutCareerNodes(
+                CAREER_DATA,
+                canvas.width,
+                canvas.height
+            )
         }
+
         resize()
         window.addEventListener("resize", resize)
 
-        /* ---------- Init particles ---------- */
-        particles.current = Array.from({ length: PARTICLE_COUNT }, (_, i) => {
-            const a = Math.random() * Math.PI * 2
-            return {
-                id: `p-${i}`,
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: Math.cos(a),
-                vy: Math.sin(a),
-            }
-        })
-
-        /* ---------- Init career nodes (Poisson-like) ---------- */
-        const nodes: CareerNode[] = []
-
-        for (const data of CAREER_DATA) {
-            const radius = experienceToRadius(data.time_period)
-
-            let placed = false
-            while (!placed) {
-                const candidate: CareerNode = {
-                    id: data.id,
-                    x: Math.random() * (canvas.width - 200) + 100,
-                    y: Math.random() * (canvas.height - 200) + 100,
-                    radius,
-                    data,
-                }
-
-                if (
-                    nodes.every(
-                        n => dist(n, candidate) > n.radius + candidate.radius + 80
-                    )
-                ) {
-                    nodes.push(candidate)
-                    placed = true
+        /* ---------- Particles ---------- */
+        particles.current = Array.from(
+            { length: PARTICLE_COUNT },
+            (_, i) => {
+                const a = Math.random() * Math.PI * 2
+                return {
+                    id: `p-${i}`,
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: Math.cos(a),
+                    vy: Math.sin(a),
                 }
             }
-        }
+        )
 
-        nodes.sort((a, b) => a.x - b.x)
-        careerNodes.current = nodes
-
-        /* ---------- Preload icons ---------- */
+        /* ---------- Icons ---------- */
         CAREER_DATA.forEach(c => {
             const img = new Image()
             img.src = c.icon
-            img.onerror = () => console.warn("Icon failed to load:", c.icon)
             imageCache.current[c.id] = img
         })
 
-        /* ---------- Mouse events ---------- */
+        /* ---------- Mouse ---------- */
         canvas.addEventListener("mousemove", e => {
-            const rect = canvas.getBoundingClientRect()
-            mouse.current.x = e.clientX - rect.left
-            mouse.current.y = e.clientY - rect.top
+            const r = canvas.getBoundingClientRect()
+            mouse.current.x = e.clientX - r.left
+            mouse.current.y = e.clientY - r.top
         })
 
         canvas.addEventListener("click", () => {
@@ -204,13 +247,12 @@ export default function CareerMapCanvas() {
             }
         })
 
-        /* ---------- Animation ---------- */
+        /* ---------- Draw Loop ---------- */
         let raf = 0
-
         const draw = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-            /* Move particles */
+            /* Particles */
             particles.current.forEach(p => {
                 p.x += p.vx * PARTICLE_SPEED
                 p.y += p.vy * PARTICLE_SPEED
@@ -219,26 +261,26 @@ export default function CareerMapCanvas() {
                 if (p.y < 0 || p.y > canvas.height) p.vy *= -1
             })
 
-            /* Draw paths */
+            /* Paths */
             for (let i = 0; i < careerNodes.current.length - 1; i++) {
                 const A = careerNodes.current[i]
                 const B = careerNodes.current[i + 1]
                 const used = new Set<string>()
 
-                for (let stops = 1; stops <= MAX_STOPS; stops++) {
+                for (let s = 1; s <= MAX_STOPS; s++) {
                     const path = findShortestPathWithStops(
                         A,
                         B,
                         particles.current,
-                        stops,
+                        s,
                         used,
                         NEAREST_PARTICLES
                     )
-
                     if (!path) continue
-                    path.forEach(p => used.add(p.id))
 
-                    const style = PATH_STYLES[stops - 1]
+                    path.forEach(p => used.add(p.id))
+                    const style = PATH_STYLES[s - 1]
+
                     ctx.strokeStyle = style.color
                     ctx.lineWidth = style.width
 
@@ -250,7 +292,7 @@ export default function CareerMapCanvas() {
                 }
             }
 
-            /* Draw particles */
+            /* Particles Draw */
             ctx.fillStyle = "rgba(255,255,255,0.45)"
             particles.current.forEach(p => {
                 ctx.beginPath()
@@ -258,54 +300,29 @@ export default function CareerMapCanvas() {
                 ctx.fill()
             })
 
-            /* Hover detection */
-            // hoveredNode.current = null
-            // careerNodes.current.forEach(n => {
-            //     if (dist(mouse.current, n) <= n.radius) {
-            //         hoveredNode.current = n
-            //     }
-            // })
-            let found: CareerNode | null = null
-
-            careerNodes.current.forEach(n => {
+            /* Hover */
+            hoveredNode.current = null
+            for (const n of careerNodes.current) {
                 if (dist(mouse.current, n) <= n.radius) {
-                    found = n
+                    hoveredNode.current = n
+                    break
                 }
-            })
-
-            hoveredNode.current = found
-
-            const pos = getTooltipPosition(mouse.current.x, mouse.current.y,)
-
-            if (found) {
-                setTooltip({
-                    node: found,
-                    x: pos.left,
-                    y: pos.top,
-                })
-            } else {
-                setTooltip(null)
             }
 
-
-            /* Draw career nodes */
+            /* Nodes */
             careerNodes.current.forEach(n => {
                 ctx.beginPath()
                 ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2)
                 ctx.fillStyle =
-                    hoveredNode.current?.id === n.id ? "#ffffff" : "#dddddd"
+                    hoveredNode.current?.id === n.id
+                        ? "#ffffff"
+                        : "#dddddd"
                 ctx.fill()
 
                 const img = imageCache.current[n.id]
-                if (img && img.complete && img.naturalWidth > 0) {
-                    const size = n.radius * 1.2
-                    ctx.drawImage(
-                        img,
-                        n.x - size / 2,
-                        n.y - size / 2,
-                        size,
-                        size
-                    )
+                if (img?.complete) {
+                    const s = n.radius * 1.2
+                    ctx.drawImage(img, n.x - s / 2, n.y - s / 2, s, s)
                 }
             })
 
@@ -314,30 +331,41 @@ export default function CareerMapCanvas() {
 
         draw()
 
+        /* ---------- Tooltip Sync ---------- */
+        const syncTooltip = () => {
+            if (hoveredNode.current) {
+                const rect = canvas.getBoundingClientRect()
+                const pos = getTooltipPosition(
+                    mouse.current.x,
+                    mouse.current.y,
+                    rect
+                )
+                setTooltip({ node: hoveredNode.current, ...pos })
+            } else {
+                setTooltip(null)
+            }
+            requestAnimationFrame(syncTooltip)
+        }
+
+        syncTooltip()
+
         return () => {
             cancelAnimationFrame(raf)
             window.removeEventListener("resize", resize)
         }
     }, [router])
 
-
-
     return (
         <>
             <canvas ref={canvasRef} className="flex flex-1 grow" />
-
             {tooltip && (
                 <div
-                    className="pointer-events-none absolute z-50"
-                    style={{
-                        left: tooltip.x + 8,
-                        top: tooltip.y + 8,
-                    }}
+                    className="absolute z-50 pointer-events-none"
+                    style={{ left: tooltip.left, top: tooltip.top }}
                 >
                     <CareerTooltip node={tooltip.node} />
                 </div>
             )}
         </>
     )
-
 }

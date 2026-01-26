@@ -20,4 +20,28 @@ export const CAREER_DATA: CareerData[] = [
     description: "Full-stack development.",
     projects: ["API Platform"],
   },
+  {
+    id: "another-company 2",
+    company_name: "Another Co",
+    time_period: 10,
+    icon: "/icons/another.svg",
+    description: "Full-stack development.",
+    projects: ["API Platform"],
+  },
+  {
+    id: "another-company 3",
+    company_name: "Another Co",
+    time_period: 50,
+    icon: "/icons/another.svg",
+    description: "Full-stack development.",
+    projects: ["API Platform"],
+  },
+  {
+    id: "another-company 4",
+    company_name: "Another Co",
+    time_period: 100,
+    icon: "/icons/another.svg",
+    description: "Full-stack development.",
+    projects: ["API Platform"],
+  },
 ]
