@@ -5,8 +5,37 @@ import { useRouter } from "next/navigation"
 import { CAREER_DATA } from "./data/careerData"
 import { CareerNode, Particle, Vec } from "./types"
 import CareerTooltip from "./CareerTooltip"
+import useThemeStore from "@/lib/useThemeStore"
 
 /* ================= CONFIG ================= */
+
+type Theme = {
+    particle: string
+    paths: object[]
+}
+
+const THEMES: Record<string, Theme> = {
+    dark: {
+        particle: "rgba(255,255,255,0.45)",
+        paths: [
+            { color: "rgba(0,255,140,0.9)", width: 2 },
+            { color: "rgba(80,160,255,0.7)", width: 1.6 },
+            { color: "rgba(255,170,60,0.55)", width: 1.3 },
+            { color: "rgba(255,80,200,0.45)", width: 1.1 },
+        ]
+    },
+
+    light: {
+        particle: "rgba(40,40,40,0.45)",
+        paths: [
+            { color: "rgba(0,255,140,0.6)", width: 2 },
+            { color: "rgba(80,160,255,0.5)", width: 1.6 },
+            { color: "rgba(255,170,60,0.45)", width: 1.3 },
+            { color: "rgba(255,80,200,0.35)", width: 1.1 },
+        ]
+    },
+}
+
 
 const PARTICLE_COUNT = 180
 const PARTICLE_SPEED = 0.3
@@ -27,13 +56,6 @@ const MAX_ROW_WIDTH_RATIO = 0.85
 const TOOLTIP_OFFSET = 16
 const TOOLTIP_WIDTH = 360
 const TOOLTIP_HEIGHT = 160
-
-const PATH_STYLES = [
-    { color: "rgba(0,255,140,0.9)", width: 2 },
-    { color: "rgba(80,160,255,0.7)", width: 1.6 },
-    { color: "rgba(255,170,60,0.55)", width: 1.3 },
-    { color: "rgba(255,80,200,0.45)", width: 1.1 },
-]
 
 /* ================= UTILS ================= */
 
@@ -191,8 +213,11 @@ export default function CareerMapCanvas() {
     const router = useRouter()
 
     const [tooltip, setTooltip] = useState<any>(null)
+    const { theme } = useThemeStore(); // subscribe to theme
 
     useEffect(() => {
+        console.log(theme);
+
         const canvas = canvasRef.current!
         const ctx = canvas.getContext("2d")!
 
@@ -279,7 +304,7 @@ export default function CareerMapCanvas() {
                     if (!path) continue
 
                     path.forEach(p => used.add(p.id))
-                    const style = PATH_STYLES[s - 1]
+                    const style = THEMES[theme].paths[s - 1]
 
                     ctx.strokeStyle = style.color
                     ctx.lineWidth = style.width
@@ -293,7 +318,7 @@ export default function CareerMapCanvas() {
             }
 
             /* Particles Draw */
-            ctx.fillStyle = "rgba(255,255,255,0.45)"
+            ctx.fillStyle = THEMES[theme].particle
             particles.current.forEach(p => {
                 ctx.beginPath()
                 ctx.arc(p.x, p.y, 1.3, 0, Math.PI * 2)
@@ -353,7 +378,7 @@ export default function CareerMapCanvas() {
             cancelAnimationFrame(raf)
             window.removeEventListener("resize", resize)
         }
-    }, [router])
+    }, [router, theme]) // re-run on theme change to update colors
 
     return (
         <>

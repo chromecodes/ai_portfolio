@@ -7,17 +7,18 @@ export interface INavbarProps {
     pages: string[];
     height: number;
     onNavigate: (page: string, index: number) => void;
+    index: number;
 }
 
 export default function Navbar(props: INavbarProps) {
-    const { pages, height, onNavigate } = props;
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const { pages, height, onNavigate, index } = props;
+    const [currentIndex, setCurrentIndex] = useState(index || 0);
+
     const [isAnimating, setIsAnimating] = useState(false);
 
     const lang = useLanguageStore((state) => state.language);
     const strings = useLanguageStore((state) => state.strings);
 
-    console.log(strings);
 
     const handleNavigation = (targetIndex: number) => {
         if (isAnimating || targetIndex === currentIndex) return;
