@@ -23,6 +23,7 @@ export type CareerData = {
   company_name: string
   time_period: number // months
   icon: string
+  tooltip_icon: string
   description: string
   projects: string[]
 }

@@ -22,7 +22,6 @@ export default function Topbar() {
 
     const [currentIndex, setCurrentIndex] = useState(derivedIndex);
 
-    console.log(currentIndex);
 
 
     return (

@@ -53,7 +53,7 @@ const GAP_Y_MAX = 600
 
 const MAX_ROW_WIDTH_RATIO = 0.85
 
-const TOOLTIP_OFFSET = 16
+const TOOLTIP_OFFSET = 8
 const TOOLTIP_WIDTH = 360
 const TOOLTIP_HEIGHT = 160
 
@@ -179,26 +179,50 @@ function layoutCareerNodes(
 
 /* ================= TOOLTIP ================= */
 
-function getTooltipPosition(
+function canvasToDom(
+    canvas: HTMLCanvasElement,
     x: number,
-    y: number,
-    rect: DOMRect
+    y: number
 ) {
-    let left = x + TOOLTIP_OFFSET
-    let top = y + TOOLTIP_OFFSET
+    const rect = canvas.getBoundingClientRect()
 
-    if (left + TOOLTIP_WIDTH > rect.width) {
-        left = x - TOOLTIP_WIDTH - TOOLTIP_OFFSET
-    }
-    if (top + TOOLTIP_HEIGHT > rect.height) {
-        top = y - TOOLTIP_HEIGHT - TOOLTIP_OFFSET
-    }
+    const scaleX = rect.width / canvas.width
+    const scaleY = rect.height / canvas.height
 
     return {
-        left: clamp(left, 8, rect.width - TOOLTIP_WIDTH - 8),
-        top: clamp(top, 8, rect.height - TOOLTIP_HEIGHT - 8),
+        x: rect.left + x * scaleX,
+        y: rect.top + y * scaleY,
     }
 }
+
+
+function getTooltipPositionDom(
+    domX: number,
+    domY: number,
+    radius: number,
+    rect: DOMRect
+) {
+    const offset = TOOLTIP_OFFSET
+
+    const placeRight =
+        domX + radius + offset + TOOLTIP_WIDTH < rect.right
+
+    const left = placeRight
+        ? domX + radius + offset
+        : domX - TOOLTIP_WIDTH + offset + 60
+
+    let top = domY - TOOLTIP_HEIGHT / 2
+
+    top = clamp(
+        top,
+        rect.top + 8,
+        rect.bottom - TOOLTIP_HEIGHT - 8
+    )
+
+    return { left, top }
+}
+
+
 
 /* ================= COMPONENT ================= */
 
@@ -216,8 +240,6 @@ export default function CareerMapCanvas() {
     const { theme } = useThemeStore(); // subscribe to theme
 
     useEffect(() => {
-        console.log(theme);
-
         const canvas = canvasRef.current!
         const ctx = canvas.getContext("2d")!
 
@@ -357,25 +379,41 @@ export default function CareerMapCanvas() {
         draw()
 
         /* ---------- Tooltip Sync ---------- */
+        let tooltipRaf = 0
+
         const syncTooltip = () => {
+            const canvas = canvasRef.current
+            if (!canvas) return
+
             if (hoveredNode.current) {
                 const rect = canvas.getBoundingClientRect()
-                const pos = getTooltipPosition(
-                    mouse.current.x,
-                    mouse.current.y,
+
+                const domPos = canvasToDom(
+                    canvas,
+                    hoveredNode.current.x,
+                    hoveredNode.current.y
+                )
+
+                const pos = getTooltipPositionDom(
+                    domPos.x,
+                    domPos.y,
+                    hoveredNode.current.radius,
                     rect
                 )
+
                 setTooltip({ node: hoveredNode.current, ...pos })
             } else {
                 setTooltip(null)
             }
-            requestAnimationFrame(syncTooltip)
+
+            tooltipRaf = requestAnimationFrame(syncTooltip)
         }
 
         syncTooltip()
 
         return () => {
             cancelAnimationFrame(raf)
+            cancelAnimationFrame(tooltipRaf)
             window.removeEventListener("resize", resize)
         }
     }, [router, theme]) // re-run on theme change to update colors

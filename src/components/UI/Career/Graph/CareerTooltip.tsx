@@ -11,7 +11,7 @@ function CareerTooltip({ node }: { node: CareerNode }) {
     ">
             <div className="flex items-center gap-3">
                 <img
-                    src={data.icon}
+                    src={data.tooltip_icon}
                     alt={data.company_name}
                     className="w-10 h-10 rounded-md"
                 />
