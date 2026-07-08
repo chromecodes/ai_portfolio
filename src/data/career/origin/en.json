@@ -1,0 +1,100 @@
+{
+  "slug": "orgin",
+  "company": {
+    "name": "Orgin",
+    "role": "Path to Software Developer",
+    "duration": "Dec 2021 – Feb 2023",
+    "logo": "/icons/flag_light.png",
+    "heroMedia": ""
+  },
+
+  "productContext": {
+    "title": "Where it all started",
+    "description": ["I didn't begin my journey as a software engineer.", " I started as someone who was always curious about how things worked — how individual parts connect, how systems behave, and how ideas become something tangible.", "My academic background was in Mechanical Engineering, where I learned to approach problems from a systems perspective: breaking complex challenges into smaller components, understanding the relationship between them, and designing solutions that work together.", "But along the way, I discovered another kind of engineering — one where ideas could be transformed into experiences through code.", "Software gave me the ability to experiment, create, and bring concepts to life faster than I had imagined.", "That curiosity became the first step in my transition from designing physical systems to building digital ones."],
+    "modules": ["CRM", "Forms", "Email", "Analytics", "Real-Time"]
+  },
+
+  "aboutContext": {
+        "title": "Learning to build",
+    "description": ["My first real introduction to programming came through The Odin Project — a platform built around one simple idea: learn by building.",
+
+"What fascinated me was not just learning how websites worked, but the process behind creating them.",
+
+"A website was no longer just something I used every day; it became something I could understand, deconstruct, and eventually build myself.",
+
+"Driven by curiosity, I started exploring the foundations of web development:",
+
+["Understanding how the web works","Learning HTML, CSS, and JavaScript","Building my first interactive interfaces","Experimenting, breaking things, and finding solutions"],
+
+"The early projects were simple, but each one taught me something new.",
+
+"Every feature I built became a new challenge.",
+
+"Every bug I fixed became a lesson.",
+
+"And slowly, writing code became more than learning a skill — it became a way of thinking."]
+  },
+  "architecture": {
+    "title": "Learning to build",
+    "diagram": "/images/architecture.png",
+    "stack": {
+      "frontend": "React · Next.js · TypeScript",
+      "realtime": "WebSockets · SSE",
+      "backend": "Node · Express",
+      "data": "MongoDB · Redis",
+      "cloud": "AWS S3 · EC2 · CloudFront"
+    },
+    "highlights": [
+      "Modular frontend architecture",
+      "Event-driven real-time communication",
+      "CDN-backed static & media delivery"
+    ]
+  },
+
+  "role": [
+    "Owned frontend architecture and UI systems",
+    "Built real-time features and collaborative workflows",
+    "Designed reusable components and editors",
+    "Worked closely with backend and product teams"
+  ],
+
+  "projects": [
+    {
+      "id": "email-editor",
+      "title": "Email Editor",
+      "tags": ["Editor", "Real-Time", "Productivity"],
+      "problem": "Users needed a Gmail-like editor with drafts, templates, and previews.",
+      "solution": "Built a modular email editor using Tiptap with autosave, signatures, previews, and export support.",
+      "tech": [
+        "Tiptap extensions and schema design",
+        "LocalStorage auto-draft recovery",
+        "Async save with REST APIs"
+      ],
+      "media": "/videos/email-editor.mp4",
+      "outcome": [
+        "Faster email creation",
+        "Reduced data loss from crashes"
+      ]
+    }
+  ],
+
+  "techStack": {
+    "frontend": "React · Next.js · TypeScript · SCSS",
+    "state": "Hookstate",
+    "editors": "Tiptap · @react-email",
+    "realtime": "WebSockets · SSE",
+    "cloud": "AWS S3 · EC2 · CloudFront"
+  },
+
+  "impact": [
+    "~30% reduction in load times",
+    "~25% improvement in collaboration workflows",
+    "Enabled scalable, reusable UI systems"
+  ],
+
+  "learnings": [
+    "Real-time systems require failure-first thinking",
+    "Modular UI systems scale better than page-level design",
+    "State architecture impacts performance more than rendering"
+  ]
+}

@@ -1,5 +1,5 @@
 "use client";
-import PulseBackground from "@/components/UI/Home/PulseBackground";
+import PulseBackground from "@/features/Home/PulseBackground";
 import useLanguageStore from "@/utils/i18n/useLanguageStore";
 
 export default function HomePage() {

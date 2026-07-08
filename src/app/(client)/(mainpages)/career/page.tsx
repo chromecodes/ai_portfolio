@@ -1,6 +1,6 @@
 
 "use client";
-import CareerMapCanvas from "@/components/UI/Career/Graph/CareerMapCanvas";
+import CareerMapCanvas from "@/features/Career/Graph/CareerMapCanvas";
 import { motion } from "framer-motion";
 
 export default function HomePage() {

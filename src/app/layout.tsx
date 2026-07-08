@@ -1,9 +1,11 @@
 // src/app/layout.tsx
 import '../app/globals.css';
+import '../app/global.scss';
+
 import { ReactNode } from 'react';
 import ThemeInitializer from '@/components/ThemeInitializer';
-import Topbar from '@/components/UI/Topbar/Topbar';
-import Footbar from '@/components/UI/Chatbar/Footbar';
+import Topbar from '@/features/Topbar/Topbar';
+import Footbar from '@/features/Chatbar/Footbar';
 import { Inter } from 'next/font/google'
 import RouteTransitionController from '@/components/animation/RouteTransitionController';
 import AnimationTester from '@/components/animation/AnimationTester';

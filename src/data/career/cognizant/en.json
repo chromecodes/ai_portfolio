@@ -1,15 +1,16 @@
 {
-  "slug": "prostack360",
+  "slug": "cognizant",
   "company": {
-    "name": "ProStack360",
-    "role": "Where it all started",
-    "duration": "Jun 2023 – Jul 2025",
-    "logo": "/icons/prostack360.png",
+    "name": "Cognizant",
+    "role": "Software Developer – Frontend",
+    "duration": "Apirl 2021 – June 2024",
+    "logo": "/icons/cognizant.png",
     "heroMedia": "/videos/prostack-demo.mp4"
   },
 
   "productContext": {
     "title" : "Company Context",
+
     "description": "ProStack360 is a modular CRM platform built for workflow automation, form management, real-time collaboration, and analytics across teams.",
     "modules": ["CRM", "Forms", "Email", "Analytics", "Real-Time"]
   },
@@ -18,7 +19,7 @@
     "diagram": "/images/architecture.png",
     "stack": {
       "frontend": "React · Next.js · TypeScript",
-      "realtime": "WebSockets · SSE",
+      "realtime": "WebSockets · SSE", 
       "backend": "Node · Express",
       "data": "MongoDB · Redis",
       "cloud": "AWS S3 · EC2 · CloudFront"

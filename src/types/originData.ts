@@ -1,4 +1,4 @@
-export interface CareerDetail {
+export interface IOrginData {
   slug: string;
   company: {
     name: string;
@@ -9,8 +9,12 @@ export interface CareerDetail {
   };
   productContext: {
     title: string;
-    description: string;
+    description: string[];
     modules: string[];
+  };
+    aboutContext: {
+    title: string;
+    description: string[][];
   };
   architecture: {
     diagram: string;

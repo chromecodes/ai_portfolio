@@ -23,7 +23,7 @@ export default function Agentbar() {
         // });
         // const data = await res.json();
         // setMessages([...messages, { user: input, bot: data.response }]);
-        console.log("Sending message:", input);
+
         setInput('');
     };
 
