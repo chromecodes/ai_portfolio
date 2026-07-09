@@ -11,7 +11,7 @@ export default function Agentbar() {
     //   const [messages, setMessages] = useState<{ user: string, bot: string }[]>([]);
     const [input, setInput] = useState('');
     const { theme } = useThemeStore(); // subscribe to theme
-    const strings = useLanguageStore((state) => state.strings);
+    const strings = useLanguageStore((state) => state.strings as Record<string, string>);
 
 
 

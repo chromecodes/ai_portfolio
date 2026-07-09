@@ -1,8 +1,15 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, type ComponentType } from "react";
 import { useRouter } from "next/navigation";
 import EnergyOverlay from "./transitions/EnergyOverlay";
+
+type EnergyOverlayProps = {
+    onMidpoint: () => void;
+    onFinish: () => void;
+};
+
+const TypedEnergyOverlay = EnergyOverlay as ComponentType<EnergyOverlayProps>;
 type TransitionContextType = {
     startTransition: (to: string) => void;
 };
@@ -32,7 +39,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
         <TransitionContext.Provider value={{ startTransition }}>
             {children}
             {active && (
-                <EnergyOverlay
+                <TypedEnergyOverlay
                     onMidpoint={onMidpoint}
                     onFinish={onFinish}
                 />

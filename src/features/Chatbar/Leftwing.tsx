@@ -7,7 +7,7 @@ export interface ILeftwingProps {
 }
 
 export default function Leftwing(props: ILeftwingProps) {
-    const strings = useLanguageStore((state) => state.strings);
+    const strings = useLanguageStore((state) => state.strings as Record<string, string>);
     return (
         <div className='w-1/4 text-sm text-fontColor'>
             {strings.footerLeftWingText}

@@ -7,7 +7,7 @@ export interface IRightwingProps {
 }
 
 export default function Rightwing(props: IRightwingProps) {
-    const strings = useLanguageStore((state) => state.strings);
+    const strings = useLanguageStore((state) => state.strings as Record<string, string>);
     return (
         <div className='w-1/4 text-sm text-right text-fontColor'>
             {strings.footerRightWingText}

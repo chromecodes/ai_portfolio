@@ -9,9 +9,14 @@ import useThemeStore from "@/lib/useThemeStore"
 
 /* ================= CONFIG ================= */
 
+type PathStyle = {
+    color: string
+    width: number
+}
+
 type Theme = {
     particle: string
-    paths: object[]
+    paths: PathStyle[]
 }
 
 const THEMES: Record<string, Theme> = {

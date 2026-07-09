@@ -3,7 +3,7 @@ import PulseBackground from "@/features/Home/PulseBackground";
 import useLanguageStore from "@/utils/i18n/useLanguageStore";
 
 export default function HomePage() {
-    const strings = useLanguageStore((state) => state.strings);
+    const strings = useLanguageStore((state) => state.strings as Record<string, string>);
     return (
         <main className="flex flex-1 justify-center">
             <section className="relative w-full flex items-center justify-center p-6">

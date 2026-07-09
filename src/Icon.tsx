@@ -3,17 +3,21 @@ import {
     Send,
     Moon,
     Sun,
-    Github,
-    Linkedin,
     ExternalLink,
 } from "lucide-react";
+
+import {
+    FaGithub,
+    FaLinkedin
+} from "react-icons/fa";
+
 
 export const Icons = {
     arrowUp: ArrowUp,
     send: Send,
     moon: Moon,
     sun: Sun,
-    github: Github,
-    linkedin: Linkedin,
-    external: ExternalLink,
+    github: FaGithub,
+    linkedin: FaLinkedin,
+    externalLink: ExternalLink,
 };

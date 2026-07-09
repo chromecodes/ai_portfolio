@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* Theme variables */
 @layer base {
@@ -79,16 +77,5 @@
 
   }
 
-  /* Global styles */
-  * {
-    @apply border-border;
-  }
 
-  body {
-    @apply bg-background text-foreground;
-  }
-
-  input {
-    outline: none
-  }
 }

@@ -4,13 +4,15 @@ import { create } from 'zustand';
 import en from './en.json';
 import es from './es.json';
 
-export type Lang = 'en' | 'es' ;
+export type Lang = 'en' | 'es';
 
-const translations = { en, es,};
+type TranslationStrings = typeof en | typeof es;
+
+const translations: Record<Lang, TranslationStrings> = { en, es };
 
 interface LanguageStore {
   language: Lang;
-  strings: typeof en;
+  strings: TranslationStrings;
   setLanguage: (lang: Lang) => void;
 }
 
