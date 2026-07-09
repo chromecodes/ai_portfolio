@@ -17,11 +17,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="en" className={inter.className}>
-      <body className="bg-background text-fontColor antialiased h-full flex flex-col min-h-screen">
+      <body className="bg-background text-fontColor antialiased h-full flex flex-col min-h-screen max-h-screen">
         <ThemeInitializer />
         {/* <MainBg /> */}
         <Topbar />
-        <div className="flex flex-col grow min-h-0">
+        <div className="flex flex-col grow overflow-auto scrollbar-mac min-h-0">
           {children}
         </div>
         <Footbar />

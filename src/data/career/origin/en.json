@@ -11,7 +11,7 @@
   "productContext": {
     "title": "Where it all started",
     "description": ["I didn't begin my journey as a software engineer.", " I started as someone who was always curious about how things worked — how individual parts connect, how systems behave, and how ideas become something tangible.", "My academic background was in Mechanical Engineering, where I learned to approach problems from a systems perspective: breaking complex challenges into smaller components, understanding the relationship between them, and designing solutions that work together.", "But along the way, I discovered another kind of engineering — one where ideas could be transformed into experiences through code.", "Software gave me the ability to experiment, create, and bring concepts to life faster than I had imagined.", "That curiosity became the first step in my transition from designing physical systems to building digital ones."],
-    "modules": ["CRM", "Forms", "Email", "Analytics", "Real-Time"]
+    "modules": ["HTML", "CSS", "JavaScript", "React" ]
   },
 
   "aboutContext": {

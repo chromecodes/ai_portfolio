@@ -64,7 +64,7 @@ export default function OrginPage(props: IOrginPageProps) {
                         {data.productContext.modules.map((m) => (
                             <span
                                 key={m}
-                                className="px-3 py-1 text-sm rounded-full bg-gray-100"
+                                className="px-3 py-1 text-sm rounded-full bg-gray-100 text-blue-700"
                             >
                                 {m}
                             </span>
@@ -78,7 +78,7 @@ export default function OrginPage(props: IOrginPageProps) {
                         {
                             data.aboutContext.description.map((desc, index) => (
                                 Array.isArray(desc)
-                                    ? <div key={index}> <ul className="space-y-2 pl-6 " key={index} >{desc.map((d: string) => <li className="list-disc text-gray-600" key={d}>{d}</li>)}</ul></div>
+                                    ? <div key={index}> <ul className="space-y-2 pl-6 " key={index} >{desc.map((d: string) => <li className="list-disc" key={d}>{d}</li>)}</ul></div>
                                     : <p key={index} >{desc}</p>
                             ))
                         }
@@ -119,48 +119,17 @@ export default function OrginPage(props: IOrginPageProps) {
                                 </ul>
                             </div>
 
-                            <video
-                                src={project.media}
-                                autoPlay
-                                loop
-                                muted
-                                className="rounded-xl border"
-                            />
+                            {/* <ImageViewer
+                                images={originImages}
+                                autoplay={{
+                                    enabled: false,
+                                    interval: 5000
+                                }}
+                            /> */}
                         </div>
                     </section>
                 ))}
 
-                {/* TECH STACK */}
-                <section className="space-y-6">
-                    <h2 className="section-title">Tech Stack</h2>
-                    <ul className="grid md:grid-cols-2 gap-4 text-gray-600">
-                        {Object.entries(data.techStack).map(([k, v]) => (
-                            <li key={k}>
-                                <strong className="capitalize">{k}:</strong> {v}
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-
-                {/* IMPACT */}
-                <section className="space-y-6">
-                    <h2 className="section-title">Impact</h2>
-                    <ul className="list-disc pl-6 text-gray-600">
-                        {data.impact.map((i) => (
-                            <li key={i}>{i}</li>
-                        ))}
-                    </ul>
-                </section>
-
-                {/* LEARNINGS */}
-                <section className="space-y-6">
-                    <h2 className="section-title">Engineering Learnings</h2>
-                    <ul className="list-disc pl-6 text-gray-600">
-                        {data.learnings.map((l) => (
-                            <li key={l}>{l}</li>
-                        ))}
-                    </ul>
-                </section>
 
                 {/* NAV */}
                 <footer className="flex justify-between text-sm text-gray-500 pt-10 border-t">
