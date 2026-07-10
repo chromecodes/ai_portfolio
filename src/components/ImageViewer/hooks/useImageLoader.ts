@@ -8,6 +8,7 @@ interface UseImageLoaderProps {
   currentIndex: number;
 
   preloadRadius?: number;
+  enabled?: boolean;
 
   useBlur?: boolean;
 }
@@ -16,13 +17,9 @@ export function useImageLoader({
   images,
 
   currentIndex,
-
+  enabled = true,
   useBlur = true,
 }: UseImageLoaderProps) {
-  console.log("useImageLoader mounted", {
-    currentIndex,
-    images,
-  });
   const [loadedBlur, setLoadedBlur] = useState(new Set<number>());
 
   const [loadedFull, setLoadedFull] = useState(new Set<number>());
@@ -64,8 +61,6 @@ export function useImageLoader({
   async function loadFull(index: number) {
     const image = images[index];
 
-    console.log("loading");
-
     const success = await preload(image.src);
 
     if (!success) {
@@ -85,6 +80,10 @@ export function useImageLoader({
 
   useEffect(() => {
     async function load() {
+      if (!enabled) {
+        return;
+      }
+
       if (useBlur) {
         await loadBlur(currentIndex);
       }
@@ -99,7 +98,7 @@ export function useImageLoader({
     }
 
     load();
-  }, [currentIndex]);
+  }, [currentIndex, enabled, useBlur]);
 
   return {
     loadedBlur,

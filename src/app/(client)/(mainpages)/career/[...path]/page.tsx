@@ -22,10 +22,8 @@ export default function CareerPath() {
 
     const fetchData = async () => {
         const fileUrl = `/api/mainpages/career/${params.path[0]}/${lang}`;
-        console.log(fileUrl);
         try {
             const response = await fetch(fileUrl);
-            console.log(response);
             const data = await response.json();
             setCareer(data.data as CareerDetail);
         } catch (error) {

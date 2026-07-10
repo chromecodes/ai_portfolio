@@ -3,6 +3,7 @@
 import { ImageViewerItem } from "@/components/ImageViewer/types";
 import { motion } from "framer-motion";
 import ImageViewer from "@/components/ImageViewer/ImageViewer";
+import ArrowButton from "@/components/ImageViewer/ArrowButton";
 
 export default function PlaygroundPage() {
     const images: ImageViewerItem[] = [
@@ -44,11 +45,20 @@ export default function PlaygroundPage() {
             className="p-8 w-full h-full"
         >
 
-            <div className="test flex items-center justify-center gap-4">
-                <h1 className="text-4xl font-bold grow">test</h1>
+            <div className="test flex flex-col flex-wrap items-center justify-center gap-4">
+                <div className="on w-full grow">
+                    <h1 className="text-4xl font-bold grow">test</h1>
 
-                <div className="cnt w-1/2">
-                    <ImageViewer images={images} aspectRatio="landscape" curvedEdge={true} />
+                    <div className="cnt w-1/2" >
+                        <ImageViewer images={images} aspectRatio="landscape" curvedEdge={true} />
+                    </div>
+                </div>
+                <div className="on2 w-full grow">
+                    <h1 className="text-4xl font-bold grow">test</h1>
+
+                    <div className="cnt w-1/2" >
+                        <ImageViewer images={images} aspectRatio="landscape" curvedEdge={true} />
+                    </div>
                 </div>
             </div>
         </motion.div>

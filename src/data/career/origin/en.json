@@ -1,100 +1,1355 @@
 {
-  "slug": "orgin",
+  "slug": "origin",
+
   "company": {
-    "name": "Orgin",
-    "role": "Path to Software Developer",
+    "name": "Origin",
+    "role": "Journey to Software Engineering",
     "duration": "Dec 2021 – Feb 2023",
     "logo": "/icons/flag_light.png",
     "heroMedia": ""
   },
 
-  "productContext": {
-    "title": "Where it all started",
-    "description": ["I didn't begin my journey as a software engineer.", " I started as someone who was always curious about how things worked — how individual parts connect, how systems behave, and how ideas become something tangible.", "My academic background was in Mechanical Engineering, where I learned to approach problems from a systems perspective: breaking complex challenges into smaller components, understanding the relationship between them, and designing solutions that work together.", "But along the way, I discovered another kind of engineering — one where ideas could be transformed into experiences through code.", "Software gave me the ability to experiment, create, and bring concepts to life faster than I had imagined.", "That curiosity became the first step in my transition from designing physical systems to building digital ones."],
-    "modules": ["HTML", "CSS", "JavaScript", "React" ]
-  },
-
-  "aboutContext": {
-        "title": "Learning to build",
-    "description": ["My first real introduction to programming came through The Odin Project — a platform built around one simple idea: learn by building.",
-
-"What fascinated me was not just learning how websites worked, but the process behind creating them.",
-
-"A website was no longer just something I used every day; it became something I could understand, deconstruct, and eventually build myself.",
-
-"Driven by curiosity, I started exploring the foundations of web development:",
-
-["Understanding how the web works","Learning HTML, CSS, and JavaScript","Building my first interactive interfaces","Experimenting, breaking things, and finding solutions"],
-
-"The early projects were simple, but each one taught me something new.",
-
-"Every feature I built became a new challenge.",
-
-"Every bug I fixed became a lesson.",
-
-"And slowly, writing code became more than learning a skill — it became a way of thinking."]
-  },
-  "architecture": {
-    "title": "Learning to build",
-    "diagram": "/images/architecture.png",
-    "stack": {
-      "frontend": "React · Next.js · TypeScript",
-      "realtime": "WebSockets · SSE",
-      "backend": "Node · Express",
-      "data": "MongoDB · Redis",
-      "cloud": "AWS S3 · EC2 · CloudFront"
-    },
-    "highlights": [
-      "Modular frontend architecture",
-      "Event-driven real-time communication",
-      "CDN-backed static & media delivery"
+  "introduction": {
+    "title": "Where Curiosity Became a Career",
+    "description": [
+      "I didn't begin my career writing software. I began by asking questions.",
+      "I've always been fascinated by how complex systems work—how individual components interact, communicate, and come together to solve meaningful problems.",
+      "My academic background in Mechanical Engineering taught me to think in systems: understanding constraints, analyzing relationships, and designing solutions that are reliable and efficient.",
+      "As I discovered software engineering, I realized those same principles existed in the digital world. Software wasn't simply writing code—it was designing systems, creating abstractions, and solving problems through logic.",
+      "The ability to transform ideas into working products with nothing more than a computer sparked a new passion.",
+      "What started as curiosity gradually became a commitment to mastering software engineering and building products that people genuinely enjoy using."
+    ],
+    "modules": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "React",
+      "Computer Science Fundamentals"
     ]
   },
 
-  "role": [
-    "Owned frontend architecture and UI systems",
-    "Built real-time features and collaborative workflows",
-    "Designed reusable components and editors",
-    "Worked closely with backend and product teams"
-  ],
+  "learningJourney": {
+    "title": "Learning Through Building",
+    "description": [
+      "My programming journey began with The Odin Project, a curriculum built around a simple philosophy: the best way to learn is by building real software.",
+      "Rather than memorizing syntax, every project introduced a new engineering concept that built upon the previous one.",
+      "I learned to understand not only how to write code, but why programming languages, frameworks, and design patterns exist.",
+      "Throughout the journey I explored:",
+      [
+        "How browsers render web pages",
+        "Semantic HTML and accessibility",
+        "Modern CSS layouts",
+        "JavaScript fundamentals",
+        "DOM manipulation",
+        "Algorithms and computational thinking",
+        "Object-Oriented Programming",
+        "Functional Programming",
+        "Closures and scope",
+        "Software design patterns",
+        "REST APIs",
+        "React component architecture"
+      ],
+      "Every project became an opportunity to explore a new engineering concept.",
+      "Every bug became a debugging exercise.",
+      "Every refactor improved not only the codebase, but also the way I approached solving problems.",
+      "By the end of this journey, I had moved beyond learning syntax and started thinking like a software engineer."
+    ]
+  },
 
   "projects": [
     {
-      "id": "email-editor",
-      "title": "Email Editor",
-      "tags": ["Editor", "Real-Time", "Productivity"],
-      "problem": "Users needed a Gmail-like editor with drafts, templates, and previews.",
-      "solution": "Built a modular email editor using Tiptap with autosave, signatures, previews, and export support.",
-      "tech": [
-        "Tiptap extensions and schema design",
-        "LocalStorage auto-draft recovery",
-        "Async save with REST APIs"
+      "id": "origin-html-001",
+
+      "title": "Recipes Website",
+
+      "tags": ["HTML"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Understand how web pages are structured using semantic HTML and learn the fundamental building blocks of the web."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Built a multi-page recipe website using semantic HTML to understand how browsers interpret documents, organize content, and construct the Document Object Model (DOM). The project focused entirely on creating meaningful document structure before introducing styling or interactivity."
+      },
+
+      "images": [
+        {
+          "id": "origin-html-001-image-01",
+          "src": "/images/p1.webp",
+          "blurSrc": "/images/p1_blur.webp",
+          "alt": "Recipes Website Home",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-html-001-image-02",
+          "src": "/images/p2.webp",
+          "blurSrc": "/images/p2_blur.webp",
+          "alt": "Recipes Website Recipe Page",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
       ],
-      "media": "/videos/email-editor.mp4",
-      "outcome": [
-        "Faster email creation",
-        "Reduced data loss from crashes"
-      ]
+
+      "links": {
+        "github": "https://github.com/chromecodes/odin-recipes",
+        "live": "https://chromecodes.github.io/odin-recipes/"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "HTML5",
+          "Semantic HTML",
+          "Lists",
+          "Hyperlinks",
+          "Images",
+          "Document Structure"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Document Object Model (DOM)",
+          "Semantic Markup",
+          "Accessibility Fundamentals",
+          "Browser Parsing",
+          "Document Hierarchy"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Built my first complete website.",
+          "Learned how browsers transform HTML into the DOM.",
+          "Understood the importance of semantic markup.",
+          "Established the foundation for future web development."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-css-002",
+
+      "title": "Landing Page",
+
+      "tags": ["HTML", "CSS"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Learn modern CSS techniques and understand how presentation is separated from document structure."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Recreated a professional landing page while focusing on responsive layouts, typography, spacing, Flexbox, and reusable styling patterns. The project emphasized pixel-perfect implementation and visual consistency."
+      },
+
+      "images": [
+        {
+          "id": "origin-css-002-image-01",
+          "src": "/images/p3.webp",
+          "blurSrc": "/images/p3_blur.webp",
+          "alt": "Landing Page Home",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/Project-landingpage",
+        "live": "https://chromecodes.github.io/Project-landingpage/"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "CSS3",
+          "Flexbox",
+          "Typography",
+          "Responsive Design",
+          "Spacing",
+          "Layout"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "CSS Cascade",
+          "Specificity",
+          "Inheritance",
+          "Box Model",
+          "Layout Algorithms",
+          "Rendering Flow"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Created responsive layouts.",
+          "Learned how browsers calculate layouts.",
+          "Improved visual design implementation.",
+          "Developed attention to UI detail."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-js-003",
+
+      "title": "Rock Paper Scissors",
+
+      "tags": ["HTML", "CSS", "JavaScript"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Learn the fundamentals of programming through JavaScript by building an interactive application."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Developed an interactive Rock Paper Scissors game that introduced variables, conditionals, loops, functions, and event handling while reinforcing logical problem-solving."
+      },
+
+      "images": [
+        {
+          "id": "origin-js-003-image-01",
+          "src": "/images/p4.webp",
+          "blurSrc": "/images/p4_blur.webp",
+          "alt": "Rock Paper Scissors Game",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/RockPaperSicssor",
+        "live": "https://chromecodes.github.io/RockPaperSicssor/"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "JavaScript",
+          "Functions",
+          "Variables",
+          "Loops",
+          "Conditionals",
+          "Events"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Algorithms",
+          "Control Flow",
+          "Computational Thinking",
+          "Execution Context",
+          "Problem Decomposition"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Developed logical thinking.",
+          "Translated real-world rules into algorithms.",
+          "Became comfortable solving programming problems."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-dom-004",
+
+      "title": "Etch-a-Sketch",
+
+      "tags": ["HTML", "CSS", "JavaScript"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Understand DOM manipulation and event-driven programming by creating an interactive browser application."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Built an interactive drawing application by dynamically generating grid elements, responding to user interactions, and updating the DOM in real time."
+      },
+
+      "images": [
+        {
+          "id": "origin-js-004-image-01",
+          "src": "/images/p5.webp",
+          "blurSrc": "/images/p5_blur.webp",
+          "alt": "Etch-a-Sketch",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/Etch-A-Sketch",
+        "live": "https://chromecodes.github.io/Etch-A-Sketch/"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "DOM Manipulation",
+          "Event Listeners",
+          "Dynamic Styling",
+          "Grid Generation",
+          "JavaScript"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Event Loop",
+          "Event Propagation",
+          "DOM Tree",
+          "Rendering Pipeline",
+          "State Management"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Built highly interactive browser experiences.",
+          "Learned how JavaScript communicates with the browser.",
+          "Understood event-driven programming.",
+          "Improved debugging skills."
+        ]
+      }
+    },
+    {
+      "id": "origin-calculator-005",
+
+      "title": "Calculator",
+
+      "tags": ["HTML", "CSS", "JavaScript"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Strengthen programming fundamentals by building a calculator that manages user input, application state, and mathematical operations."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Developed a fully functional calculator capable of handling chained operations, keyboard input, decimal values, and error handling. The project emphasized separating business logic from the user interface while maintaining predictable application state."
+      },
+
+      "images": [
+        {
+          "id": "origin-js-005-image-01",
+          "src": "/images/p6.webp",
+          "blurSrc": "/images/p6_blur.webp",
+          "alt": "Calculator",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/calculator",
+        "live": "https://chromecodes.github.io/calculator/"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "JavaScript",
+          "DOM Manipulation",
+          "Keyboard Events",
+          "Functions",
+          "Application State"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "State Management",
+          "Finite State Machines",
+          "Function Composition",
+          "Input Parsing",
+          "Separation of Concerns"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Separated business logic from presentation.",
+          "Managed complex application state.",
+          "Improved debugging and logical reasoning.",
+          "Designed reusable functions instead of repetitive code."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-signup-form-006",
+
+      "title": "Sign-up Form",
+
+      "tags": ["HTML", "CSS", "JavaScript"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Learn how browsers process forms and build robust client-side validation for a better user experience."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Created a responsive registration form with real-time validation, password confirmation, custom error messaging, and user feedback. The project focused on writing defensive code that prevents invalid data before submission."
+      },
+
+      "images": [
+        {
+          "id": "origin-js-006-image-01",
+          "src": "/images/p7.webp",
+          "blurSrc": "/images/p7_blur.webp",
+          "alt": "Sign-up Form",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/Sign-up-form",
+        "live": "https://chromecodes.github.io/Sign-up-form/"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "HTML Forms",
+          "JavaScript",
+          "Regular Expressions",
+          "Event Handling",
+          "CSS"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Input Validation",
+          "Constraint Validation API",
+          "Defensive Programming",
+          "Data Integrity",
+          "Error Handling"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Validated user input effectively.",
+          "Improved user experience through instant feedback.",
+          "Understood the importance of protecting application data.",
+          "Learned browser-native validation techniques."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-admin-dashboard-007",
+
+      "title": "Admin Dashboard",
+
+      "tags": ["HTML", "CSS"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Master advanced CSS layouts while recreating a professional dashboard interface."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Built a responsive admin dashboard using CSS Grid and Flexbox. The focus was on accurately reproducing complex layouts while maintaining scalability and reusable styling patterns."
+      },
+
+      "images": [
+        {
+          "id": "origin-admin-dashboard-007-image-01",
+          "src": "/images/p8.webp",
+          "blurSrc": "/images/p8_blur.webp",
+          "alt": "Admin Dashboard",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/admin-dashboard",
+        "live": "https://chromecodes.github.io/admin-dashboard"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "CSS Grid",
+          "Flexbox",
+          "Responsive Design",
+          "Layout Systems",
+          "Typography"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Layout Algorithms",
+          "Visual Hierarchy",
+          "Responsive Design",
+          "Component-Based UI",
+          "UI Composition"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Built production-style dashboard layouts.",
+          "Improved precision in UI implementation.",
+          "Learned scalable layout techniques.",
+          "Developed stronger visual problem-solving skills."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-library-008",
+
+      "title": "Library",
+
+      "tags": ["HTML", "CSS", "JavaScript"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Understand JavaScript's object model and learn Object-Oriented Programming through real-world application design."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Built a library management application using constructor functions and JavaScript prototypes. The project explored how objects are created, how behavior is shared through prototypes, and how applications can be modeled using reusable abstractions."
+      },
+
+      "images": [
+        {
+          "id": "origin-library-008-image-01",
+          "src": "/images/p9.webp",
+          "blurSrc": "/images/p9_blur.webp",
+          "alt": "Library Management App",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/library",
+        "live": "https://chromecodes.github.io/library"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "JavaScript",
+          "Constructor Functions",
+          "Objects",
+          "Methods",
+          "Prototypes"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Object-Oriented Programming",
+          "Prototype Chain",
+          "Prototypal Inheritance",
+          "Object Instantiation",
+          "Method Resolution",
+          "The 'this' Keyword",
+          "Encapsulation"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Understood JavaScript's prototype-based inheritance model.",
+          "Learned how objects share behavior through prototypes.",
+          "Applied abstraction to model real-world entities.",
+          "Developed a stronger understanding of object-oriented design."
+        ]
+      }
+    },
+    {
+      "id": "origin-tictactoe-009",
+
+      "title": "Tic Tac Toe",
+
+      "tags": ["HTML", "CSS", "JavaScript"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Learn software design patterns and create maintainable applications using modular JavaScript architecture."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Built a Tic Tac Toe game using Factory Functions and the Module Pattern. The project focused on separating responsibilities, managing private state, and organizing application logic into independent modules."
+      },
+
+      "images": [
+        {
+          "id": "origin-tictactoe-009-image-01",
+          "src": "/images/p10.webp",
+          "blurSrc": "/images/p10_blur.webp",
+          "alt": "Tic Tac Toe Game",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/tic-tac-toe",
+        "live": "https://chromecodes.github.io/tic-tac-toe"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "JavaScript",
+          "Factory Functions",
+          "Modules",
+          "Closures",
+          "DOM Manipulation"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Encapsulation",
+          "Abstraction",
+          "Composition",
+          "Private Variables",
+          "Module Pattern",
+          "Scope Management",
+          "Closures"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Learned how to structure larger applications.",
+          "Understood the importance of separating responsibilities.",
+          "Created private application state using closures.",
+          "Started thinking about software architecture instead of just functionality."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-restaurant-webpack-010",
+
+      "title": "Restaurant Page",
+
+      "tags": ["HTML", "CSS", "JavaScript", "Webpack"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Understand modern JavaScript development workflows and learn how professional frontend applications are structured."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Created a restaurant single-page application using JavaScript modules and Webpack. The project introduced dependency management, build processes, and the idea of transforming source code into optimized production bundles."
+      },
+
+      "images": [
+        {
+          "id": "origin-restaurant-webpack-010-image-01",
+          "src": "/images/p11.webp",
+          "blurSrc": "/images/p11_blur.webp",
+          "alt": "Restaurant Page",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-restaurant-webpack-010-image-02",
+          "src": "/images/p12.webp",
+          "blurSrc": "/images/p12_blur.webp",
+          "alt": "Restaurant Page 2",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-restaurant-webpack-010-image-03",
+          "src": "/images/p13.webp",
+          "blurSrc": "/images/p13_blur.webp",
+          "alt": "Restaurant Page 3",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-restaurant-webpack-010-image-04",
+          "src": "/images/p14.webp",
+          "blurSrc": "/images/p14_blur.webp",
+          "alt": "Restaurant Page 4",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/restaurant-page",
+        "live": "https://chromecodes.github.io/restaurant-page"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "JavaScript Modules",
+          "Webpack",
+          "NPM",
+          "Asset Management",
+          "Build Tools"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Dependency Graph",
+          "Module Systems",
+          "Bundling",
+          "Build Pipeline",
+          "Code Organization",
+          "Separation of Concerns"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Understood how modern frontend applications are built.",
+          "Learned the purpose of bundlers and build tools.",
+          "Improved project structure and maintainability.",
+          "Moved from small scripts toward application development."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-todo-solid-011",
+
+      "title": "Todo Application",
+
+      "tags": ["HTML", "CSS", "JavaScript"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Apply software engineering principles and learn how to design maintainable, scalable applications."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Developed a modular Todo application while applying object-oriented principles, focusing on clean architecture, reusable components, and separation of responsibilities."
+      },
+
+      "images": [
+        {
+          "id": "origin-todo-solid-011-image-01",
+          "src": "/images/p15.webp",
+          "blurSrc": "/images/p15_blur.webp",
+          "alt": "Todo Application",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-todo-solid-011-image-02",
+          "src": "/images/p16.webp",
+          "blurSrc": "/images/p16_blur.webp",
+          "alt": "Todo Application 2",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/todo-list",
+        "live": "https://chromecodes.github.io/todo-list"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "JavaScript",
+          "Object-Oriented Programming",
+          "Modules",
+          "Local Storage",
+          "Application Architecture"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "SOLID Principles",
+          "Single Responsibility Principle",
+          "Loose Coupling",
+          "High Cohesion",
+          "Composition Over Inheritance",
+          "Dependency Management",
+          "Software Design Principles"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Learned how to design applications that can grow.",
+          "Understood why tightly coupled code becomes difficult to maintain.",
+          "Applied principles used in professional software development.",
+          "Started thinking about architecture before implementation."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-weather-api-012",
+
+      "title": "Weather Application",
+
+      "tags": ["HTML", "CSS", "JavaScript", "API"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Understand how frontend applications communicate with external services through APIs."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Built a weather application that consumes external weather data through an API. The project introduced asynchronous programming, HTTP communication, API responses, and handling data from external sources."
+      },
+
+      "images": [
+        {
+          "id": "origin-weather-api-012-image-01",
+          "src": "/images/p17.webp",
+          "blurSrc": "/images/p17_blur.webp",
+          "alt": "Weather Application",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-weather-api-012-image-02",
+          "src": "/images/p18.webp",
+          "blurSrc": "/images/p18_blur.webp",
+          "alt": "Weather Application 2",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/weather-app",
+        "live": "https://chromecodes.github.io/weather-app"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "Fetch API",
+          "Promises",
+          "Async/Await",
+          "JSON",
+          "API Integration"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "REST Architecture",
+          "HTTP Protocol",
+          "Client-Server Communication",
+          "Asynchronous Programming",
+          "Data Serialization",
+          "API Security",
+          "Environment Variables"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Understood how applications consume external data.",
+          "Learned asynchronous JavaScript patterns.",
+          "Worked with real-world API responses.",
+          "Developed awareness of API security and sensitive data handling."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-react-cv-013",
+
+      "title": "CV Application",
+
+      "tags": ["HTML", "CSS", "JavaScript", "React"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Learn the fundamentals of React and understand how modern frontend applications are structured using components."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Built an interactive CV builder application using React class components. The project introduced component-based architecture, props, state management, and the concept of building interfaces through reusable pieces instead of manually manipulating the DOM."
+      },
+
+      "images": [
+        {
+          "id": "origin-cv-project-013-image-01",
+          "src": "/images/p21.webp",
+          "blurSrc": "/images/p21_blur.webp",
+          "alt": "CV Application",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-cv-project-013-image-02",
+          "src": "/images/p22.webp",
+          "blurSrc": "/images/p22_blur.webp",
+          "alt": "CV Application 2",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-cv-project-013-image-03",
+          "src": "/images/p23.webp",
+          "blurSrc": "/images/p23_blur.webp",
+          "alt": "CV Application 3",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/cv-project",
+        "live": "https://chromecodes.github.io/cv-project"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "React",
+          "Class Components",
+          "Props",
+          "State",
+          "Component Lifecycle",
+          "JavaScript ES6"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Component Architecture",
+          "Declarative Programming",
+          "Virtual DOM",
+          "State Management",
+          "Data Flow",
+          "UI Abstraction"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Transitioned from manipulating the DOM directly to declarative UI development.",
+          "Understood how components represent reusable pieces of an application.",
+          "Learned the fundamentals of React's rendering model.",
+          "Developed a foundation for building larger React applications."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-react-memory-card-014",
+
+      "title": "Memory Card",
+
+      "tags": ["React", "JavaScript"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Learn modern React development using functional components, hooks, and application state."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Built a memory card game using React functional components and hooks. The project focused on managing state changes, handling user interactions, consuming external data sources, and understanding how React updates the UI based on state changes."
+      },
+
+      "images": [
+        {
+          "id": "origin-memory-game-014-image-01",
+          "src": "/images/p19.webp",
+          "blurSrc": "/images/p19_blur.webp",
+          "alt": "Memory Game",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-memory-game-014-image-02",
+          "src": "/images/p20.webp",
+          "blurSrc": "/images/p20_blur.webp",
+          "alt": "Memory Game 2",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/memory-game",
+        "live": "https://chromecodes.github.io/memory-game"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "React Functional Components",
+          "React Hooks",
+          "useState",
+          "useEffect",
+          "API Integration",
+          "Component Reusability"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Functional Programming",
+          "Reactive Rendering",
+          "State Synchronization",
+          "Side Effects",
+          "Component Lifecycle",
+          "Unidirectional Data Flow"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Mastered modern React functional components.",
+          "Learned how hooks manage application behavior.",
+          "Improved understanding of state-driven interfaces.",
+          "Started designing reusable UI components."
+        ]
+      }
+    },
+
+    {
+      "id": "origin-react-shopping-cart-015",
+
+      "title": "Shopping Cart",
+
+      "tags": ["React", "JavaScript"],
+
+      "goal": {
+        "title": "Goal",
+        "description": "Build a larger React application while applying component architecture, state management, and scalable frontend patterns."
+      },
+
+      "solution": {
+        "title": "Solution",
+        "description": "Developed a complete shopping cart application using React components, shared state, routing concepts, and reusable UI patterns. The project simulated real-world application development by separating concerns between presentation, business logic, and application state."
+      },
+
+      "images": [
+        {
+          "id": "origin-shopping-cart-015-image-01",
+          "src": "/images/p24.webp",
+          "blurSrc": "/images/p24_blur.webp",
+          "alt": "Shopping Cart",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-shopping-cart-015-image-02",
+          "src": "/images/p25.webp",
+          "blurSrc": "/images/p25_blur.webp",
+          "alt": "Shopping Cart 2",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+        {
+          "id": "origin-shopping-cart-015-image-03",
+          "src": "/images/p26.webp",
+          "blurSrc": "/images/p26_blur.webp",
+          "alt": "Shopping Cart 3",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+
+        {
+          "id": "origin-shopping-cart-015-image-04",
+          "src": "/images/p27.webp",
+          "blurSrc": "/images/p27_blur.webp",
+          "alt": "Shopping Cart 4",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+
+        {
+          "id": "origin-shopping-cart-015-image-05",
+          "src": "/images/p28.webp",
+          "blurSrc": "/images/p28_blur.webp",
+          "alt": "Shopping Cart 5",
+          "displayMode": "cover",
+          "width": 1200,
+          "height": 800
+        },
+
+        {
+          "id": "origin-shopping-cart-015-image-06",
+          "src": "/images/p29.webp",
+          "blurSrc": "/images/p29_blur.webp",
+          "alt": "Shopping Cart 6",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        },
+
+        {
+          "id": "origin-shopping-cart-015-image-07",
+          "src": "/images/p30.webp",
+          "blurSrc": "/images/p30_blur.webp",
+          "alt": "Shopping Cart 7",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        },
+
+        {
+          "id": "origin-shopping-cart-015-image-8",
+          "src": "/images/p31.webp",
+          "blurSrc": "/images/p31_blur.webp",
+          "alt": "Shopping Cart 8",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        },
+
+        {
+          "id": "origin-shopping-cart-015-image-9",
+          "src": "/images/p32.webp",
+          "blurSrc": "/images/p32_blur.webp",
+          "alt": "Shopping Cart 9",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ],
+
+      "links": {
+        "github": "https://github.com/chromecodes/shopping-cart",
+        "live": "https://chromecodes.github.io/shopping-cart"
+      },
+
+      "skills": {
+        "title": "Technologies Used",
+        "items": [
+          "React",
+          "Functional Components",
+          "Component Composition",
+          "State Management",
+          "Routing",
+          "Reusable UI Components"
+        ]
+      },
+
+      "concepts": {
+        "title": "Computer Science Concepts",
+        "items": [
+          "Component Architecture",
+          "Composition",
+          "State Management Patterns",
+          "Data Flow Architecture",
+          "Scalable Frontend Design",
+          "Separation of Concerns",
+          "Software Modularity"
+        ]
+      },
+
+      "outcome": {
+        "title": "What I Learned",
+        "items": [
+          "Designed applications using reusable component systems.",
+          "Understood how frontend applications scale.",
+          "Applied software architecture principles to UI development.",
+          "Completed the transition from learning React to building production-style applications."
+        ]
+      }
     }
   ],
 
   "techStack": {
-    "frontend": "React · Next.js · TypeScript · SCSS",
-    "state": "Hookstate",
-    "editors": "Tiptap · @react-email",
-    "realtime": "WebSockets · SSE",
-    "cloud": "AWS S3 · EC2 · CloudFront"
+    "title": "Technologies & Engineering Foundations",
+
+    "categories": {
+      "frontend": ["HTML5", "CSS3", "JavaScript ES6+", "React"],
+
+      "programmingConcepts": [
+        "Algorithms",
+        "Computational Thinking",
+        "Object-Oriented Programming",
+        "Functional Programming",
+        "Closures",
+        "Prototype Chain",
+        "Design Patterns"
+      ],
+
+      "webFundamentals": [
+        "DOM",
+        "Browser Rendering",
+        "HTTP",
+        "REST APIs",
+        "Client-Server Architecture",
+        "Asynchronous Programming"
+      ],
+
+      "softwareEngineering": [
+        "SOLID Principles",
+        "Clean Code",
+        "Refactoring",
+        "Modular Architecture",
+        "Separation of Concerns",
+        "Composition Over Inheritance"
+      ],
+
+      "tooling": ["Git", "GitHub", "NPM", "Webpack"]
+    }
   },
 
-  "impact": [
-    "~30% reduction in load times",
-    "~25% improvement in collaboration workflows",
-    "Enabled scalable, reusable UI systems"
-  ],
+  "learnings": {
+    "title": "Engineering Concepts Developed",
 
-  "learnings": [
-    "Real-time systems require failure-first thinking",
-    "Modular UI systems scale better than page-level design",
-    "State architecture impacts performance more than rendering"
-  ]
+    "items": [
+      "Computational Thinking",
+
+      "Problem Decomposition",
+
+      "Algorithmic Thinking",
+
+      "Data Structures Fundamentals",
+
+      "Browser Rendering Pipeline",
+
+      "Document Object Model",
+
+      "Semantic Web Development",
+
+      "Responsive Design",
+
+      "JavaScript Fundamentals",
+
+      "Event Driven Programming",
+
+      "State Management",
+
+      "Object-Oriented Programming",
+
+      "Functional Programming",
+
+      "Closures",
+
+      "Prototype Based Inheritance",
+
+      "Factory Functions",
+
+      "Module Pattern",
+
+      "Design Patterns",
+
+      "REST API Integration",
+
+      "HTTP Communication",
+
+      "Asynchronous Programming",
+
+      "Error Handling",
+
+      "Component Based Architecture",
+
+      "Declarative UI Development",
+
+      "React Components",
+
+      "React Hooks",
+
+      "Reusable Design Systems",
+
+      "Software Architecture",
+
+      "SOLID Principles",
+
+      "Clean Code Practices",
+
+      "Debugging",
+
+      "Refactoring",
+
+      "Code Maintainability",
+
+      "Scalable Application Design",
+
+      "Engineering Mindset"
+    ]
+  }
 }

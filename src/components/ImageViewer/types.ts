@@ -39,3 +39,5 @@ export interface ImageViewerProps {
 }
 
 export type ImageViewerAspectRatio = "square" | "landscape" | "portrait";
+
+export type ImageLoadState = "idle" | "loading" | "loaded" | "error";

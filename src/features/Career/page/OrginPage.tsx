@@ -8,6 +8,7 @@ export interface IOrginPageProps {
 
 import type { IOrginData } from "@/types/originData";
 import Image from "next/image";
+import ImageViewer from "@/components/ImageViewer/ImageViewer";
 
 
 export default function OrginPage(props: IOrginPageProps) {
@@ -15,7 +16,6 @@ export default function OrginPage(props: IOrginPageProps) {
 
     const data = props.data as IOrginData;
 
-    console.log(data);
     // const params = useParams();
 
     return (
@@ -48,20 +48,20 @@ export default function OrginPage(props: IOrginPageProps) {
 
                 </section>
 
-                {/* PRODUCT CONTEXT */}
+                {/* INTRODUCTION */}
                 <section className="space-y-6">
-                    <h2 className="text-xl font-bold">{data.productContext.title}</h2>
+                    <h2 className="text-xl font-bold">{data.introduction.title}</h2>
 
                     <div className="context flex flex-wrap gap-2">
                         {
-                            data.productContext.description.map((desc, index) => (
+                            data.introduction.description.map((desc, index) => (
                                 <div key={index} >{desc}</div>
                             ))
                         }
                     </div>
 
                     <div className="flex flex-wrap gap-3">
-                        {data.productContext.modules.map((m) => (
+                        {data.introduction.modules.map((m) => (
                             <span
                                 key={m}
                                 className="px-3 py-1 text-sm rounded-full bg-gray-100 text-blue-700"
@@ -71,12 +71,12 @@ export default function OrginPage(props: IOrginPageProps) {
                         ))}
                     </div>
 
-                    {/* About CONTEXT */}
-                    <h2 className="text-xl font-bold">{data.aboutContext.title}</h2>
+                    {/* learningJourney CONTEXT */}
+                    <h2 className="text-xl font-bold">{data.learningJourney.title}</h2>
                     <div className="context flex flex-col gap-2">
 
                         {
-                            data.aboutContext.description.map((desc, index) => (
+                            data.learningJourney.description.map((desc, index) => (
                                 Array.isArray(desc)
                                     ? <div key={index}> <ul className="space-y-2 pl-6 " key={index} >{desc.map((d: string) => <li className="list-disc" key={d}>{d}</li>)}</ul></div>
                                     : <p key={index} >{desc}</p>
@@ -103,29 +103,25 @@ export default function OrginPage(props: IOrginPageProps) {
 
                         <div className="grid md:grid-cols-2 gap-10">
                             <div className="space-y-4">
-                                <p><strong>Problem:</strong> {project.problem}</p>
-                                <p><strong>Solution:</strong> {project.solution}</p>
+                                <p><strong>{project.goal.title} - </strong> {project.goal.description}</p>
+                                <p><strong>{project.solution.title} - </strong> {project.solution.description}</p>
 
                                 <ul className="list-disc pl-6 text-gray-600">
-                                    {project.tech.map((t) => (
+                                    {project.concepts.items.map((t) => (
                                         <li key={t}>{t}</li>
                                     ))}
                                 </ul>
 
                                 <ul className="list-disc pl-6 text-green-700">
-                                    {project.outcome.map((o) => (
+                                    {project.outcome.items.map((o) => (
                                         <li key={o}>{o}</li>
                                     ))}
                                 </ul>
                             </div>
 
-                            {/* <ImageViewer
-                                images={originImages}
-                                autoplay={{
-                                    enabled: false,
-                                    interval: 5000
-                                }}
-                            /> */}
+                            <div className="preview ">
+                                {project.images.length > 0 && <ImageViewer images={project.images} aspectRatio="landscape" curvedEdge={true} />}
+                            </div>
                         </div>
                     </section>
                 ))}

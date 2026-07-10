@@ -1,3 +1,5 @@
+import { ImageViewerItem } from "@/components/ImageViewer/types";
+
 export interface IOrginData {
   slug: string;
   company: {
@@ -7,30 +9,42 @@ export interface IOrginData {
     logo: string;
     heroMedia: string;
   };
-  productContext: {
+  introduction: {
     title: string;
     description: string[];
     modules: string[];
   };
-    aboutContext: {
+  learningJourney: {
     title: string;
     description: string[][];
   };
-  architecture: {
-    diagram: string;
-    stack: Record<string, string>;
-    highlights: string[];
-  };
-  role: string[];
+
   projects: {
     id: string;
     title: string;
     tags: string[];
-    problem: string;
-    solution: string;
-    tech: string[];
-    media: string;
-    outcome: string[];
+    goal: {
+      title: string;
+      description: string;
+    };
+    solution: {
+      title: string;
+      description: string;
+    };
+    skills: string[];
+    concepts: {
+      title: string;
+      items: string[];
+    };
+    images: ImageViewerItem[];
+    challenges: {
+      title: string;
+      items: string[];
+    };
+    outcome: {
+      title: string;
+      items: string[];
+    };
   }[];
   techStack: Record<string, string>;
   impact: string[];
