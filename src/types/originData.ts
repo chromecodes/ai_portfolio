@@ -37,6 +37,10 @@ export interface IOrginData {
       items: string[];
     };
     images: ImageViewerItem[];
+    links: {
+      github: string;
+      live: string;
+    };
     challenges: {
       title: string;
       items: string[];

@@ -18,7 +18,8 @@
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
 
-
+  --color-imageViewerIconColor: hsl(var(--imageViewerIconColor));
+  --color-imageViewerIconColorHover: hsl(var(--imageViewerIconColorHover));
 }
 
 :root {
@@ -57,6 +58,8 @@
   --chart-5: 27 87% 67%;
   --radius: 0.5rem;
 
+  --imageViewerIconColor: 198 0% 75%;
+  --imageViewerIconColorHover: 198 0% 50%;
 }
 
 .dark {
@@ -94,10 +97,24 @@
   --chart-4: 280 65% 60%;
   --chart-5: 340 75% 55%;
 
+
 }
 
-@layer utilities {}
-
+/* Add this new components layer */
+@layer components {
+  .image-viewer-icon {
+    /* We use flex & center to align the SVG perfectly.
+      We replaced 'gray' with your semantic theme colors! 
+    */
+    @apply text-lg  text-imageViewerIconColor hover:text-imageViewerIconColorHover;
+  }
+ .image-viewer-dot-icon {
+    /* We use flex & center to align the SVG perfectly.
+      We replaced 'gray' with your semantic theme colors! 
+    */
+    @apply text-lg  bg-imageViewerIconColor hover:bg-imageViewerIconColorHover;
+  }
+}
 
 /* Theme variables */
 @layer base {

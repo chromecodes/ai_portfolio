@@ -28,14 +28,7 @@ export default function ArrowButton({
                     ? "Previous image"
                     : "Next image"
             }
-            className=" flex 
-                h-8
-                 w-8 
-                 items-center 
-                 justify-center 
-                 rounded-full 
-                 bg-black/50 text-white backdrop-blur-sm transition-all duration-200 hover:bg-black/70 disabled:cursor-not-allowed disabled:opacity-40 ">
-            <Icon size={20} />
-        </button>
+            className="image-viewer-icon disabled:opacity-25 disabled:pointer-events-none">     <Icon size={20} />
+        </button >
     );
 }

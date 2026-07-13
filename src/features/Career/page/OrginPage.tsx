@@ -9,6 +9,7 @@ export interface IOrginPageProps {
 import type { IOrginData } from "@/types/originData";
 import Image from "next/image";
 import ImageViewer from "@/components/ImageViewer/ImageViewer";
+import { Icons } from "@/Icon";
 
 
 export default function OrginPage(props: IOrginPageProps) {
@@ -118,9 +119,31 @@ export default function OrginPage(props: IOrginPageProps) {
                                     ))}
                                 </ul>
                             </div>
+                            <div className="righr relative">
 
-                            <div className="preview ">
-                                {project.images.length > 0 && <ImageViewer images={project.images} aspectRatio="landscape" curvedEdge={true} />}
+                                <div className="preview ">
+                                    {project.images.length > 0 && <ImageViewer images={project.images} aspectRatio="landscape" curvedEdge={true} />}
+                                </div>
+
+                                <div className="links absolute top-4 right-4 flex gap-3">
+
+                                    {Object.entries(project.links).map(([key, url]) => {
+                                        const IconComponent = key === "github" ? Icons.github : Icons.externalLink;
+                                        console.log(IconComponent);
+
+                                        return IconComponent ? (
+                                            <a
+                                                key={`${key}-icon`}
+                                                href={url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="image-viewer-icon"
+                                            >
+                                                <IconComponent className="h-5 w-5" />
+                                            </a>
+                                        ) : null;
+                                    })}
+                                </div>
                             </div>
                         </div>
                     </section>
