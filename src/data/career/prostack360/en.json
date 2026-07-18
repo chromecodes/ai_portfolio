@@ -1,79 +1,196 @@
 {
-  "slug": "prostack360",
   "company": {
-    "name": "ProStack360",
-    "role": "Where it all started",
+    "title": "ProStack360",
+    "subtitle": "Software Developer – Frontend",
     "duration": "Jun 2023 – Jul 2025",
-    "logo": "/icons/prostack360.png",
-    "heroMedia": "/videos/prostack-demo.mp4"
-  },
-
-  "productContext": {
-    "title" : "Company Context",
-    "description": "ProStack360 is a modular CRM platform built for workflow automation, form management, real-time collaboration, and analytics across teams.",
-    "modules": ["CRM", "Forms", "Email", "Analytics", "Real-Time"]
-  },
-
-  "architecture": {
-    "diagram": "/images/architecture.png",
-    "stack": {
-      "frontend": "React · Next.js · TypeScript",
-      "realtime": "WebSockets · SSE",
-      "backend": "Node · Express",
-      "data": "MongoDB · Redis",
-      "cloud": "AWS S3 · EC2 · CloudFront"
-    },
-    "highlights": [
-      "Modular frontend architecture",
-      "Event-driven real-time communication",
-      "CDN-backed static & media delivery"
+    "headline": "Building a metadata-driven enterprise CRM capable of generating complete business systems from configuration.",
+    "video": "/videos/prostack360-overview.mp4",
+    "poster": "/images/prostack360-cover.webp",
+    "tags": [
+      "Enterprise CRM",
+      "No-Code",
+      "Metadata Driven",
+      "Real-Time",
+      "Analytics"
     ]
   },
-
-  "role": [
-    "Owned frontend architecture and UI systems",
-    "Built real-time features and collaborative workflows",
-    "Designed reusable components and editors",
-    "Worked closely with backend and product teams"
-  ],
-
+  "roles": {
+    "title": "Lead Frontend Architecture & UI Systems",
+    "description": "Spearheaded the development and architectural design of the platform's core functional modules, focusing on scalability, performance, and highly customizable user experiences.",
+    "impact": [
+      "Achieved a ~30% reduction in application load times through optimized state management and lazy-loading techniques.",
+      "Drove a ~25% measurable improvement in team collaboration and workflow speed by centralizing tools.",
+      "Successfully established highly reusable, modular UI systems that accelerated the delivery of future features."
+    ],
+    "engineering_insights": [
+      "Building real-time WebSocket systems necessitates a 'failure-first' mentality to ensure data integrity during disconnects.",
+      "Modular, component-driven UI systems scale exponentially better and are easier to maintain than traditional page-level designs.",
+      "Strategic state architecture and data-flow management often have a deeper impact on perceived application performance than rendering optimizations alone."
+    ]
+  },
   "projects": [
     {
-      "id": "email-editor",
-      "title": "Email Editor",
-      "tags": ["Editor", "Real-Time", "Productivity"],
-      "problem": "Users needed a Gmail-like editor with drafts, templates, and previews.",
-      "solution": "Built a modular email editor using Tiptap with autosave, signatures, previews, and export support.",
-      "tech": [
-        "Tiptap extensions and schema design",
-        "LocalStorage auto-draft recovery",
-        "Async save with REST APIs"
-      ],
-      "media": "/videos/email-editor.mp4",
-      "outcome": [
-        "Faster email creation",
-        "Reduced data loss from crashes"
+      "project_name": "ProStack360 CRM Platform",
+      "project_context": "ProStack360 is a comprehensive, modular CRM platform engineered to streamline workflow automation, form management, real-time collaboration, and cross-team analytics.",
+      "core_pillars": ["CRM", "Forms", "Email", "Analytics", "Real-Time"],
+      "architecture": {
+        "high_level": "Frontend (React / Next.js / TypeScript) ➔ REST APIs & WebSockets ➔ Backend (PHP)",
+        "infrastructure": "Cloud Infrastructure: AWS S3, EC2, CloudFront CDN",
+        "design_paradigm": "Modular frontend architecture paired with event-driven, real-time communication.",
+        "asset_delivery": "CDN-backed static and media delivery for optimal performance."
+      },
+      "tech_stack": {
+        "frontend": ["React", "Next.js", "TypeScript", "SCSS"],
+        "state_management": ["Hookstate"],
+        "editors": ["Tiptap", "@react-email"],
+        "real_time_data": ["WebSockets", "Server-Sent Events (SSE)"],
+        "cloud_infrastructure": ["AWS S3", "EC2", "CloudFront"]
+      },
+      "key_features": [
+        {
+          "title": "Dynamic Module Builder",
+          "tags": ["Modular", "Highly Customizable", "Productivity"],
+          "problem": "Users required complete autonomy to customize and construct bespoke CRM modules tailored to their specific business operations.",
+          "solution": "Architected a dynamic, schema-driven Module Builder that automatically generates complex Create/Read/Update/Delete (CRUD) UIs based on user-defined configurations.",
+          "technical_details": [
+            "Engineered support for over 28 distinct field types (including complex data like formulas, multi-user lookups, and linked records).",
+            "Developed deeply nested, row-based subforms equipped with automated arithmetic computations for tax, discounts, and quote generation.",
+            "Built specialized module UI views, including Gantt charts for Project management, integrated Zoom/Google Meet connections for Meetings, and IMAP-synced custom mail views for Emails.",
+            "Implemented intelligent CRM automations, including lead conversion mapping, automated quote/invoice generation, and dynamic autofill pipelines."
+          ],
+          "outcome": "Delivered a fully modular, zero-code environment that empowers users to generate sophisticated workflows and financial documents directly within the CRM.",
+          "media": [
+            {
+              "id": "mb-1",
+              "type": "video",
+              "src": "/videos/module-builder-demo.mp4",
+              "alt": "Module Builder Interface Demo"
+            },
+            {
+              "id": "mb-2",
+              "type": "image",
+              "src": "/images/module-builder-fields.webp",
+              "alt": "28+ Field Types Configuration"
+            }
+          ]
+        },
+        {
+          "title": "Advanced Email Editor",
+          "tags": ["Real-Time", "Drag-and-Drop", "No-Code Builder"],
+          "problem": "Users needed a robust, native email authoring experience (similar to Gmail) featuring drafts, templates, and rich previews without leaving the platform.",
+          "solution": "Built a high-performance, modular email editor utilizing Tiptap, seamlessly integrated with the platform's IMAP functionalities.",
+          "technical_details": [
+            "Designed custom Tiptap extensions for rich text formatting and complex schema validation.",
+            "Implemented an auto-draft recovery system using LocalStorage alongside asynchronous API saves to prevent data loss."
+          ],
+          "outcome": "Accelerated user email creation workflows while virtually eliminating data loss during unexpected application crashes or network drops.",
+          "media": [
+            {
+              "id": "ee-1",
+              "type": "video",
+              "src": "/videos/email-editor-demo.mp4",
+              "alt": "Email drag and drop demo"
+            },
+            {
+              "id": "ee-2",
+              "type": "image",
+              "src": "/images/email-templates.webp",
+              "alt": "Email templates view"
+            }
+          ]
+        },
+        {
+          "title": "WebForm Builder",
+          "tags": ["Drag-and-Drop", "No-Code Builder"],
+          "problem": "Non-technical users lacked an intuitive method to design dynamic web forms and data-capture layouts.",
+          "solution": "Developed a fluid, drag-and-drop form builder using dnd-kit and react-grid-layout.",
+          "technical_details": [
+            "Created a component-driven form schema integrated with a responsive grid-based layout system.",
+            "Linked form submission flows directly to custom CRM modules, ensuring seamless, automated data ingestion upon submission."
+          ],
+          "media": [
+            {
+              "id": "wf-1",
+              "type": "video",
+              "src": "/videos/webform-builder.mp4",
+              "alt": "WebForm drag and drop interaction"
+            }
+          ]
+        },
+        {
+          "title": "Analytics Dashboard",
+          "tags": ["Analytics", "Real-Time Insights", "Drag-and-Drop"],
+          "problem": "Clients needed a customizable interface to visualize deal pipelines, module summaries, and real-time business metrics.",
+          "solution": "Constructed a drag-and-drop dashboard builder utilizing robust grid layouts and dynamic charting engines.",
+          "technical_details": [
+            "Built mechanisms to translate raw module data into interactive analytics graphs (e.g., deal pipeline funnel charts).",
+            "Engineered a flexible, grid-based layout system allowing users to resize and arrange real-time data widgets."
+          ],
+          "media": [
+            {
+              "id": "ad-1",
+              "type": "image",
+              "src": "/images/analytics-dashboard.webp",
+              "alt": "Real-time analytics grid layout"
+            }
+          ]
+        },
+        {
+          "title": "Interactive Calendar Integration",
+          "tags": ["Real-Time", "Scheduling", "Connectivity"],
+          "problem": "Users needed a unified interface to track and manage upcoming meetings, calls, and integrated events.",
+          "solution": "Integrated and customized react-big-calendar to sync bi-directionally with users' primary calendars.",
+          "technical_details": [
+            "Engineered the UI to allow instantaneous creation of meeting, call, or event records directly from the calendar interface.",
+            "Synchronized external user data to provide a reliable, single source of truth for scheduling."
+          ],
+          "media": [
+            {
+              "id": "ic-1",
+              "type": "image",
+              "src": "/images/calendar-sync.webp",
+              "alt": "Synced React Big Calendar view"
+            }
+          ]
+        },
+        {
+          "title": "High-Performance Table View",
+          "tags": ["Infinite Scroll", "Role-Based Access", "Bulk Actions"],
+          "problem": "The platform struggled to fluidly render datasets exceeding 100 columns and infinite rows.",
+          "solution": "Rebuilt the data-table architecture using pagination-based lazy loading, optimized for a frictionless user experience.",
+          "technical_details": [
+            "Implemented WebSockets for real-time row updates with strict role-based access control.",
+            "Added support for custom user views, complex multi-column sorting/filtering, and bulk operations (update, delete, email)."
+          ],
+          "outcome": "Provided a highly responsive, simplified navigation experience for massive, complex datasets.",
+          "media": [
+            {
+              "id": "pt-1",
+              "type": "video",
+              "src": "/videos/table-view-scroll.mp4",
+              "alt": "Infinite scroll and lazy loading in action"
+            }
+          ]
+        },
+        {
+          "title": "Automated Timesheets",
+          "tags": ["Real-Time Tracking"],
+          "problem": "Management required precise logging of employee active hours based on actual system interaction rather than manual entry.",
+          "solution": "Developed an intelligent background tracking service that monitors UI engagement to calculate active working time down to the exact second.",
+          "technical_details": [
+            "Captured granular system activity through optimized keyboard, mouse, and UI interaction event listeners.",
+            "Utilized WebSockets to broadcast live status updates across the administration dashboard in real time."
+          ],
+          "media": [
+            {
+              "id": "at-1",
+              "type": "image",
+              "src": "/images/timesheet-tracking.webp",
+              "alt": "Live status update dashboard"
+            }
+          ]
+        }
       ]
     }
-  ],
-
-  "techStack": {
-    "frontend": "React · Next.js · TypeScript · SCSS",
-    "state": "Hookstate",
-    "editors": "Tiptap · @react-email",
-    "realtime": "WebSockets · SSE",
-    "cloud": "AWS S3 · EC2 · CloudFront"
-  },
-
-  "impact": [
-    "~30% reduction in load times",
-    "~25% improvement in collaboration workflows",
-    "Enabled scalable, reusable UI systems"
-  ],
-
-  "learnings": [
-    "Real-time systems require failure-first thinking",
-    "Modular UI systems scale better than page-level design",
-    "State architecture impacts performance more than rendering"
   ]
 }
