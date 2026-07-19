@@ -38,8 +38,8 @@ export default function Agentbar() {
                     placeholder={strings.agentbarPlaceholder}
                 />
 
-                <button className=" flex items-center justify-center agentbar-button bg-buttonColor rounded-full p-1" onClick={sendMessage}>
-                    <Icons.arrowUp className={"w-6 h-6 text-buttonTextColor"} />
+                <button className=" flex items-center justify-center agentbar-button bg-primary-foreground rounded-full p-1" onClick={sendMessage}>
+                    <Icons.arrowUp className={"w-6 h-6 text-primary-background"} />
                     {/* <Icons.arrowUp className={"w-6 h-6" + "text-" + (theme == 'dark' ? 'black' : 'white')} /> */}
                 </button>
             </div>

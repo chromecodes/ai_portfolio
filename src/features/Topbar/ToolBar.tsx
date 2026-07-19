@@ -21,7 +21,7 @@ export default function ToolBar() {
                 value={language}
                 onValueChange={(v) => setLanguage(v as "en" | "es")}
             >
-                <SelectTrigger className="bg-card px-3 py-1 rounded text-sm">
+                <SelectTrigger className="px-3 py-1 rounded text-sm">
                     <SelectValue>{language.toUpperCase()}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>

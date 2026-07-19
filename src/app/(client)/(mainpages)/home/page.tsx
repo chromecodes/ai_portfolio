@@ -11,10 +11,10 @@ export default function HomePage() {
                 <PulseBackground />
 
                 {/* Content */}
-                <div className="relative z-10 text-center bg-background/95 rounded-full">
+                <div className="relative z-10 text-center bg-primary-background/95 rounded-full">
                     <p className="mb-2">{strings.homePageGreeting}</p>
-                    <h1 className="text-6xl text-foreground font-bold mb-2"> {strings.homePageName}</h1>
-                    <p className="text-xl  text-foreground my-4">{strings.homePageTitle}</p>
+                    <h1 className="text-6xl text-accent-color font-bold mb-2"> {strings.homePageName}</h1>
+                    <p className="text-xl  text-primary-foreground my-4">{strings.homePageTitle}</p>
                     <p className="max-w-xl leading-relaxed">
                         {strings.homePageIntro}
                     </p>

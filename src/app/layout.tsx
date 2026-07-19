@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="en" className={inter.className}>
-      <body className="bg-background text-fontColor antialiased h-full flex flex-col min-h-screen max-h-screen">
+      <body className="bg-primary-background text-font-color antialiased h-full flex flex-col min-h-screen max-h-screen">
         <ThemeInitializer />
         {/* <MainBg /> */}
         <Topbar />

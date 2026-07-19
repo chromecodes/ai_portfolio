@@ -5,9 +5,10 @@ function CareerTooltip({ node }: { node: CareerNode }) {
 
     return (
         <div className="
-      w-64 rounded-xl bg-black/80 backdrop-blur-md
+      w-64 rounded-xl
+      bg-primary-background/80 backdrop-blur-md
       border border-white/10
-      shadow-xl p-4 text-white
+      shadow-xl p-4 
     ">
             <div className="flex items-center gap-3">
                 <img
@@ -17,13 +18,13 @@ function CareerTooltip({ node }: { node: CareerNode }) {
                 />
                 <div>
                     <div className="font-semibold">{data.company_name}</div>
-                    <div className="text-xs text-white/60">
+                    <div className="text-xs ">
                         {data.time_period} months
                     </div>
                 </div>
             </div>
 
-            <p className="mt-3 text-sm text-white/80 line-clamp-3">
+            <p className="mt-3 text-sm line-clamp-3">
                 {data.description}
             </p>
         </div>

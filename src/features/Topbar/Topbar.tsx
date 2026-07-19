@@ -25,7 +25,7 @@ export default function Topbar() {
 
 
     return (
-        <header className="flex items-center justify-between border-b border-borderColor px-6 py-3 bg-background">
+        <header className="flex items-center justify-between border-b border-borderColor px-6 py-3 bg-primary-background">
             <LogoViewer />
 
             <Navbar

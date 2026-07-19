@@ -10,7 +10,7 @@ export default function Footbar() {
 
 
     return (
-        <footer className="flex items-end justify-between border-t border-borderColor px-6 py-3 bg-background">
+        <footer className="flex items-end justify-between border-t border-borderColor px-6 py-3 bg-primary-background">
             <Leftwing />
             <Agentbar />
             <Rightwing />
