@@ -106,13 +106,14 @@
     /* We use flex & center to align the SVG perfectly.
       We replaced 'gray' with your semantic theme colors! 
     */
-    @apply text-lg  text-imageViewerIconColor hover:text-imageViewerIconColorHover;
+    @apply text-lg text-imageViewerIconColor hover:text-imageViewerIconColorHover;
   }
- .image-viewer-dot-icon {
+
+  .image-viewer-dot-icon {
     /* We use flex & center to align the SVG perfectly.
       We replaced 'gray' with your semantic theme colors! 
     */
-    @apply text-lg  bg-imageViewerIconColor hover:bg-imageViewerIconColorHover;
+    @apply text-lg bg-imageViewerIconColor hover:bg-imageViewerIconColorHover;
   }
 }
 

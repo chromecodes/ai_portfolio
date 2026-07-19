@@ -1,11 +1,17 @@
 {
+  "slug": "prostack360",
   "company": {
-    "title": "ProStack360",
-    "subtitle": "Software Developer – Frontend",
+    "logo": "/icons/prostack360.png",
+    "name": "ProStack360",
+    "role": "Software Developer – Frontend",
     "duration": "Jun 2023 – Jul 2025",
     "headline": "Building a metadata-driven enterprise CRM capable of generating complete business systems from configuration.",
-    "video": "/videos/prostack360-overview.mp4",
-    "poster": "/images/prostack360-cover.webp",
+    "media": {
+      "video": "/videos/prostack360-overview.mp4",
+      "images": [
+        "/images/prostack360-cover.webp"
+      ]
+    },
     "tags": [
       "Enterprise CRM",
       "No-Code",
@@ -32,7 +38,13 @@
     {
       "project_name": "ProStack360 CRM Platform",
       "project_context": "ProStack360 is a comprehensive, modular CRM platform engineered to streamline workflow automation, form management, real-time collaboration, and cross-team analytics.",
-      "core_pillars": ["CRM", "Forms", "Email", "Analytics", "Real-Time"],
+      "core_pillars": [
+        "CRM",
+        "Forms",
+        "Email",
+        "Analytics",
+        "Real-Time"
+      ],
       "architecture": {
         "high_level": "Frontend (React / Next.js / TypeScript) ➔ REST APIs & WebSockets ➔ Backend (PHP)",
         "infrastructure": "Cloud Infrastructure: AWS S3, EC2, CloudFront CDN",
@@ -40,16 +52,37 @@
         "asset_delivery": "CDN-backed static and media delivery for optimal performance."
       },
       "tech_stack": {
-        "frontend": ["React", "Next.js", "TypeScript", "SCSS"],
-        "state_management": ["Hookstate"],
-        "editors": ["Tiptap", "@react-email"],
-        "real_time_data": ["WebSockets", "Server-Sent Events (SSE)"],
-        "cloud_infrastructure": ["AWS S3", "EC2", "CloudFront"]
+        "frontend": [
+          "React",
+          "Next.js",
+          "TypeScript",
+          "SCSS"
+        ],
+        "state_management": [
+          "Hookstate"
+        ],
+        "editors": [
+          "Tiptap",
+          "@react-email"
+        ],
+        "real_time_data": [
+          "WebSockets",
+          "Server-Sent Events (SSE)"
+        ],
+        "cloud_infrastructure": [
+          "AWS S3",
+          "EC2",
+          "CloudFront"
+        ]
       },
       "key_features": [
         {
           "title": "Dynamic Module Builder",
-          "tags": ["Modular", "Highly Customizable", "Productivity"],
+          "tags": [
+            "Modular",
+            "Highly Customizable",
+            "Productivity"
+          ],
           "problem": "Users required complete autonomy to customize and construct bespoke CRM modules tailored to their specific business operations.",
           "solution": "Architected a dynamic, schema-driven Module Builder that automatically generates complex Create/Read/Update/Delete (CRUD) UIs based on user-defined configurations.",
           "technical_details": [
@@ -76,7 +109,11 @@
         },
         {
           "title": "Advanced Email Editor",
-          "tags": ["Real-Time", "Drag-and-Drop", "No-Code Builder"],
+          "tags": [
+            "Real-Time",
+            "Drag-and-Drop",
+            "No-Code Builder"
+          ],
           "problem": "Users needed a robust, native email authoring experience (similar to Gmail) featuring drafts, templates, and rich previews without leaving the platform.",
           "solution": "Built a high-performance, modular email editor utilizing Tiptap, seamlessly integrated with the platform's IMAP functionalities.",
           "technical_details": [
@@ -101,7 +138,10 @@
         },
         {
           "title": "WebForm Builder",
-          "tags": ["Drag-and-Drop", "No-Code Builder"],
+          "tags": [
+            "Drag-and-Drop",
+            "No-Code Builder"
+          ],
           "problem": "Non-technical users lacked an intuitive method to design dynamic web forms and data-capture layouts.",
           "solution": "Developed a fluid, drag-and-drop form builder using dnd-kit and react-grid-layout.",
           "technical_details": [
@@ -119,7 +159,11 @@
         },
         {
           "title": "Analytics Dashboard",
-          "tags": ["Analytics", "Real-Time Insights", "Drag-and-Drop"],
+          "tags": [
+            "Analytics",
+            "Real-Time Insights",
+            "Drag-and-Drop"
+          ],
           "problem": "Clients needed a customizable interface to visualize deal pipelines, module summaries, and real-time business metrics.",
           "solution": "Constructed a drag-and-drop dashboard builder utilizing robust grid layouts and dynamic charting engines.",
           "technical_details": [
@@ -137,7 +181,11 @@
         },
         {
           "title": "Interactive Calendar Integration",
-          "tags": ["Real-Time", "Scheduling", "Connectivity"],
+          "tags": [
+            "Real-Time",
+            "Scheduling",
+            "Connectivity"
+          ],
           "problem": "Users needed a unified interface to track and manage upcoming meetings, calls, and integrated events.",
           "solution": "Integrated and customized react-big-calendar to sync bi-directionally with users' primary calendars.",
           "technical_details": [
@@ -155,7 +203,11 @@
         },
         {
           "title": "High-Performance Table View",
-          "tags": ["Infinite Scroll", "Role-Based Access", "Bulk Actions"],
+          "tags": [
+            "Infinite Scroll",
+            "Role-Based Access",
+            "Bulk Actions"
+          ],
           "problem": "The platform struggled to fluidly render datasets exceeding 100 columns and infinite rows.",
           "solution": "Rebuilt the data-table architecture using pagination-based lazy loading, optimized for a frictionless user experience.",
           "technical_details": [
@@ -174,7 +226,9 @@
         },
         {
           "title": "Automated Timesheets",
-          "tags": ["Real-Time Tracking"],
+          "tags": [
+            "Real-Time Tracking"
+          ],
           "problem": "Management required precise logging of employee active hours based on actual system interaction rather than manual entry.",
           "solution": "Developed an intelligent background tracking service that monitors UI engagement to calculate active working time down to the exact second.",
           "technical_details": [

@@ -8,6 +8,7 @@ export interface IOrginData {
     duration: string;
     logo: string;
     heroMedia: string;
+    headline: string;
   };
   introduction: {
     title: string;

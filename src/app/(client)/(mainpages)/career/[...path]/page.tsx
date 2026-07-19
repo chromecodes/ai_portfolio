@@ -2,7 +2,7 @@
 
 
 import data from "@/data/career/prostack360/en.json";
-import type { CareerDetail } from "@/types/career";
+import type { CareerData, DetailedCareerDetail } from "@/types/career";
 import CareerUI from '@/features/Career/page/CareerUI';
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,14 +18,16 @@ export default function CareerPath() {
     const lang = useLanguageStore((state) => state.language);
 
     const [isloading, setIsLoading] = useState(true);
-    const [career, setCareer] = useState(data as CareerDetail);
+    const [career, setCareer] = useState<CareerData>(data as DetailedCareerDetail);
+
+    console.log(career);
 
     const fetchData = async () => {
         const fileUrl = `/api/mainpages/career/${params.path[0]}/${lang}`;
         try {
             const response = await fetch(fileUrl);
             const data = await response.json();
-            setCareer(data.data as CareerDetail);
+            setCareer(data.data as CareerData);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -49,10 +51,13 @@ export default function CareerPath() {
                 return <CareerUI data={career} />;
             case "prostack360":
                 return <CareerUI data={career} />;
+            case "cognizant":
+                return <CareerUI data={career} />;
             default:
                 return <div>Career not found</div>;
         }
     }
 
 }
+
 

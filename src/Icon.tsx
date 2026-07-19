@@ -11,7 +11,6 @@ import {
     FaLinkedin
 } from "react-icons/fa";
 
-
 export const Icons = {
     arrowUp: ArrowUp,
     send: Send,
