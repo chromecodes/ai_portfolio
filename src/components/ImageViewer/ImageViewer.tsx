@@ -16,6 +16,8 @@ export default function ImageViewer({
     curvedEdge = true,
 }: ImageViewerProps) {
 
+    console.log(images);
+
     const {
         ref,
         isVisible

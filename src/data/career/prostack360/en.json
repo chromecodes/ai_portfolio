@@ -77,33 +77,57 @@
       },
       "key_features": [
         {
+          "id": "prostack360-feature-001",
           "title": "Dynamic Module Builder",
           "tags": [
             "Modular",
             "Highly Customizable",
             "Productivity"
           ],
-          "problem": "Users required complete autonomy to customize and construct bespoke CRM modules tailored to their specific business operations.",
-          "solution": "Architected a dynamic, schema-driven Module Builder that automatically generates complex Create/Read/Update/Delete (CRUD) UIs based on user-defined configurations.",
-          "technical_details": [
-            "Engineered support for over 28 distinct field types (including complex data like formulas, multi-user lookups, and linked records).",
-            "Developed deeply nested, row-based subforms equipped with automated arithmetic computations for tax, discounts, and quote generation.",
-            "Built specialized module UI views, including Gantt charts for Project management, integrated Zoom/Google Meet connections for Meetings, and IMAP-synced custom mail views for Emails.",
-            "Implemented intelligent CRM automations, including lead conversion mapping, automated quote/invoice generation, and dynamic autofill pipelines."
-          ],
-          "outcome": "Delivered a fully modular, zero-code environment that empowers users to generate sophisticated workflows and financial documents directly within the CRM.",
+          "problem": {
+            "title": "Problem",
+            "description":"Users required complete autonomy to customize and construct bespoke CRM modules tailored to their specific business operations."
+          },
+          "solution": {
+            "title" : "Solution", 
+            "description": "Architected a dynamic, schema-driven Module Builder that automatically generates complex Create/Read/Update/Delete (CRUD) UIs based on user-defined configurations."
+          },
+          "technical_details": {
+            "title": "Technical Details",
+            "items": [
+              "Engineered support for over 28 distinct field types (including complex data like formulas, multi-user lookups, and linked records).",
+              "Developed deeply nested, row-based subforms equipped with automated arithmetic computations for tax, discounts, and quote generation.",
+              "Built specialized module UI views, including Gantt charts for Project management, integrated Zoom/Google Meet connections for Meetings, and IMAP-synced custom mail views for Emails.",
+              "Implemented intelligent CRM automations, including lead conversion mapping, automated quote/invoice generation, and dynamic autofill pipelines."
+            ]
+          },
+          "outcome": {
+            "title" : "Impact",
+            "items" : [
+              "Delivered a fully modular, zero-code environment that empowers users to generate sophisticated workflows and financial documents directly within the CRM.",
+              "Accelerated custom module creation time by eliminating developer bottlenecks."
+            ]
+          },
           "media": [
             {
               "id": "mb-1",
               "type": "video",
-              "src": "/videos/module-builder-demo.mp4",
-              "alt": "Module Builder Interface Demo"
+              "src": "/videos/prostack360-mb.mp4",
+              "blurSrc": "",
+              "alt": "Module Builder Interface Demo",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
             },
             {
               "id": "mb-2",
               "type": "image",
-              "src": "/images/module-builder-fields.webp",
-              "alt": "28+ Field Types Configuration"
+              "src": "/images/p28.webp",
+              "blurSrc": "/images/p28-blur.webp",
+              "alt": "Module Builder Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
             }
           ]
         },
@@ -114,25 +138,48 @@
             "Drag-and-Drop",
             "No-Code Builder"
           ],
-          "problem": "Users needed a robust, native email authoring experience (similar to Gmail) featuring drafts, templates, and rich previews without leaving the platform.",
-          "solution": "Built a high-performance, modular email editor utilizing Tiptap, seamlessly integrated with the platform's IMAP functionalities.",
-          "technical_details": [
-            "Designed custom Tiptap extensions for rich text formatting and complex schema validation.",
-            "Implemented an auto-draft recovery system using LocalStorage alongside asynchronous API saves to prevent data loss."
-          ],
-          "outcome": "Accelerated user email creation workflows while virtually eliminating data loss during unexpected application crashes or network drops.",
+          "problem": {
+            "title":"Problem",
+            "description": "Users needed a robust, native email authoring experience (similar to Gmail) featuring drafts, templates, and rich previews without leaving the platform."
+          },
+          "solution": {
+            "title" : "Solution",
+            "description": "Built a high-performance, modular email editor utilizing Tiptap, seamlessly integrated with the platform's IMAP functionalities."
+          },
+          "technical_details": {
+            "title": "Technical Details",
+            "items": [
+              "Designed custom Tiptap extensions for rich text formatting and complex schema validation.",
+              "Implemented an auto-draft recovery system using LocalStorage alongside asynchronous API saves to prevent data loss."
+            ]
+          },
+          "outcome": {
+            "title" : "Impact",
+            "items" : [
+              "Accelerated user email creation workflows while virtually eliminating data loss during unexpected application crashes or network drops.",
+              "Reduced data-loss incident reports to 0% during email drafting."
+            ]
+          },
           "media": [
             {
               "id": "ee-1",
               "type": "video",
               "src": "/videos/email-editor-demo.mp4",
-              "alt": "Email drag and drop demo"
+              "blurSrc": "",
+              "alt": "Email drag and drop demo",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
             },
             {
               "id": "ee-2",
               "type": "image",
               "src": "/images/email-templates.webp",
-              "alt": "Email templates view"
+              "blurSrc": "",
+              "alt": "Email templates view",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
             }
           ]
         },
@@ -142,18 +189,38 @@
             "Drag-and-Drop",
             "No-Code Builder"
           ],
-          "problem": "Non-technical users lacked an intuitive method to design dynamic web forms and data-capture layouts.",
-          "solution": "Developed a fluid, drag-and-drop form builder using dnd-kit and react-grid-layout.",
-          "technical_details": [
-            "Created a component-driven form schema integrated with a responsive grid-based layout system.",
-            "Linked form submission flows directly to custom CRM modules, ensuring seamless, automated data ingestion upon submission."
-          ],
+          "problem": {
+            "title":"Problem",
+            "description": "Non-technical users lacked an intuitive method to design dynamic web forms and data-capture layouts."
+          },
+          "solution": {
+            "title" : "Solution",
+            "description": "Developed a fluid, drag-and-drop form builder using dnd-kit and react-grid-layout."
+          },
+          "technical_details": {
+            "title": "Technical Details",
+            "items": [
+              "Created a component-driven form schema integrated with a responsive grid-based layout system.",
+              "Linked form submission flows directly to custom CRM modules, ensuring seamless, automated data ingestion upon submission."
+            ]
+          },
+          "outcome": {
+            "title" : "Impact",
+            "items" : [
+              "Streamlined data collection by empowering non-technical teams to instantly deploy custom lead-capture forms without engineering support.",
+              "Decreased custom form deployment time by over 80%."
+            ]
+          },
           "media": [
             {
               "id": "wf-1",
               "type": "video",
               "src": "/videos/webform-builder.mp4",
-              "alt": "WebForm drag and drop interaction"
+              "blurSrc": "",
+              "alt": "WebForm drag and drop interaction",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
             }
           ]
         },
@@ -164,18 +231,38 @@
             "Real-Time Insights",
             "Drag-and-Drop"
           ],
-          "problem": "Clients needed a customizable interface to visualize deal pipelines, module summaries, and real-time business metrics.",
-          "solution": "Constructed a drag-and-drop dashboard builder utilizing robust grid layouts and dynamic charting engines.",
-          "technical_details": [
-            "Built mechanisms to translate raw module data into interactive analytics graphs (e.g., deal pipeline funnel charts).",
-            "Engineered a flexible, grid-based layout system allowing users to resize and arrange real-time data widgets."
-          ],
+          "problem": {
+            "title":"Problem",
+            "description": "Clients needed a customizable interface to visualize deal pipelines, module summaries, and real-time business metrics."
+          },
+          "solution": {
+            "title" : "Solution",
+            "description": "Constructed a drag-and-drop dashboard builder utilizing robust grid layouts and dynamic charting engines."
+          },
+          "technical_details": {
+            "title": "Technical Details",
+            "items": [
+              "Built mechanisms to translate raw module data into interactive analytics graphs (e.g., deal pipeline funnel charts).",
+              "Engineered a flexible, grid-based layout system allowing users to resize and arrange real-time data widgets."
+            ]
+          },
+          "outcome": {
+            "title" : "Impact",
+            "items" : [
+              "Provided leadership with instant visibility into business performance through personalized, real-time data views.",
+              "Increased daily active dashboard usage across management teams by offering personalized views."
+            ]
+          },
           "media": [
             {
               "id": "ad-1",
               "type": "image",
               "src": "/images/analytics-dashboard.webp",
-              "alt": "Real-time analytics grid layout"
+              "blurSrc": "",
+              "alt": "Real-time analytics grid layout",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
             }
           ]
         },
@@ -186,18 +273,38 @@
             "Scheduling",
             "Connectivity"
           ],
-          "problem": "Users needed a unified interface to track and manage upcoming meetings, calls, and integrated events.",
-          "solution": "Integrated and customized react-big-calendar to sync bi-directionally with users' primary calendars.",
-          "technical_details": [
-            "Engineered the UI to allow instantaneous creation of meeting, call, or event records directly from the calendar interface.",
-            "Synchronized external user data to provide a reliable, single source of truth for scheduling."
-          ],
+          "problem": {
+            "title":"Problem",
+            "description": "Users needed a unified interface to track and manage upcoming meetings, calls, and integrated events."
+          },
+          "solution": {
+            "title" : "Solution",
+            "description": "Integrated and customized react-big-calendar to sync bi-directionally with users' primary calendars."
+          },
+          "technical_details": {
+            "title": "Technical Details",
+            "items": [
+              "Engineered the UI to allow instantaneous creation of meeting, call, or event records directly from the calendar interface.",
+              "Synchronized external user data to provide a reliable, single source of truth for scheduling."
+            ]
+          },
+          "outcome": {
+            "title" : "Impact",
+            "items" : [
+              "Centralized scheduling workflows, significantly reducing the friction of bouncing between the CRM and external email clients.",
+              "Unified cross-platform scheduling into a single, reliable interface to prevent double-bookings."
+            ]
+          },
           "media": [
             {
               "id": "ic-1",
               "type": "image",
               "src": "/images/calendar-sync.webp",
-              "alt": "Synced React Big Calendar view"
+              "blurSrc": "",
+              "alt": "Synced React Big Calendar view",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
             }
           ]
         },
@@ -208,19 +315,38 @@
             "Role-Based Access",
             "Bulk Actions"
           ],
-          "problem": "The platform struggled to fluidly render datasets exceeding 100 columns and infinite rows.",
-          "solution": "Rebuilt the data-table architecture using pagination-based lazy loading, optimized for a frictionless user experience.",
-          "technical_details": [
-            "Implemented WebSockets for real-time row updates with strict role-based access control.",
-            "Added support for custom user views, complex multi-column sorting/filtering, and bulk operations (update, delete, email)."
-          ],
-          "outcome": "Provided a highly responsive, simplified navigation experience for massive, complex datasets.",
+          "problem": {
+            "title":"Problem",
+            "description": "The platform struggled to fluidly render datasets exceeding 100 columns and infinite rows."
+          },
+          "solution": {
+            "title" : "Solution",
+            "description": "Rebuilt the data-table architecture using pagination-based lazy loading, optimized for a frictionless user experience."
+          },
+          "technical_details": {
+            "title": "Technical Details",
+            "items": [
+              "Implemented WebSockets for real-time row updates with strict role-based access control.",
+              "Added support for custom user views, complex multi-column sorting/filtering, and bulk operations (update, delete, email)."
+            ]
+          },
+          "outcome": {
+            "title" : "Impact",
+            "items" : [
+              "Provided a highly responsive, simplified navigation experience for massive, complex datasets.",
+              "Maintained fluid scrolling performance for datasets exceeding 10,000 rows."
+            ]
+          },
           "media": [
             {
               "id": "pt-1",
               "type": "video",
               "src": "/videos/table-view-scroll.mp4",
-              "alt": "Infinite scroll and lazy loading in action"
+              "blurSrc": "",
+              "alt": "Infinite scroll and lazy loading in action",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
             }
           ]
         },
@@ -229,18 +355,38 @@
           "tags": [
             "Real-Time Tracking"
           ],
-          "problem": "Management required precise logging of employee active hours based on actual system interaction rather than manual entry.",
-          "solution": "Developed an intelligent background tracking service that monitors UI engagement to calculate active working time down to the exact second.",
-          "technical_details": [
-            "Captured granular system activity through optimized keyboard, mouse, and UI interaction event listeners.",
-            "Utilized WebSockets to broadcast live status updates across the administration dashboard in real time."
-          ],
+          "problem": {
+            "title":"Problem",
+            "description": "Management required precise logging of employee active hours based on actual system interaction rather than manual entry."
+          },
+          "solution": {
+            "title" : "Solution",
+            "description": "Developed an intelligent background tracking service that monitors UI engagement to calculate active working time down to the exact second."
+          },
+          "technical_details": {
+            "title": "Technical Details",
+            "items": [
+              "Captured granular system activity through optimized keyboard, mouse, and UI interaction event listeners.",
+              "Utilized WebSockets to broadcast live status updates across the administration dashboard in real time."
+            ]
+          },
+          "outcome": {
+            "title" : "Impact",
+            "items" : [
+              "Replaced manual, error-prone time tracking with an objective, exact-second activity logging system.",
+              "Improved timesheet accuracy and accountability by eliminating manual entry discrepancies."
+            ]
+          },
           "media": [
             {
               "id": "at-1",
               "type": "image",
               "src": "/images/timesheet-tracking.webp",
-              "alt": "Live status update dashboard"
+              "blurSrc": "",
+              "alt": "Live status update dashboard",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
             }
           ]
         }

@@ -43,7 +43,7 @@ export function useImageLoader({
   async function loadBlur(index: number) {
     const image = images[index];
 
-    if (!image) return;
+    if (!image || !image.blurSrc) return;
 
     if (loadedBlur.has(index)) return;
 

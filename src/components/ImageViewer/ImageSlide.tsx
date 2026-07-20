@@ -54,6 +54,8 @@ export default function ImageSlide({ image, isFullLoaded, curvedEdge, direction 
         );
     }
 
+    console.log(image);
+
     return (
         <motion.div
             key={image.id}
@@ -74,17 +76,30 @@ export default function ImageSlide({ image, isFullLoaded, curvedEdge, direction 
                 duration: 0.3
             }}
             className="relative w-full h-full">
-            <Image
-                src={isFullLoaded ? image.src : image.blurSrc}
-                alt={image.alt}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                onError={() => {
-                    setHasError(true);
-                }}
-                style={{ objectFit: image.displayMode }}
-                className={` object-cover  transition-all duration-500 ${isFullLoaded ? "blur-0 scale-100" : "blur-sm scale-105"} ${curvedEdge ? "rounded-2xl" : ""}`}
-            />
+            {image.type === "video" ? (<>
+                <video
+                    src={image.src}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    onError={() => {
+                        setHasError(true);
+                    }}
+                    style={{ objectFit: image.displayMode }}
+                /></>) : (
+                <Image
+                    src={(isFullLoaded || !image.blurSrc) ? image.src : image.blurSrc}
+                    alt={image.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    onError={() => {
+                        setHasError(true);
+                    }}
+                    style={{ objectFit: image.displayMode }}
+                    className={` object-cover  transition-all duration-500 ${(isFullLoaded || !image.blurSrc) ? "blur-0 scale-100" : "blur-sm scale-105"} ${curvedEdge ? "rounded-2xl" : ""}`}
+                />)
+            }
         </motion.div>
     );
 }

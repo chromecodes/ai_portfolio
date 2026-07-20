@@ -8,6 +8,10 @@
   --color-font-color-muted: hsl(var(--primary-foreground-muted));
 
   --color-accent-color: hsl(var(--accent));
+  --color-success-color: hsl(var(--success));
+
+  --color-secondary-accent-color: hsl(var(--secondary-accent));
+
 
   --color-border: hsl(var(--border));
 
@@ -43,10 +47,11 @@
   --primary-foreground-muted: 0, 0%, 40%;
 
   --accent: 256, 100%, 70%;
-
+  --secondary-accent: 186, 100%, 60%;
+  --success: 160, 60%, 60%;
   --borderColor: 0 0% 89%;
 
-  --secondary-background: 0 0% 96.1%;
+  --secondary-background: 0 0% 96%;
   --secondary-foreground: 0 0% 9%;
 
   --card: 0 0% 100%;
@@ -96,7 +101,7 @@
 
   --borderColor: 0 0% 14%;
 
-  --secondary-background: 0 0% 14.9%;
+  --secondary-background: 0 0% 8%;
   --secondary-foreground: 0 0% 98%;
 
   --muted: 0 0% 14.9%;

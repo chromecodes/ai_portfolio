@@ -40,7 +40,6 @@ export function useSwipe({
     }
 
     const distance = currentX.current - startX.current;
-    console.log("distance", distance);
 
     if (Math.abs(distance) < threshold) {
       return;

@@ -3,15 +3,17 @@ export interface ImageViewerItem {
 
   src: string;
 
-  blurSrc: string;
+  blurSrc?: string;
 
   alt: string;
 
   displayMode?: "contain" | "cover";
 
-  width: number;
+  width?: number;
 
-  height: number;
+  height?: number;
+
+  type: "video" | "image";
 
   caption?: string;
 }

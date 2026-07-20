@@ -1,45 +1,4 @@
-import { ImageViewerItem } from "@/components/ImageViewer/types";
-
-export interface CareerDetail {
-  slug: string;
-  company: {
-    name: string;
-    role: string;
-    duration: string;
-    headline?: string;
-    media?: {
-      "video": "",
-      "images": []
-    }
-    logo?: string;
-  };
-  productContext: {
-    title: string;
-    description: string;
-    modules: string[];
-  };
-  architecture: {
-    diagram: string;
-    stack: Record<string, string>;
-    highlights: string[];
-  };
-  role: string[];
-  projects: {
-    id: string;
-    title: string;
-    tags: string[];
-    problem: string;
-    solution: string;
-    tech: string[];
-    media: string;
-    outcome: string[];
-  }[];
-  techStack: Record<string, string>;
-  impact: string[];
-  learnings: string[];
-}
-
-export interface DetailedCareerDetail {
+export default interface careerTypes {
   slug: string;
   company: {
     logo: string;
@@ -58,6 +17,26 @@ export interface DetailedCareerDetail {
     description: string;
     impact: string[];
     engineering_insights: string[];
+  };
+  introduction: {
+    title: string;
+    description: string[];
+    modules: string[];
+  };
+  learningJourney: {
+    title: string;
+    description: (string | string[])[];
+  };
+  techStack: {
+    title: string;
+    categories: {
+      name: string;
+      values: string[];
+    }[];
+  };
+  learnings: {
+    title: string;
+    items: string[];
   };
   projects: {
     project_name: string;
@@ -79,10 +58,10 @@ export interface DetailedCareerDetail {
     key_features: {
       title: string;
       tags: string[];
-      problem: string;
-      solution: string;
-      technical_details: string[];
-      outcome?: string;
+      problem: {title:string, description:string};
+      solution: {title:string, description:string};
+      technical_details: {title:string, items:string[]};
+      outcome: {title:string, items:string[]};
       media: {
         id: string;
         type: "video" | "image";
@@ -91,7 +70,4 @@ export interface DetailedCareerDetail {
       }[];
     }[];
   }[];
-}
-
-export type CareerData = CareerDetail | DetailedCareerDetail;
-
+};

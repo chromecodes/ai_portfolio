@@ -5,8 +5,12 @@
     "role": "Journey to Software Engineering",
     "duration": "Dec 2021 – Feb 2023",
     "logo": "/icons/flag_light.png",
-    "heroMedia": "",
-    "headline": "Learing through  Building"
+    "media": {
+      "video": "",
+      "images": []
+    },
+    "headline": "Learing through  Building",
+    "tags": []
   },
   "introduction": {
     "title": "Where Curiosity Became a Career",
@@ -57,10 +61,8 @@
     {
       "id": "origin-html-001",
       "title": "Recipes Website",
-      "tags": [
-        "HTML"
-      ],
-      "goal": {
+      "tags": ["HTML"],
+      "problem": {
         "title": "Goal",
         "description": "Understand how web pages are structured using semantic HTML and learn the fundamental building blocks of the web."
       },
@@ -68,7 +70,7 @@
         "title": "Solution",
         "description": "Built a multi-page recipe website using semantic HTML to understand how browsers interpret documents, organize content, and construct the Document Object Model (DOM). The project focused entirely on creating meaningful document structure before introducing styling or interactivity."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-html-001-image-01",
           "src": "/images/p1.webp",
@@ -76,6 +78,7 @@
           "alt": "Recipes Website Home",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -85,6 +88,7 @@
           "alt": "Recipes Website Recipe Page",
           "displayMode": "contain",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -103,7 +107,7 @@
           "Document Structure"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Document Object Model (DOM)",
@@ -126,11 +130,8 @@
     {
       "id": "origin-css-002",
       "title": "Landing Page",
-      "tags": [
-        "HTML",
-        "CSS"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS"],
+      "problem": {
         "title": "Goal",
         "description": "Learn modern CSS techniques and understand how presentation is separated from document structure."
       },
@@ -138,7 +139,7 @@
         "title": "Solution",
         "description": "Recreated a professional landing page while focusing on responsive layouts, typography, spacing, Flexbox, and reusable styling patterns. The project emphasized pixel-perfect implementation and visual consistency."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-css-002-image-01",
           "src": "/images/p3.webp",
@@ -146,6 +147,7 @@
           "alt": "Landing Page Home",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -164,7 +166,7 @@
           "Layout"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "CSS Cascade",
@@ -188,12 +190,8 @@
     {
       "id": "origin-js-003",
       "title": "Rock Paper Scissors",
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
         "title": "Goal",
         "description": "Learn the fundamentals of programming through JavaScript by building an interactive application."
       },
@@ -201,7 +199,7 @@
         "title": "Solution",
         "description": "Developed an interactive Rock Paper Scissors game that introduced variables, conditionals, loops, functions, and event handling while reinforcing logical problem-solving."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-js-003-image-01",
           "src": "/images/p4.webp",
@@ -209,6 +207,7 @@
           "alt": "Rock Paper Scissors Game",
           "displayMode": "contain",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -227,7 +226,7 @@
           "Events"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Algorithms",
@@ -249,12 +248,8 @@
     {
       "id": "origin-dom-004",
       "title": "Etch-a-Sketch",
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
         "title": "Goal",
         "description": "Understand DOM manipulation and event-driven programming by creating an interactive browser application."
       },
@@ -262,7 +257,7 @@
         "title": "Solution",
         "description": "Built an interactive drawing application by dynamically generating grid elements, responding to user interactions, and updating the DOM in real time."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-js-004-image-01",
           "src": "/images/p5.webp",
@@ -270,6 +265,7 @@
           "alt": "Etch-a-Sketch",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -287,7 +283,7 @@
           "JavaScript"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Event Loop",
@@ -310,12 +306,8 @@
     {
       "id": "origin-calculator-005",
       "title": "Calculator",
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
         "title": "Goal",
         "description": "Strengthen programming fundamentals by building a calculator that manages user input, application state, and mathematical operations."
       },
@@ -323,7 +315,7 @@
         "title": "Solution",
         "description": "Developed a fully functional calculator capable of handling chained operations, keyboard input, decimal values, and error handling. The project emphasized separating business logic from the user interface while maintaining predictable application state."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-js-005-image-01",
           "src": "/images/p6.webp",
@@ -331,6 +323,7 @@
           "alt": "Calculator",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -348,7 +341,7 @@
           "Application State"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "State Management",
@@ -371,12 +364,8 @@
     {
       "id": "origin-signup-form-006",
       "title": "Sign-up Form",
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
         "title": "Goal",
         "description": "Learn how browsers process forms and build robust client-side validation for a better user experience."
       },
@@ -384,7 +373,7 @@
         "title": "Solution",
         "description": "Created a responsive registration form with real-time validation, password confirmation, custom error messaging, and user feedback. The project focused on writing defensive code that prevents invalid data before submission."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-js-006-image-01",
           "src": "/images/p7.webp",
@@ -392,6 +381,7 @@
           "alt": "Sign-up Form",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -409,7 +399,7 @@
           "CSS"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Input Validation",
@@ -432,11 +422,8 @@
     {
       "id": "origin-admin-dashboard-007",
       "title": "Admin Dashboard",
-      "tags": [
-        "HTML",
-        "CSS"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS"],
+      "problem": {
         "title": "Goal",
         "description": "Master advanced CSS layouts while recreating a professional dashboard interface."
       },
@@ -444,7 +431,7 @@
         "title": "Solution",
         "description": "Built a responsive admin dashboard using CSS Grid and Flexbox. The focus was on accurately reproducing complex layouts while maintaining scalability and reusable styling patterns."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-admin-dashboard-007-image-01",
           "src": "/images/p8.webp",
@@ -452,6 +439,7 @@
           "alt": "Admin Dashboard",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -469,7 +457,7 @@
           "Typography"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Layout Algorithms",
@@ -492,12 +480,8 @@
     {
       "id": "origin-library-008",
       "title": "Library",
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
         "title": "Goal",
         "description": "Understand JavaScript's object model and learn Object-Oriented Programming through real-world application design."
       },
@@ -505,7 +489,7 @@
         "title": "Solution",
         "description": "Built a library management application using constructor functions and JavaScript prototypes. The project explored how objects are created, how behavior is shared through prototypes, and how applications can be modeled using reusable abstractions."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-library-008-image-01",
           "src": "/images/p9.webp",
@@ -513,6 +497,7 @@
           "alt": "Library Management App",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -530,7 +515,7 @@
           "Prototypes"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Object-Oriented Programming",
@@ -555,12 +540,8 @@
     {
       "id": "origin-tictactoe-009",
       "title": "Tic Tac Toe",
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
         "title": "Goal",
         "description": "Learn software design patterns and create maintainable applications using modular JavaScript architecture."
       },
@@ -568,7 +549,7 @@
         "title": "Solution",
         "description": "Built a Tic Tac Toe game using Factory Functions and the Module Pattern. The project focused on separating responsibilities, managing private state, and organizing application logic into independent modules."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-tictactoe-009-image-01",
           "src": "/images/p10.webp",
@@ -576,6 +557,7 @@
           "alt": "Tic Tac Toe Game",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -593,7 +575,7 @@
           "DOM Manipulation"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Encapsulation",
@@ -618,13 +600,8 @@
     {
       "id": "origin-restaurant-webpack-010",
       "title": "Restaurant Page",
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript",
-        "Webpack"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS", "JavaScript", "Webpack"],
+      "problem": {
         "title": "Goal",
         "description": "Understand modern JavaScript development workflows and learn how professional frontend applications are structured."
       },
@@ -632,7 +609,7 @@
         "title": "Solution",
         "description": "Created a restaurant single-page application using JavaScript modules and Webpack. The project introduced dependency management, build processes, and the idea of transforming source code into optimized production bundles."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-restaurant-webpack-010-image-01",
           "src": "/images/p11.webp",
@@ -640,6 +617,7 @@
           "alt": "Restaurant Page",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -649,6 +627,7 @@
           "alt": "Restaurant Page 2",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -658,6 +637,7 @@
           "alt": "Restaurant Page 3",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -667,6 +647,7 @@
           "alt": "Restaurant Page 4",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -684,7 +665,7 @@
           "Build Tools"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Dependency Graph",
@@ -708,12 +689,8 @@
     {
       "id": "origin-todo-solid-011",
       "title": "Todo Application",
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
         "title": "Goal",
         "description": "Apply software engineering principles and learn how to design maintainable, scalable applications."
       },
@@ -721,7 +698,7 @@
         "title": "Solution",
         "description": "Developed a modular Todo application while applying object-oriented principles, focusing on clean architecture, reusable components, and separation of responsibilities."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-todo-solid-011-image-01",
           "src": "/images/p15.webp",
@@ -729,6 +706,7 @@
           "alt": "Todo Application",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -738,6 +716,7 @@
           "alt": "Todo Application 2",
           "displayMode": "contain",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -780,13 +759,8 @@
     {
       "id": "origin-weather-api-012",
       "title": "Weather Application",
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript",
-        "API"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS", "JavaScript", "API"],
+      "problem": {
         "title": "Goal",
         "description": "Understand how frontend applications communicate with external services through APIs."
       },
@@ -794,7 +768,7 @@
         "title": "Solution",
         "description": "Built a weather application that consumes external weather data through an API. The project introduced asynchronous programming, HTTP communication, API responses, and handling data from external sources."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-weather-api-012-image-01",
           "src": "/images/p17.webp",
@@ -802,6 +776,7 @@
           "alt": "Weather Application",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -811,6 +786,7 @@
           "alt": "Weather Application 2",
           "displayMode": "contain",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -828,7 +804,7 @@
           "API Integration"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "REST Architecture",
@@ -853,13 +829,8 @@
     {
       "id": "origin-react-cv-013",
       "title": "CV Application",
-      "tags": [
-        "HTML",
-        "CSS",
-        "JavaScript",
-        "React"
-      ],
-      "goal": {
+      "tags": ["HTML", "CSS", "JavaScript", "React"],
+      "problem": {
         "title": "Goal",
         "description": "Learn the fundamentals of React and understand how modern frontend applications are structured using components."
       },
@@ -867,7 +838,7 @@
         "title": "Solution",
         "description": "Built an interactive CV builder application using React class components. The project introduced component-based architecture, props, state management, and the concept of building interfaces through reusable pieces instead of manually manipulating the DOM."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-cv-project-013-image-01",
           "src": "/images/p21.webp",
@@ -875,6 +846,7 @@
           "alt": "CV Application",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -884,6 +856,7 @@
           "alt": "CV Application 2",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -893,6 +866,7 @@
           "alt": "CV Application 3",
           "displayMode": "contain",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -911,7 +885,7 @@
           "JavaScript ES6"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Component Architecture",
@@ -935,11 +909,8 @@
     {
       "id": "origin-react-memory-card-014",
       "title": "Memory Card",
-      "tags": [
-        "React",
-        "JavaScript"
-      ],
-      "goal": {
+      "tags": ["React", "JavaScript"],
+      "problem": {
         "title": "Goal",
         "description": "Learn modern React development using functional components, hooks, and application state."
       },
@@ -947,7 +918,7 @@
         "title": "Solution",
         "description": "Built a memory card game using React functional components and hooks. The project focused on managing state changes, handling user interactions, consuming external data sources, and understanding how React updates the UI based on state changes."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-memory-game-014-image-01",
           "src": "/images/p19.webp",
@@ -955,6 +926,7 @@
           "alt": "Memory Game",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -964,6 +936,7 @@
           "alt": "Memory Game 2",
           "displayMode": "contain",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -982,7 +955,7 @@
           "Component Reusability"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Functional Programming",
@@ -1006,11 +979,8 @@
     {
       "id": "origin-react-shopping-cart-015",
       "title": "Shopping Cart",
-      "tags": [
-        "React",
-        "JavaScript"
-      ],
-      "goal": {
+      "tags": ["React", "JavaScript"],
+      "problem": {
         "title": "Goal",
         "description": "Build a larger React application while applying component architecture, state management, and scalable frontend patterns."
       },
@@ -1018,7 +988,7 @@
         "title": "Solution",
         "description": "Developed a complete shopping cart application using React components, shared state, routing concepts, and reusable UI patterns. The project simulated real-world application development by separating concerns between presentation, business logic, and application state."
       },
-      "images": [
+      "media": [
         {
           "id": "origin-shopping-cart-015-image-01",
           "src": "/images/p24.webp",
@@ -1026,6 +996,7 @@
           "alt": "Shopping Cart",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -1035,6 +1006,7 @@
           "alt": "Shopping Cart 2",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -1044,6 +1016,7 @@
           "alt": "Shopping Cart 3",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -1053,6 +1026,7 @@
           "alt": "Shopping Cart 4",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -1062,6 +1036,7 @@
           "alt": "Shopping Cart 5",
           "displayMode": "cover",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -1071,6 +1046,7 @@
           "alt": "Shopping Cart 6",
           "displayMode": "contain",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -1080,6 +1056,7 @@
           "alt": "Shopping Cart 7",
           "displayMode": "contain",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -1089,6 +1066,7 @@
           "alt": "Shopping Cart 8",
           "displayMode": "contain",
           "width": 1200,
+          "type": "image",
           "height": 800
         },
         {
@@ -1098,6 +1076,7 @@
           "alt": "Shopping Cart 9",
           "displayMode": "contain",
           "width": 1200,
+          "type": "image",
           "height": 800
         }
       ],
@@ -1116,7 +1095,7 @@
           "Reusable UI Components"
         ]
       },
-      "concepts": {
+      "technical_details": {
         "title": "Computer Science Concepts",
         "items": [
           "Component Architecture",
@@ -1142,12 +1121,7 @@
   "techStack": {
     "title": "Technologies & Engineering Foundations",
     "categories": {
-      "frontend": [
-        "HTML5",
-        "CSS3",
-        "JavaScript ES6+",
-        "React"
-      ],
+      "frontend": ["HTML5", "CSS3", "JavaScript ES6+", "React"],
       "programmingConcepts": [
         "Algorithms",
         "Computational Thinking",
@@ -1173,12 +1147,7 @@
         "Separation of Concerns",
         "Composition Over Inheritance"
       ],
-      "tooling": [
-        "Git",
-        "GitHub",
-        "NPM",
-        "Webpack"
-      ]
+      "tooling": ["Git", "GitHub", "NPM", "Webpack"]
     }
   },
   "learnings": {
