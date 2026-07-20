@@ -14,7 +14,8 @@ export default function PlaygroundPage() {
             alt: "test image 1",
             displayMode: "cover",
             width: 16,
-            height: 9
+            height: 9,
+            type: "image"
         },
         {
             id: "image-2",
@@ -23,7 +24,8 @@ export default function PlaygroundPage() {
             alt: "test image 2",
             displayMode: "contain",
             width: 1200,
-            height: 800
+            height: 800,
+            type: "image"
         },
         {
             id: "image-3",
@@ -32,7 +34,8 @@ export default function PlaygroundPage() {
             alt: "test image 3",
             displayMode: "cover",
             width: 1200,
-            height: 800
+            height: 800,
+            type: "image"
         }
     ];
 

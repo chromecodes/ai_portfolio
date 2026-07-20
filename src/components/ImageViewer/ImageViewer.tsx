@@ -89,10 +89,10 @@ export default function ImageViewer({
             tabIndex={0}
         >
             <ImageSlide
-
                 image={viewer.currentImage}
                 direction={viewer.direction}
                 isFullLoaded={isFullLoaded}
+                isVisible={isVisible}
                 curvedEdge={curvedEdge}
             />
 

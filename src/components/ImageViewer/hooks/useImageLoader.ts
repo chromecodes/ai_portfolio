@@ -24,19 +24,21 @@ export function useImageLoader({
 
   const [loadedFull, setLoadedFull] = useState(new Set<number>());
 
-  function preload(src: string) {
+  function preload(src: string, type: "video" | "image" = "image") {
     return new Promise<boolean>((resolve) => {
-      const img = new window.Image();
-
-      img.onload = () => {
-        resolve(true);
-      };
-
-      img.onerror = () => {
-        resolve(false);
-      };
-
-      img.src = src;
+      if (type === "video") {
+        const video = document.createElement("video");
+        video.src = src;
+        video.preload = "auto";
+        video.oncanplaythrough = () => resolve(true);
+        video.onerror = () => resolve(false);
+        video.load();
+      } else {
+        const img = new window.Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = src;
+      }
     });
   }
 
@@ -47,7 +49,7 @@ export function useImageLoader({
 
     if (loadedBlur.has(index)) return;
 
-    await preload(image.blurSrc);
+    await preload(image.blurSrc, "image");
 
     setLoadedBlur((prev) => {
       const next = new Set(prev);
@@ -61,7 +63,7 @@ export function useImageLoader({
   async function loadFull(index: number) {
     const image = images[index];
 
-    const success = await preload(image.src);
+    const success = await preload(image.src, image.type);
 
     if (!success) {
       return;

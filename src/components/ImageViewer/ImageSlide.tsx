@@ -8,17 +8,21 @@ interface ImageSlideProps {
 
     isFullLoaded: boolean;
 
+    isVisible?: boolean;
+
     curvedEdge?: boolean;
 
     direction?: "left" | "right";
 
 }
 
-export default function ImageSlide({ image, isFullLoaded, curvedEdge, direction }: ImageSlideProps) {
+export default function ImageSlide({ image, isFullLoaded, isVisible = false, curvedEdge, direction }: ImageSlideProps) {
     const [hasError, setHasError] = useState(false);
+    const [videoPlayable, setVideoPlayable] = useState(false);
 
     useEffect(() => {
         setHasError(false);
+        setVideoPlayable(false);
     }, [image.id]);
 
     if (hasError) {
@@ -76,18 +80,49 @@ export default function ImageSlide({ image, isFullLoaded, curvedEdge, direction 
                 duration: 0.3
             }}
             className="relative w-full h-full">
-            {image.type === "video" ? (<>
-                <video
-                    src={image.src}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    onError={() => {
-                        setHasError(true);
-                    }}
-                    style={{ objectFit: image.displayMode }}
-                /></>) : (
+            {image.type === "video" ? (
+                isVisible ? (
+                    <div className="relative w-full h-full">
+                        {image.blurSrc && !videoPlayable && (
+                            <Image
+                                src={image.blurSrc}
+                                alt={image.alt}
+                                fill
+                                style={{ objectFit: image.displayMode }}
+                                className={`blur-sm scale-105 transition-opacity duration-500 ${curvedEdge ? "rounded-2xl" : ""}`}
+                            />
+                        )}
+                        <motion.video
+                            src={image.src}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            onPlaying={() => setVideoPlayable(true)}
+                            onError={() => {
+                                setHasError(true);
+                            }}
+                            style={{ objectFit: image.displayMode }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: videoPlayable ? 1 : 0 }}
+                            transition={{ duration: 0.4 }}
+                            className={`w-full h-full ${curvedEdge ? "rounded-2xl" : ""}`}
+                        />
+                    </div>
+                ) : (
+                    image.blurSrc ? (
+                        <Image
+                            src={image.blurSrc}
+                            alt={image.alt}
+                            fill
+                            style={{ objectFit: image.displayMode }}
+                            className={`blur-sm scale-105 ${curvedEdge ? "rounded-2xl" : ""}`}
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-neutral-900 animate-pulse" />
+                    )
+                )
+            ) : (
                 <Image
                     src={(isFullLoaded || !image.blurSrc) ? image.src : image.blurSrc}
                     alt={image.alt}
@@ -98,8 +133,8 @@ export default function ImageSlide({ image, isFullLoaded, curvedEdge, direction 
                     }}
                     style={{ objectFit: image.displayMode }}
                     className={` object-cover  transition-all duration-500 ${(isFullLoaded || !image.blurSrc) ? "blur-0 scale-100" : "blur-sm scale-105"} ${curvedEdge ? "rounded-2xl" : ""}`}
-                />)
-            }
+                />
+            )}
         </motion.div>
     );
 }
