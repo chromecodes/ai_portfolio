@@ -3,9 +3,14 @@ import { HeroSection } from "./HeroSecrion";
 import TagsCapsule from "@/components/UI/tags/TagsCapsule";
 import FeaturesTile from "./FeaturesTile";
 import careerTypes from "@/types/career";
+import useLanguageStore from "@/utils/i18n/useLanguageStore";
+import CareerFooter from "./CareerFooter";
 
 
 export default function OrginPage(props: any) {
+
+    const strings = useLanguageStore((state) => state.strings as Record<string, string>);
+
 
     console.log(props);
 
@@ -36,7 +41,7 @@ export default function OrginPage(props: any) {
                                              tracking-widest 
                                              font-extrabold 
                                              text-accent-color">
-                                Foundation</span>
+                                {strings.foundation}</span>
                             <h2 className="text-3xl font-bold tracking-tight">
                                 {data.introduction.title}</h2>
                             <div className="space-y-4 text-base
@@ -53,7 +58,7 @@ export default function OrginPage(props: any) {
                                         border 
                                         space-y-4">
                             <h3 className="text-lg font-bold text-primary-foreground flex items-center gap-2">
-                                <span>🛠️</span> Core Technologies
+                                <span>🛠️</span> {strings.coreTechnologies}
                             </h3>
                             <div className="flex flex-wrap gap-2">
                                 <TagsCapsule tags={data.introduction.modules} />
@@ -66,7 +71,7 @@ export default function OrginPage(props: any) {
                         <div className="space-y-2">
                             <div className="flex items-center gap-3">
                                 <span className="text-xs uppercase tracking-widest 
-                                font-extrabold text-accent-color">Curriculum Path</span>
+                                font-extrabold text-accent-color">{strings.curriculumPath}</span>
                                 <span className="h-px bg-secondary-foreground/20 flex-grow" />
                             </div>
                             <h2 className="text-3xl font-bold tracking-tight">{data.learningJourney.title}</h2>
@@ -89,14 +94,14 @@ export default function OrginPage(props: any) {
                              from-accent-color/15 to-primary-background/10 
                              p-6 md:p-8 rounded-2xl border 
                                shadow-sm space-y-6">
-                                <h3 className="text-lg font-bold tracking-tight border-b border-gray-100 dark:border-gray-800 pb-3 flex items-center gap-2">
-                                    <span>🚀</span> Explored Engineering Concepts
+                                <h3 className="text-lg font-bold tracking-tight border-b pb-3 flex items-center gap-2">
+                                    <span>🚀</span> {strings.exploredEngineeringConcepts}
                                 </h3>
                                 <ul className="grid sm:grid-cols-2 gap-3 text-xs md:text-sm">
                                     {(data.learningJourney.description as any[]).map((desc) => {
                                         if (Array.isArray(desc)) {
                                             return desc.map((d: string) => (
-                                                <li key={d} className="flex gap-2 text-gray-700 dark:text-gray-300 items-start">
+                                                <li key={d} className="flex gap-2 items-start">
                                                     <span className="text-emerald-500 font-bold">✓</span>
                                                     <span className="leading-tight">{d}</span>
                                                 </li>
@@ -112,7 +117,7 @@ export default function OrginPage(props: any) {
                     {
                         data.projects.map((project, index) => {
                             return (
-                                <FeaturesTile key={project.project_name} features={project as any} index={index} />
+                                <FeaturesTile key={project.id + index} features={project as any} index={index} />
                             )
                         })
                     }
@@ -122,10 +127,7 @@ export default function OrginPage(props: any) {
                 </div>
 
                 {/* NAV */}
-                <footer className="flex justify-between text-sm text-gray-500 pt-10 mt-16 border-t">
-                    <button>← Back to Career Map</button>
-                    <button>Next Company →</button>
-                </footer>
+                <CareerFooter />
             </main>
 
         </div>

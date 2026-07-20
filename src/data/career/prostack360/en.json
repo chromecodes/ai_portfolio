@@ -8,9 +8,7 @@
     "headline": "Building a metadata-driven enterprise CRM capable of generating complete business systems from configuration.",
     "media": {
       "video": "/videos/prostack360-overview.mp4",
-      "images": [
-        "/images/prostack360-cover.webp"
-      ]
+      "images": ["/images/prostack360-cover.webp"]
     },
     "tags": [
       "Enterprise CRM",
@@ -38,58 +36,87 @@
     {
       "project_name": "ProStack360 CRM Platform",
       "project_context": "ProStack360 is a comprehensive, modular CRM platform engineered to streamline workflow automation, form management, real-time collaboration, and cross-team analytics.",
-      "core_pillars": [
-        "CRM",
-        "Forms",
-        "Email",
-        "Analytics",
-        "Real-Time"
+      "core_pillars": ["CRM", "Forms", "Email", "Analytics", "Real-Time"],
+      "architecture": [
+        {
+          "title": "high_level",
+          "description": "Frontend (React / Next.js / TypeScript) ➔ REST APIs & WebSockets ➔ Backend (PHP)"
+        },
+        {
+          "title": "infrastructure",
+          "description": "Cloud Infrastructure: AWS S3, EC2, CloudFront CDN"
+        },
+        {
+          "title": "design_paradigm",
+          "description": "Modular frontend architecture paired with event-driven, real-time communication."
+        },
+        {
+          "title": "asset_delivery",
+          "description": "CDN-backed static and media delivery for optimal performance."
+        }
       ],
-      "architecture": {
-        "high_level": "Frontend (React / Next.js / TypeScript) ➔ REST APIs & WebSockets ➔ Backend (PHP)",
-        "infrastructure": "Cloud Infrastructure: AWS S3, EC2, CloudFront CDN",
-        "design_paradigm": "Modular frontend architecture paired with event-driven, real-time communication.",
-        "asset_delivery": "CDN-backed static and media delivery for optimal performance."
-      },
-      "tech_stack": {
-        "frontend": [
-          "React",
-          "Next.js",
-          "TypeScript",
-          "SCSS"
-        ],
-        "state_management": [
-          "Hookstate"
-        ],
-        "editors": [
-          "Tiptap",
-          "@react-email"
-        ],
-        "real_time_data": [
-          "WebSockets",
-          "Server-Sent Events (SSE)"
-        ],
-        "cloud_infrastructure": [
-          "AWS S3",
-          "EC2",
-          "CloudFront"
+
+      "tech_stack": [
+        {
+          "title": "Core Framework / State Management",
+          "items": ["React", "React Router", "Webpack (CRA)", "Hookstate"]
+        },
+        {
+          "title": "Drag and Drop Layouts",
+          "items": ["Dnd Kit", "React Grid Layout", "Sortable Tree", 
+            "React Dropzone"
         ]
-      },
+        },
+        {
+          "title": "Editors and Text",
+          "items": [
+            "Tiptap",
+            "@react-email",
+            "Draft.js",
+            "React Syntax Highlighter"
+          ]
+        },
+        {
+          "title": "Data Visualization & Utilities",
+          "items": ["Recharts", "React Big Calendar", "PS360 React Gantt Chart", 
+            "Date-fns",
+            "PapaParse (CSV)",
+            "Expr-eval (Formulas)",
+            "React Cropper"
+        ]
+        },
+        {
+          "title": "Styling and UI",
+          "items": [
+            "SCSS",
+            "React Icons",
+            "React Hot Toast",
+            "Tippy.js",
+            "React Tooltip"
+          ]
+        },
+        {
+          "title": "Real-Time and Cloud",
+          "items": [
+            "WebSockets",
+            "Server-Sent Events (SSE)",
+            "AWS S3",
+            "EC2",
+            "CloudFront"
+          ]
+        }
+      ],
       "key_features": [
         {
           "id": "prostack360-feature-001",
           "title": "Dynamic Module Builder",
-          "tags": [
-            "Modular",
-            "Highly Customizable",
-            "Productivity"
-          ],
+          "tags": ["Modular", "Highly Customizable", "Productivity"],
           "problem": {
             "title": "Problem",
-            "description":"Users required complete autonomy to customize and construct bespoke CRM modules tailored to their specific business operations."
+            "description": "Users required complete autonomy to customize and construct bespoke CRM modules tailored to their specific business operations."
           },
           "solution": {
-            "title" : "Solution", 
+            "title": "Solution",
             "description": "Architected a dynamic, schema-driven Module Builder that automatically generates complex Create/Read/Update/Delete (CRUD) UIs based on user-defined configurations."
           },
           "technical_details": {
@@ -102,8 +129,8 @@
             ]
           },
           "outcome": {
-            "title" : "Impact",
-            "items" : [
+            "title": "Impact",
+            "items": [
               "Delivered a fully modular, zero-code environment that empowers users to generate sophisticated workflows and financial documents directly within the CRM.",
               "Accelerated custom module creation time by eliminating developer bottlenecks."
             ]
@@ -132,18 +159,15 @@
           ]
         },
         {
+          "id": "prostack360-feature-002",
           "title": "Advanced Email Editor",
-          "tags": [
-            "Real-Time",
-            "Drag-and-Drop",
-            "No-Code Builder"
-          ],
+          "tags": ["Real-Time", "Drag-and-Drop", "No-Code Builder"],
           "problem": {
-            "title":"Problem",
+            "title": "Problem",
             "description": "Users needed a robust, native email authoring experience (similar to Gmail) featuring drafts, templates, and rich previews without leaving the platform."
           },
           "solution": {
-            "title" : "Solution",
+            "title": "Solution",
             "description": "Built a high-performance, modular email editor utilizing Tiptap, seamlessly integrated with the platform's IMAP functionalities."
           },
           "technical_details": {
@@ -154,8 +178,8 @@
             ]
           },
           "outcome": {
-            "title" : "Impact",
-            "items" : [
+            "title": "Impact",
+            "items": [
               "Accelerated user email creation workflows while virtually eliminating data loss during unexpected application crashes or network drops.",
               "Reduced data-loss incident reports to 0% during email drafting."
             ]
@@ -184,17 +208,15 @@
           ]
         },
         {
+          "id": "prostack360-feature-003",
           "title": "WebForm Builder",
-          "tags": [
-            "Drag-and-Drop",
-            "No-Code Builder"
-          ],
+          "tags": ["Drag-and-Drop", "No-Code Builder"],
           "problem": {
-            "title":"Problem",
+            "title": "Problem",
             "description": "Non-technical users lacked an intuitive method to design dynamic web forms and data-capture layouts."
           },
           "solution": {
-            "title" : "Solution",
+            "title": "Solution",
             "description": "Developed a fluid, drag-and-drop form builder using dnd-kit and react-grid-layout."
           },
           "technical_details": {
@@ -205,8 +227,8 @@
             ]
           },
           "outcome": {
-            "title" : "Impact",
-            "items" : [
+            "title": "Impact",
+            "items": [
               "Streamlined data collection by empowering non-technical teams to instantly deploy custom lead-capture forms without engineering support.",
               "Decreased custom form deployment time by over 80%."
             ]
@@ -225,18 +247,15 @@
           ]
         },
         {
+          "id": "prostack360-feature-004",
           "title": "Analytics Dashboard",
-          "tags": [
-            "Analytics",
-            "Real-Time Insights",
-            "Drag-and-Drop"
-          ],
+          "tags": ["Analytics", "Real-Time Insights", "Drag-and-Drop"],
           "problem": {
-            "title":"Problem",
+            "title": "Problem",
             "description": "Clients needed a customizable interface to visualize deal pipelines, module summaries, and real-time business metrics."
           },
           "solution": {
-            "title" : "Solution",
+            "title": "Solution",
             "description": "Constructed a drag-and-drop dashboard builder utilizing robust grid layouts and dynamic charting engines."
           },
           "technical_details": {
@@ -247,8 +266,8 @@
             ]
           },
           "outcome": {
-            "title" : "Impact",
-            "items" : [
+            "title": "Impact",
+            "items": [
               "Provided leadership with instant visibility into business performance through personalized, real-time data views.",
               "Increased daily active dashboard usage across management teams by offering personalized views."
             ]
@@ -267,18 +286,15 @@
           ]
         },
         {
+          "id": "prostack360-feature-005",
           "title": "Interactive Calendar Integration",
-          "tags": [
-            "Real-Time",
-            "Scheduling",
-            "Connectivity"
-          ],
+          "tags": ["Real-Time", "Scheduling", "Connectivity"],
           "problem": {
-            "title":"Problem",
+            "title": "Problem",
             "description": "Users needed a unified interface to track and manage upcoming meetings, calls, and integrated events."
           },
           "solution": {
-            "title" : "Solution",
+            "title": "Solution",
             "description": "Integrated and customized react-big-calendar to sync bi-directionally with users' primary calendars."
           },
           "technical_details": {
@@ -289,8 +305,8 @@
             ]
           },
           "outcome": {
-            "title" : "Impact",
-            "items" : [
+            "title": "Impact",
+            "items": [
               "Centralized scheduling workflows, significantly reducing the friction of bouncing between the CRM and external email clients.",
               "Unified cross-platform scheduling into a single, reliable interface to prevent double-bookings."
             ]
@@ -309,18 +325,15 @@
           ]
         },
         {
+          "id": "prostack360-feature-006",
           "title": "High-Performance Table View",
-          "tags": [
-            "Infinite Scroll",
-            "Role-Based Access",
-            "Bulk Actions"
-          ],
+          "tags": ["Infinite Scroll", "Role-Based Access", "Bulk Actions"],
           "problem": {
-            "title":"Problem",
+            "title": "Problem",
             "description": "The platform struggled to fluidly render datasets exceeding 100 columns and infinite rows."
           },
           "solution": {
-            "title" : "Solution",
+            "title": "Solution",
             "description": "Rebuilt the data-table architecture using pagination-based lazy loading, optimized for a frictionless user experience."
           },
           "technical_details": {
@@ -331,8 +344,8 @@
             ]
           },
           "outcome": {
-            "title" : "Impact",
-            "items" : [
+            "title": "Impact",
+            "items": [
               "Provided a highly responsive, simplified navigation experience for massive, complex datasets.",
               "Maintained fluid scrolling performance for datasets exceeding 10,000 rows."
             ]
@@ -351,16 +364,15 @@
           ]
         },
         {
+          "id": "prostack360-feature-007",
           "title": "Automated Timesheets",
-          "tags": [
-            "Real-Time Tracking"
-          ],
+          "tags": ["Real-Time Tracking"],
           "problem": {
-            "title":"Problem",
+            "title": "Problem",
             "description": "Management required precise logging of employee active hours based on actual system interaction rather than manual entry."
           },
           "solution": {
-            "title" : "Solution",
+            "title": "Solution",
             "description": "Developed an intelligent background tracking service that monitors UI engagement to calculate active working time down to the exact second."
           },
           "technical_details": {
@@ -371,8 +383,8 @@
             ]
           },
           "outcome": {
-            "title" : "Impact",
-            "items" : [
+            "title": "Impact",
+            "items": [
               "Replaced manual, error-prone time tracking with an objective, exact-second activity logging system.",
               "Improved timesheet accuracy and accountability by eliminating manual entry discrepancies."
             ]

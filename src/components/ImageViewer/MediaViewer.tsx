@@ -12,7 +12,7 @@ export default function MediaViewer(props: IMediaViewerProps) {
     return (
         <div className="lg:col-span-5 space-y-4">
             {/* Image slider render */}
-            <div className="relative rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="relative rounded-xl overflow-hidden border shadow-sm">
                 <ImageViewer images={media} aspectRatio="landscape" curvedEdge={true} />
             </div>
         </div>

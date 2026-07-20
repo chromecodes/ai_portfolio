@@ -2,5 +2,20 @@
   "home": "Inicio",
   "projects": "Proyectos",
   "career": "Experiencia",
-  "about": "Acerca de"
+  "about": "Acerca de",
+  "footerLeftWingText": "Desarrollado por IA",
+  "agentbarPlaceholder": "Pregunta lo que sea...",
+  "footerRightWingText": "© Portafolio 2026",
+  "homePageGreeting": "Hola — Soy",
+  "foundation": "Fundación",
+  "coreTechnologies": "Tecnologías Principales",
+  "curriculumPath": "Ruta Curricular",
+  "exploredEngineeringConcepts": "Conceptos de Ingeniería Explorados",
+  "backToCareerMap": "Volver al Mapa de Carrera",
+  "previousCompany": "Compañía Anterior",
+  "nextCompany": "Siguiente Compañía",
+  "whatIlearned": "Lo Que Aprendí",
+  "homePageName": "HAMEED HUSSAIN",
+  "homePageTitle": "Ingeniero de Software Full-Stack",
+  "homePageIntro": "Soy un ingeniero full-stack que disfruta construyendo productos web limpios y escalables que resuelven problemas reales con soluciones elegantes."
 }

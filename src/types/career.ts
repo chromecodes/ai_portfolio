@@ -39,26 +39,24 @@ export default interface careerTypes {
     items: string[];
   };
   projects: {
+    id: string;
     project_name: string;
     project_context: string;
     core_pillars: string[];
-    architecture: {
-      high_level: string;
-      infrastructure: string;
-      design_paradigm: string;
-      asset_delivery: string;
-    };
-    tech_stack: {
-      frontend: string[];
-      state_management: string[];
-      editors: string[];
-      real_time_data: string[];
-      cloud_infrastructure: string[];
-    };
+    architecture: [
+      {
+        title: string;
+        description: string;
+      }
+    ]
+
+    tech_stack: [
+      { title: string, items: string[] }
+    ]
     key_features: {
       title: string;
       tags: string[];
-      problem: {title:string, description:string};
+      problem: { title: string, description: string };
       solution: {title:string, description:string};
       technical_details: {title:string, items:string[]};
       outcome: {title:string, items:string[]};

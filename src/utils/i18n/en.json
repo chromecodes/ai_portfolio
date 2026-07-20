@@ -7,6 +7,25 @@
   "agentbarPlaceholder": "Ask anything...",
   "footerRightWingText": "© Portfolio 2026",
   "homePageGreeting": "Hi — I'm",
+  "foundation": "Foundation",
+  "coreTechnologies": "Core Technologies",
+  "curriculumPath": "Curriculum Path",
+  "exploredEngineeringConcepts": "Explored Engineering Concepts",
+  "backToCareerMap": "Back to Career Map",
+  "previousCompany": "Previous Company",
+  "nextCompany": "Next Company",
+  "whatIlearned": "What I Learned",
+  "leadershipAndImpact": "Leadership & Impact",
+  "keyDeliverablesAndImpact": "Key Deliverables & Impact",
+  "engineeringInsights": "Engineering Insights",
+  "systemArchitecture": "System Architecture",
+  "appliedTechStack": "Applied Tech Stack",
+  "keyArchitecturalComponents": "Key Architectural Components",
+  "breakdownOfSpecificModulesProblemsSolvedAndConcreteEngineeringOutcomes": "Breakdown of specific modules, problems solved, and concrete engineering outcomes.",
+  
+  
+  
+
   "homePageName": "HAMEED HUSSAIN",
   "homePageTitle": "Full-Stack Software Engineer",
   "homePageIntro": "I'm a full-stack engineer who enjoys building clean, scalable web products that solve real problems with elegant solutions."
