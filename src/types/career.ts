@@ -66,6 +66,10 @@ export default interface careerTypes {
         src: string;
         alt: string;
       }[];
+      links?: {
+        github?: string;
+        live?: string;
+      };
     }[];
   }[];
-};
+}

@@ -75,6 +75,10 @@ export default function ImageViewer({
     const isFullLoaded =
         loader.loadedFull.has(viewer.currentIndex);
 
+    if (!images || images.length === 0) {
+        return null;
+    }
+
     return (
         <div ref={ref} className={"relative w-full border touch-none " + (curvedEdge ? "rounded-2xl" : "")}
             style={{

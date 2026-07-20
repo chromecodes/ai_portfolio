@@ -33,12 +33,12 @@ export default function CareerUI({ data }: ICareerUIProps) {
                         <span className="text-xs 
                                          uppercase tracking-widest 
                                          font-extrabold
-                                         text-accent-color">{strings.leadership_and_impact}</span>
+                                         text-accent-color">{strings.roleAndResponseibilities}</span>
                         <h2 className="text-3xl font-bold tracking-tight">{data.roles.title}</h2>
                         <p className="text-base text-muted-foreground leading-relaxed max-w-4xl">{data.roles.description}</p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-8 pt-4">
+                    <div className={`grid gap-8 pt-4 ${data.roles.engineering_insights.length > 0 ? "grid-cols-2" : "grid-cols-1"}`}>
                         <div className="space-y-4 bg-secondary-background p-6 rounded-2xl border shadow-xs">
                             <h3 className="text-xl font-bold  flex items-center gap-2">
                                 <span className="text-primary-foreground text-lg">🎯</span> {strings.keyDeliverablesAndImpact}
@@ -52,20 +52,22 @@ export default function CareerUI({ data }: ICareerUIProps) {
                                 ))}
                             </ul>
                         </div>
-
-                        <div className="space-y-4 bg-secondary-background p-6 rounded-2xl border shadow-xs">
-                            <h3 className="text-xl font-bold  flex items-center gap-2">
-                                <span className="text-primary-foreground text-lg">💡</span> {strings.engineeringInsights}
-                            </h3>
-                            <ul className="space-y-3">
-                                {data.roles.engineering_insights.map((insight, idx) => (
-                                    <li key={idx} className="flex gap-3 text-sm text-muted-foreground leading-relaxed">
-                                        <span className="text-amber-500 font-bold">▪</span>
-                                        <span>{insight}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        {
+                            data.roles.engineering_insights.length > 0 && (
+                                <div className="space-y-4 bg-secondary-background p-6 rounded-2xl border shadow-xs">
+                                    <h3 className="text-xl font-bold  flex items-center gap-2">
+                                        <span className="text-primary-foreground text-lg">💡</span> {strings.engineeringInsights}
+                                    </h3>
+                                    <ul className="space-y-3">
+                                        {data.roles.engineering_insights.map((insight, idx) => (
+                                            <li key={idx} className="flex gap-3 text-sm text-muted-foreground leading-relaxed">
+                                                <span className="text-amber-500 font-bold">▪</span>
+                                                <span>{insight}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>)
+                        }
                     </div>
                 </section>
 

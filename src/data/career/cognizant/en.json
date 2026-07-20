@@ -1,80 +1,94 @@
 {
   "slug": "cognizant",
   "company": {
-    "name": "Cognizant",
-    "role": "Software Developer – Frontend",
-    "duration": "Apirl 2021 – June 2024",
     "logo": "/icons/cognizant.png",
-    "heroMedia": "/videos/prostack-demo.mp4"
-  },
-
-  "productContext": {
-    "title" : "Company Context",
-
-    "description": "ProStack360 is a modular CRM platform built for workflow automation, form management, real-time collaboration, and analytics across teams.",
-    "modules": ["CRM", "Forms", "Email", "Analytics", "Real-Time"]
-  },
-
-  "architecture": {
-    "diagram": "/images/architecture.png",
-    "stack": {
-      "frontend": "React · Next.js · TypeScript",
-      "realtime": "WebSockets · SSE", 
-      "backend": "Node · Express",
-      "data": "MongoDB · Redis",
-      "cloud": "AWS S3 · EC2 · CloudFront"
+    "name": "Cognizant",
+    "role": "Programming Analyst ",
+    "duration": "Oct 2021 – Jun 2023",
+    "headline": "Supported business decision-making and stakeholder communication through comprehensive data analysis and visual reporting.",
+    "media": {
+      "video": "",
+      "images": []
     },
-    "highlights": [
-      "Modular frontend architecture",
-      "Event-driven real-time communication",
-      "CDN-backed static & media delivery"
+    "tags": [
+      "Data Analysis",
+      "KPI Monitoring",
+      "Reporting",
+      "Dashboards",
+      "Excel"
     ]
   },
-
-  "role": [
-    "Owned frontend architecture and UI systems",
-    "Built real-time features and collaborative workflows",
-    "Designed reusable components and editors",
-    "Worked closely with backend and product teams"
-  ],
-
+  "roles": {
+    "title": "Programming Analyst",
+    "description": "Analyzed project data and maintained databases to provide actionable insights for business decision-making and stakeholder reporting.",
+    "impact": [
+      "Monitored project progress, timelines, and key performance indicators (KPIs) to ensure alignment with business objectives.",
+      "Prepared comprehensive reports and dashboards for stakeholders, improving data visibility.",
+      "Created data summaries, charts, and visual reports using tools such as Excel to communicate project performance insights clearly."
+    ],
+    "engineering_insights": []
+  },
   "projects": [
     {
-      "id": "email-editor",
-      "title": "Email Editor",
-      "tags": ["Editor", "Real-Time", "Productivity"],
-      "problem": "Users needed a Gmail-like editor with drafts, templates, and previews.",
-      "solution": "Built a modular email editor using Tiptap with autosave, signatures, previews, and export support.",
-      "tech": [
-        "Tiptap extensions and schema design",
-        "LocalStorage auto-draft recovery",
-        "Async save with REST APIs"
+      "id": "cognizant-project-001",
+      "project_name": "Project Monitoring & Analytics",
+      "project_context": "Gathered and analyzed data from multiple sources to track project health and deliver visual performance insights to key stakeholders.",
+      "core_pillars": [
+        "Data Collection",
+        "KPI Tracking",
+        "Visual Reporting"
       ],
-      "media": "/videos/email-editor.mp4",
-      "outcome": [
-        "Faster email creation",
-        "Reduced data loss from crashes"
+      "architecture": [
+        {
+          "title": "high_level",
+          "description": "Raw Data Sources ➔ Microsoft Excel / Dashboards ➔ Stakeholder Reports"
+        }
+      ],
+      "tech_stack": [
+        {
+          "title": "Data and Analytics Tools",
+          "items": [
+            "Microsoft Excel",
+            "Internal Databases",
+            "Reporting Dashboards"
+          ]
+        }
+      ],
+      "key_features": [
+        {
+          "id": "cognizant-feature-001",
+          "title": "Project Performance Tracking",
+          "tags": [
+            "Reporting",
+            "KPIs",
+            "Data Visualization"
+          ],
+          "problem": {
+            "title": "Problem",
+            "description": "Stakeholders required clear, accessible insights into project progress, timelines, and key performance indicators to make informed business decisions."
+          },
+          "solution": {
+            "title": "Solution",
+            "description": "Developed visual reports and data summaries using Excel and dashboarding tools to translate raw database information into actionable insights."
+          },
+          "technical_details": {
+            "title": "Technical Details",
+            "items": [
+              "Collected, analyzed, and maintained project data from reports, databases, and user feedback.",
+              "Monitored ongoing project progress and timelines against established KPIs.",
+              "Designed and generated charts and visual summaries tailored for non-technical stakeholders."
+            ]
+          },
+          "outcome": {
+            "title": "Impact",
+            "items": [
+              "Empowered business leaders with accurate, up-to-date project metrics to support strategic decision-making.",
+              "Streamlined stakeholder communication through consistent, visual KPI reporting."
+            ]
+          },
+          "media": []
+        }
       ]
     }
-  ],
-
-  "techStack": {
-    "frontend": "React · Next.js · TypeScript · SCSS",
-    "state": "Hookstate",
-    "editors": "Tiptap · @react-email",
-    "realtime": "WebSockets · SSE",
-    "cloud": "AWS S3 · EC2 · CloudFront"
-  },
-
-  "impact": [
-    "~30% reduction in load times",
-    "~25% improvement in collaboration workflows",
-    "Enabled scalable, reusable UI systems"
-  ],
-
-  "learnings": [
-    "Real-time systems require failure-first thinking",
-    "Modular UI systems scale better than page-level design",
-    "State architecture impacts performance more than rendering"
   ]
 }

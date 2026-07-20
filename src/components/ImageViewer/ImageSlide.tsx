@@ -23,7 +23,11 @@ export default function ImageSlide({ image, isFullLoaded, isVisible = false, cur
     useEffect(() => {
         setHasError(false);
         setVideoPlayable(false);
-    }, [image.id]);
+    }, [image?.id]);
+
+    if (!image) {
+        return null;
+    }
 
     if (hasError) {
         return (
