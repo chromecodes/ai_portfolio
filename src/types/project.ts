@@ -1,17 +1,17 @@
 export interface Project {
   id: string;
   category: 'fullstack' | 'software' | 'cli' | 'library' | 'casestudy';
-  image: string;
+  logo: string;
+  icon: string;
   tags: string[];
   githubUrl?: string;
   demoUrl?: string;
-  titleKey: string;
-  whatItIsKey: string;
-  problemKey: string;
-  solutionKey: string;
-  gridSpan: string;
-  iconName: string;
+  description: string;
+  problem: string;
+  solution: string;
   themeColor: "pink" | "green" | "teal" | "purple" | "blue" | "emerald" | "zinc";
   subBadges: string[];
-  badgesKey: string[];
+  badges: string[];
+  title:string;
+  path: string;
 }
