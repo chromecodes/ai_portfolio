@@ -100,36 +100,36 @@ export default function ImageViewer({
                 curvedEdge={curvedEdge}
             />
 
-            <div
-                onPointerDown={(e) => e.stopPropagation()}
-                className="
+            {images.length > 1 && (
+                <div
+                    onPointerDown={(e) => e.stopPropagation()}
+                    className="
                     absolute
                      bottom-4 flex 
                      w-full
                      px-4
                      gap-4 items-center justify-between left-1/2 transform -translate-x-1/2">
 
-                <ArrowButton
-                    direction="left"
-                    onClick={viewer.previous}
-                    disabled={!viewer.canPrevious}
+                    <ArrowButton
+                        direction="left"
+                        onClick={viewer.previous}
+                        disabled={!viewer.canPrevious}
 
-                />
-                <DotNavigation
-                    total={images.length}
-                    currentIndex={viewer.currentIndex}
-                    onChange={viewer.goTo}
-                />
+                    />
+                    <DotNavigation
+                        total={images.length}
+                        currentIndex={viewer.currentIndex}
+                        onChange={viewer.goTo}
+                    />
 
-                <ArrowButton
-                    direction="right"
-                    onClick={viewer.next}
-                    disabled={!viewer.canNext}
-                />
-            </div>
+                    <ArrowButton
+                        direction="right"
+                        onClick={viewer.next}
+                        disabled={!viewer.canNext}
+                    />
+                </div>
 
-
-
+            )}
         </div >
     );
 }
