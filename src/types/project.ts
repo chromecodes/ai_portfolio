@@ -7,11 +7,20 @@ export interface Project {
   githubUrl?: string;
   demoUrl?: string;
   description: string;
-  problem: string;
-  solution: string;
+  problem: {
+    title: string;
+    description: string;
+  };
+  solution: {
+    title: string;
+    description: string;
+  };
   themeColor: "pink" | "green" | "teal" | "purple" | "blue" | "emerald" | "zinc";
-  subBadges: string[];
   badges: string[];
+  techStack: {
+    title: string;
+    items: string[];
+  };
   title:string;
   path: string;
 }

@@ -59,10 +59,8 @@ export const ProjectIntroTile: FC<IProps> = ({ project, index }) => {
         <article
             key={project.id}
             style={{ animationDelay: `${index * 50}ms` }}
-            className="relative 
-            flex flex-col h-full 
-            bg-secondary-background/40 border 
-            border-borderColor hover:border-accent-color/40 
+            className="relative flex flex-col h-full 
+            bg-secondary-background/40 border border-borderColor hover:border-accent-color/40 
             hover:-translate-y-1.5 hover:shadow-xl rounded-3xl overflow-hidden transition-all duration-300 ease-out group"
         >
             {/* Cover Visual Area using pure CSS background grid & HTML orbital rings (No SVG) */}
@@ -93,7 +91,7 @@ export const ProjectIntroTile: FC<IProps> = ({ project, index }) => {
 
                 {/* Floating sub-badges */}
                 <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10 px-4">
-                    {project.subBadges.map((badge, idx) => (
+                    {project.tags.map((badge, idx) => (
                         <span key={idx} className="bg-primary-background/90 backdrop-blur-xs text-font-color border border-borderColor px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide shadow-xs transition-transform duration-200 group-hover:scale-105">
                             {badge}
                         </span>
@@ -131,26 +129,29 @@ export const ProjectIntroTile: FC<IProps> = ({ project, index }) => {
 
                 {/* Problem Statement */}
                 <div className="space-y-1">
-                    <span className="text-[9px] font-extrabold text-muted-foreground/60 uppercase tracking-widest block">Problem</span>
+                    <span className="text-[9px] font-extrabold text-muted-foreground/60 uppercase tracking-widest block">{project.problem.title}</span>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                        {project.problem}
+                        {project.problem.description}
                     </p>
                 </div>
 
                 {/* Solution (Highlighted Callout) */}
                 <div className="p-3.5 rounded-xl border border-accent-color/20 bg-accent-color/5 flex flex-col gap-1 transition-colors duration-200 group-hover:border-accent-color/30">
-                    <span className="text-[9px] font-extrabold text-accent-color uppercase tracking-widest block">Solution</span>
+                    <span className="text-[9px] font-extrabold text-accent-color uppercase tracking-widest block">{project.solution.title}</span>
                     <span className="text-[11px] text-accent-color font-semibold leading-relaxed">
-                        {project.solution}
+                        {project.solution.description}
                     </span>
                 </div>
 
                 {/* Tech Stack/Tools */}
                 <div className="space-y-2 pt-1">
-                    <span className="text-[9px] font-extrabold text-muted-foreground/60 uppercase tracking-widest block">Stack / Tools</span>
+                    <span className="text-[9px] font-extrabold text-muted-foreground/60 uppercase tracking-widest block">{project.techStack.title}</span>
                     <div className="flex flex-wrap gap-1">
-                        {project.tags.map((tech, idx) => (
-                            <span key={idx} className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg border border-borderColor bg-secondary-background/60 text-[9px] font-mono text-muted-foreground hover:border-accent-color/20 transition-colors">
+                        {project.techStack.items.map((tech, idx) => (
+                            <span key={idx} className="inline-flex items-center gap-1.5 
+                            px-2 py-0.5 rounded-lg border border-borderColor bg-secondary-background/60
+                             text-[9px] font-mono text-muted-foreground hover:border-accent-color/20 
+                             transition-colors">
                                 <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
                                 {tech}
                             </span>
