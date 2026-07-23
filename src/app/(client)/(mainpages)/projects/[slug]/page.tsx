@@ -4,13 +4,14 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import RingLoader from "@/features/Loaders/RingLoader";
 import ProjectDetailUI from "@/features/Projects/page/ProjectDetailUI";
+import CaseStudyDetailUI, { CaseStudyData } from "@/features/Projects/page/CaseStudyDetailUI";
 import { ProjectDetail } from "@/types/projectDetail";
 import Link from "next/link";
 
 export default function ProjectPage() {
   const params = useParams() as { slug: string };
   const [loading, setLoading] = useState(true);
-  const [projectData, setProjectData] = useState<ProjectDetail | null>(null);
+  const [projectData, setProjectData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export default function ProjectPage() {
         }
         const resData = await response.json();
         if (resData.success) {
-          setProjectData(resData.data as ProjectDetail);
+          setProjectData(resData.data);
         } else {
           setError(resData.message || "Failed to load project");
         }
@@ -63,5 +64,9 @@ export default function ProjectPage() {
     );
   }
 
-  return <ProjectDetailUI data={projectData} />;
+  if (projectData.project_type === "Case Study") {
+    return <CaseStudyDetailUI data={projectData as CaseStudyData} />;
+  }
+
+  return <ProjectDetailUI data={projectData as ProjectDetail} />;
 }

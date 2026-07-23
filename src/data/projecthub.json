@@ -1,0 +1,74 @@
+[
+  {
+    "id": "easyform",
+    "category": "fullstack",
+    "logo": "/icons/easyform.webp",
+    "icon": "formspree",
+    "title": "Easy Forms",
+    "description": "Easy Forms is a modern, full-featured form builder and management platform enabling users to dynamically construct, publish, and analyze custom web forms with real-time analytics and automated export capabilities.",
+    "problem": {
+      "title": "Problem",
+      "description": "Users needed an intuitive, code-free interface to build complex, customizable forms with custom field types."
+    },
+    "solution": {
+      "title": "Solution",
+      "description": "Engineered a flexible, component-driven form builder allowing users to assemble, preview, and deploy custom form schemas effortlessly."
+    },
+    "techStack": {
+      "title": "Stack / Tools",
+      "items": ["Next.js", "React", "TypeScript", "NextAuth.js", "Redis", "SSE"]
+    },
+    "themeColor": "pink",
+    "badges": ["Form Builder", "Analytics", "Real-Time", "Data Export", "AI Native"],
+    "tags": ["SaaS", "Commercial", "Applied AI"],
+    "path": "easyform"
+  },
+  {
+    "id": "localllmmemory",
+    "category": "cli",
+    "logo": "/icons/easyform.webp",
+    "icon": "terminal",
+    "title": "Local LLM Memory",
+    "description": "Local LLM Memory is a fully local, privacy-preserving AI coding assistant that combines Retrieval-Augmented Generation (RAG) with natural-language file and function operations via Ollama, ChromaDB, and structured intent routing.",
+    "problem": {
+      "title": "Problem",
+      "description": "Standard LLM chat models suggest code changes but cannot execute file operations, while generic commands often fail due to unstructured natural language."
+    },
+    "solution": {
+      "title": "Solution",
+      "description": "Architected a dual-stage intent parser that extracts structured JSON payloads from raw prompt text and dispatches commands directly to local handlers."
+    },
+    "techStack": {
+      "title": "AI & Systems Stack",
+      "items": ["Python 3.12", "LangChain", "Ollama", "ChromaDB", "Mistral", "PyTorch"]
+    },
+    "themeColor": "purple",
+    "badges": ["Local Inference", "RAG", "Intent Parsing", "Vector Search", "Local AI", "Agentic Tool"],
+    "tags": ["AI", "Privacy", "Open Source"],
+    "path": "localllmmemory"
+  },
+  {
+    "id": "financial-ledger-casestudy",
+    "category": "casestudy",
+    "logo": "/icons/easyform.webp",
+    "icon": "graduationCap",
+    "title": "High-Throughput Distributed Financial Ledger & Analytics Engine",
+    "description": "A production-grade, asynchronous financial transaction engine built with Python (FastAPI) and SQLAlchemy 2.0 using CQRS architecture, Transactional Outbox pattern, Apache Kafka, and ClickHouse OLAP.",
+    "problem": {
+      "title": "Problem",
+      "description": "High concurrency wallet transactions risk race conditions, dual-write desynchronization, and analytical reporting freezing OLTP operational database tables."
+    },
+    "solution": {
+      "title": "Solution",
+      "description": "Isolated high-speed transaction updates (PostgreSQL OLTP + Transactional Outbox) from historical analytics (Kafka + ClickHouse OLAP) using CQRS architecture."
+    },
+    "techStack": {
+      "title": "Architecture Stack",
+      "items": ["Python", "FastAPI", "PostgreSQL", "Kafka", "ClickHouse", "Docker"]
+    },
+    "themeColor": "emerald",
+    "badges": ["CQRS", "Kafka", "ClickHouse", "Pessimistic Locking", "Transactional Outbox"],
+    "tags": ["FinTech", "Concurrency", "High Throughput"],
+    "path": "financial-ledger-casestudy"
+  }
+]

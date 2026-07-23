@@ -8,8 +8,11 @@ import {
 
 import {
     FaGithub,
-    FaLinkedin
+    FaLinkedin,
+    FaGraduationCap,
+    FaTerminal
 } from "react-icons/fa";
+import { SiFormspree } from "react-icons/si";
 
 export const Icons = {
     arrowUp: ArrowUp,
@@ -19,4 +22,7 @@ export const Icons = {
     github: FaGithub,
     linkedin: FaLinkedin,
     externalLink: ExternalLink,
+    graduationCap: FaGraduationCap,
+    formspree: SiFormspree,
+    terminal: FaTerminal,
 };
