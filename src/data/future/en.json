@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "badge": "Future Roadmap & Vision",
+    "title_part1": "Building Products that Solve Real Problems using",
+    "title_part2": "AI & High-Performance Systems",
+    "subtitle": "An active blueprint of where I am right now, the engineering paths I am advancing towards, and the local-first AI tools currently cooking in my lab.",
+    "vision_pillars": [
+      "Local-First AI Tools",
+      "Agentic Workflows",
+      "Fine-tuning Open Source LLMs",
+      "High-Performance Systems"
+    ]
+  },
+  "telemetry": {
+    "section_title": "Live Telemetry • \"Right Now\" Status",
+    "badges": [
+      {
+        "id": "building",
+        "label": "Currently Building",
+        "title": "Local-first documentation tools with AI",
+        "icon": "Hammer",
+        "color": "text-accent-color",
+        "bgColor": "bg-accent-color/10"
+      },
+      {
+        "id": "exploring",
+        "label": "Currently Exploring",
+        "title": "LLM fine-tuning, RAG & high-performance AI systems",
+        "icon": "Compass",
+        "color": "text-emerald-500",
+        "bgColor": "bg-emerald-500/10"
+      },
+      {
+        "id": "researching",
+        "label": "Currently Researching",
+        "title": "AI architectures & designs for production",
+        "icon": "BookOpen",
+        "color": "text-amber-500",
+        "bgColor": "bg-amber-500/10"
+      }
+    ]
+  },
+  "vectors": {
+    "section_tag": "Technical Trajectory",
+    "section_title": "Active Engineering Vectors",
+    "section_subtitle": "The core architectural domains and technological paradigms shaping my current work and future projects.",
+    "focus_tech_label": "Focus Tech",
+    "items": [
+      {
+        "id": "vector-1",
+        "index_label": "01",
+        "tag": "Vector 1 • Primary Direction",
+        "title": "Agentic AI Development for Local-First Tools",
+        "why": "Amazed by AI's potential to impact people's lives — making it accessible for everyone to use locally with privacy and speed.",
+        "icon": "Bot",
+        "tech_stack": [
+          "LLM Fine-Tuning",
+          "RAG",
+          "High-Performance AI Systems",
+          "Local Models",
+          "Ollama"
+        ]
+      },
+      {
+        "id": "vector-2",
+        "index_label": "02",
+        "tag": "Vector 2 • Domain Focus",
+        "title": "Fintech & Financial Tools for Developers",
+        "why": "Passionate about building developer tools after years in CRM systems. Fintech is a high-stakes domain where AI can vastly improve user experience.",
+        "icon": "Layers",
+        "tech_stack": [
+          "System Design",
+          "Distributed Systems",
+          "Building for Scale",
+          "Microservices",
+          "API Integrations",
+          "Financial Data Processing"
+        ]
+      },
+      {
+        "id": "vector-3",
+        "index_label": "03",
+        "tag": "Vector 3 • Emerging R&D",
+        "title": "Open Source CLI Utilities",
+        "why": "As a developer, love having powerful local CLI tools that streamline workflows, save tokens, and make everyday coding faster.",
+        "icon": "Terminal",
+        "tech_stack": [
+          "CLI Tools",
+          "AI Agents",
+          "LLM Fine-Tuning",
+          "GraphRAG",
+          "BM25 Search"
+        ]
+      }
+    ]
+  },
+  "pipeline": {
+    "section_tag": "In The Lab",
+    "section_title": "Project Pipeline",
+    "section_subtitle": "Key active projects and experimental software currently under development.",
+    "core_highlights_label": "Core Highlights",
+    "tech_stack_label": "Tech Stack",
+    "projects": [
+      {
+        "id": "docgen-cli",
+        "name": "docgen-cli",
+        "status": "In Progress",
+        "status_type": "progress",
+        "icon": "Terminal",
+        "problem": "With advanced GraphRAG and RAG search paired with BM25 search algorithms, docgen-cli generates precise codebase documentation locally while using a token limiter to minimize consumption.",
+        "stack": [
+          "LangChain",
+          "Ollama",
+          "Open Source LLMs",
+          "GraphRAG",
+          "BM25",
+          "Python",
+          "CLI Tools"
+        ],
+        "highlights": [
+          "GraphRAG combined with BM25 search algorithm",
+          "Token limiter to control ongoing operations",
+          "Local-first privacy-preserving design",
+          "Agentic generation of codebase documentation"
+        ]
+      },
+      {
+        "id": "quiz-generator",
+        "name": "Quiz Generator",
+        "status": "R&D",
+        "status_type": "rnd",
+        "icon": "Cpu",
+        "problem": "Generates personalized quizzes for students and teachers from raw notes and books in seconds. Tailored to student learning styles, 100% free, and completely local-first.",
+        "stack": [
+          "LangChain",
+          "Ollama",
+          "Open Source LLMs",
+          "GraphRAG",
+          "BM25",
+          "Python",
+          "Fine-Tuned LLMs"
+        ],
+        "highlights": [
+          "Fast & accurate quiz generation from text/documents",
+          "Personalized quiz difficulty & learning style tuning",
+          "Clean, accessible interface",
+          "100% Local-First execution"
+        ]
+      }
+    ]
+  },
+  "launchpad": {
+    "section_tag": "The Launchpad",
+    "section_title": "Let's Connect & Build",
+    "section_subtitle": "Interested in open-source collaboration, AI architecture discussions, mentorship, or full-stack AI roles? Let's connect!",
+    "topic_select_label": "Select a topic to discuss:",
+    "selected_interest_prefix": "Selected interest:",
+    "default_reach_out_text": "Reach out via your preferred channel",
+    "topics": [
+      "Open source collabs",
+      "Full-stack AI roles",
+      "Architectural discussions",
+      "Mentorship",
+      "Learning from others",
+      "Building community"
+    ],
+    "contacts": {
+      "email_label": "Email Me",
+      "email_address": "hameedhussain@example.com",
+      "github_label": "GitHub",
+      "github_url": "https://github.com",
+      "linkedin_label": "LinkedIn",
+      "linkedin_url": "https://linkedin.com"
+    }
+  }
+}

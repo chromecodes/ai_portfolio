@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import useLanguageStore from "@/utils/i18n/useLanguageStore";
-import { PROJECTS_DATA } from "@/data/projectsData";
+import { getProjectsData } from "@/data/projectsData";
 import { Project } from "@/types/project";
 import FeaturesTile from "@/features/Career/page/FeaturesTile";
 import { ProjectIntroTile } from "@/features/Projects/ProjectIntroTile";
@@ -16,14 +16,16 @@ interface TabItem {
 
 
 export default function ProjectsPage() {
+    const lang = useLanguageStore((state) => state.language);
     const strings = useLanguageStore((state) => state.strings as Record<string, string>);
     const [activeTab, setActiveTab] = useState<CategoryFilter>("all");
 
-    // Filtered projects list based on active tab selection
+    // Filtered projects list based on active tab selection & language
     const filteredProjects = useMemo(() => {
-        if (activeTab === "all") return PROJECTS_DATA;
-        return PROJECTS_DATA.filter((p) => p.category === activeTab);
-    }, [activeTab]);
+        const data = getProjectsData(lang);
+        if (activeTab === "all") return data;
+        return data.filter((p) => p.category === activeTab);
+    }, [activeTab, lang]);
 
     const tabs: TabItem[] = [
         { id: "all", labelKey: "catAll" },

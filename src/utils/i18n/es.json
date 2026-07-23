@@ -3,6 +3,7 @@
   "projects": "Proyectos",
   "career": "Experiencia",
   "about": "Acerca de",
+  "future": "Futuro",
   "footerLeftWingText": "Desarrollado por IA",
   "agentbarPlaceholder": "Pregunta lo que sea...",
   "footerRightWingText": "© Portafolio 2026",
@@ -94,5 +95,7 @@
   "visitGithub": "GitHub",
   "visitDemo": "Demo en Vivo",
   "readCaseStudy": "Ver Estudio",
-  "viewForMoreDetails": "Ver más detalles"
+  "viewForMoreDetails": "Ver más detalles",
+  "careerNotFound": "Detalles de Experiencia No Encontrados",
+  "careerNotFoundMessage": "No pudimos encontrar la información de la experiencia que estás buscando."
 }

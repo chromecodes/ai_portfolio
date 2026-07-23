@@ -49,22 +49,11 @@ export const ProjectHeroSection: FC<IProjectHeroSectionProps> = ({
   const hasLinks = Boolean(projectDemoUrl || projectRepoUrl);
 
   return (
-    <div className="space-y-6">
-      {/* Navigation Back Link */}
-      <div>
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-accent-color transition-colors duration-200"
-        >
-          <span>←</span>
-          <span>Back to Projects</span>
-        </Link>
-      </div>
-
+    <>
       {/* Main Hero Grid Layout */}
-      <section className="bg-secondary-background/60 backdrop-blur-md p-6 md:p-10 rounded-3xl border border-borderColor shadow-sm grid lg:grid-cols-12 gap-8 items-center">
+      <section className="bg-secondary-background/60 backdrop-blur-md p-6 md:p-10 rounded-3xl border border-borderColor shadow-sm grid lg:grid-cols-12 gap-8 items-center" >
         {/* Left Column: Context & Metadata */}
-        <div className="lg:col-span-7 space-y-6">
+        < div className="lg:col-span-7 space-y-6" >
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <span className="text-[10px] tracking-wider font-extrabold uppercase text-accent-color px-3 py-1 rounded-full bg-accent-color/10 border border-accent-color/20">
@@ -93,41 +82,44 @@ export const ProjectHeroSection: FC<IProjectHeroSectionProps> = ({
             </span>
             <TagsCapsule tags={corePillars} />
           </div>
-        </div>
+        </div >
 
         {/* Right Column: Media Overview or Terminal UI + Action Links */}
-        <div className="lg:col-span-5 flex flex-col gap-4 w-full">
-          {hasVideo ? (
-            <div className="relative group overflow-hidden rounded-2xl shadow-md border border-borderColor bg-secondary-background">
-              <video
-                src={videoSrc}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-auto max-h-[300px] object-cover transition-transform duration-500 group-hover:scale-102"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent pointer-events-none" />
-            </div>
-          ) : mediaArray.length > 0 ? (
-            <div className="relative rounded-2xl overflow-hidden border border-borderColor shadow-md bg-secondary-background">
-              <ImageViewer images={mediaArray as any} aspectRatio="landscape" curvedEdge={true} />
-            </div>
-          ) : (
-            <ProjectTerminalUI projectName={projectName} corePillars={corePillars} />
-          )}
+        < div className="lg:col-span-5 flex flex-col gap-4 w-full" >
+          {
+            hasVideo ? (
+              <div className="relative group overflow-hidden rounded-2xl shadow-md border border-borderColor bg-secondary-background" >
+                <video
+                  src={videoSrc}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-auto max-h-[300px] object-cover transition-transform duration-500 group-hover:scale-102"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent pointer-events-none" />
+              </div>
+            ) : mediaArray.length > 0 ? (
+              <div className="relative rounded-2xl overflow-hidden border border-borderColor shadow-md bg-secondary-background">
+                <ImageViewer images={mediaArray as any} aspectRatio="landscape" curvedEdge={true} />
+              </div>
+            ) : (
+              <ProjectTerminalUI projectName={projectName} corePillars={corePillars} />
+            )}
 
           {/* Demo & Repository Action Links */}
-          {hasLinks && (
-            <ProjectLinks
-              links={{
-                live: projectDemoUrl,
-                github: projectRepoUrl,
-              }}
-            />
-          )}
-        </div>
-      </section>
-    </div>
+          {
+            hasLinks && (
+              <ProjectLinks
+                links={{
+                  live: projectDemoUrl,
+                  github: projectRepoUrl,
+                }}
+              />
+            )
+          }
+        </div >
+      </section >
+    </>
   );
 };

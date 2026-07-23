@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import { CAREER_DATA } from "./data/careerData"
-import { CareerNode, Particle, Vec } from "./types"
+import { getCareerGraphData } from "./data/careerData"
+import { CareerData, CareerNode, Particle, Vec } from "./types"
 import CareerTooltip from "./CareerTooltip"
 import useThemeStore from "@/lib/useThemeStore"
+import useLanguageStore from "@/utils/i18n/useLanguageStore"
 
 /* ================= CONFIG ================= */
 
@@ -125,7 +126,7 @@ function findShortestPathWithStops(
 /* ================= LAYOUT ================= */
 
 function layoutCareerNodes(
-    data: typeof CAREER_DATA,
+    data: CareerData[],
     canvasWidth: number,
     canvasHeight: number
 ): CareerNode[] {
@@ -242,11 +243,13 @@ export default function CareerMapCanvas() {
     const router = useRouter()
 
     const [tooltip, setTooltip] = useState<any>(null)
-    const { theme } = useThemeStore(); // subscribe to theme
+    const { theme } = useThemeStore();
+    const lang = useLanguageStore((state) => state.language);
 
     useEffect(() => {
         const canvas = canvasRef.current!
         const ctx = canvas.getContext("2d")!
+        const careerData = getCareerGraphData(lang);
 
         /* ---------- Resize ---------- */
         const resize = () => {
@@ -255,7 +258,7 @@ export default function CareerMapCanvas() {
             canvas.height = parent.clientHeight
 
             careerNodes.current = layoutCareerNodes(
-                CAREER_DATA,
+                careerData,
                 canvas.width,
                 canvas.height
             )
@@ -280,7 +283,7 @@ export default function CareerMapCanvas() {
         )
 
         /* ---------- Icons ---------- */
-        CAREER_DATA.forEach(c => {
+        careerData.forEach(c => {
             const img = new Image()
             img.src = c.icon
             imageCache.current[c.id] = img
@@ -421,7 +424,7 @@ export default function CareerMapCanvas() {
             cancelAnimationFrame(tooltipRaf)
             window.removeEventListener("resize", resize)
         }
-    }, [router, theme]) // re-run on theme change to update colors
+    }, [router, theme, lang])
 
     return (
         <>

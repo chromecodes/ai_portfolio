@@ -4,15 +4,20 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import RingLoader from "@/features/Loaders/RingLoader";
 import ProjectDetailUI from "@/features/Projects/page/ProjectDetailUI";
-import CaseStudyDetailUI, { CaseStudyData } from "@/features/Projects/page/CaseStudyDetailUI";
+import CaseStudyDetailUI from "@/features/Projects/page/CaseStudyDetailUI";
+import { CaseStudyData } from "@/features/Projects/types";
 import { ProjectDetail } from "@/types/projectDetail";
 import Link from "next/link";
+import useLanguageStore from "@/utils/i18n/useLanguageStore";
 
 export default function ProjectPage() {
   const params = useParams() as { slug: string };
   const [loading, setLoading] = useState(true);
   const [projectData, setProjectData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const lang = useLanguageStore((state) => state.language);
+  const strings = useLanguageStore((state) => state.strings as Record<string, string>);
 
   useEffect(() => {
     const slug = params.slug;
@@ -22,7 +27,7 @@ export default function ProjectPage() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`/api/mainpages/projects/${slug}`);
+        const response = await fetch(`/api/mainpages/projects/${slug}?lang=${lang}`);
         if (!response.ok) {
           throw new Error(`Project "${slug}" not found`);
         }
@@ -40,7 +45,7 @@ export default function ProjectPage() {
     };
 
     fetchProject();
-  }, [params.slug]);
+  }, [params.slug, lang]);
 
   if (loading) {
     return <RingLoader />;
@@ -50,15 +55,16 @@ export default function ProjectPage() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4 text-center px-6">
         <span className="text-4xl">🔍</span>
-        <h2 className="text-2xl font-bold text-font-color">Project Not Found</h2>
+        <h2 className="text-2xl font-bold text-font-color">{strings.projectNotFound}</h2>
         <p className="text-sm text-muted-foreground max-w-md">
-          {error || "We couldn't find the project details you were looking for."}
+          {/* {error || "We couldn't find the project details you were looking for."} */}
+          {strings.projectNotFoundMessage}
         </p>
         <Link
           href="/projects"
           className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full bg-accent-color text-primary-background shadow-xs hover:opacity-90 transition-opacity"
         >
-          Back to Projects
+          {strings.backToProjects}
         </Link>
       </div>
     );

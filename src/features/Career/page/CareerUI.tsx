@@ -17,7 +17,7 @@ export default function CareerUI({ data }: ICareerUIProps) {
     const strings = useLanguageStore((state) => state.strings as Record<string, string>);
 
     return (
-        <main className="max-w-6xl mx-auto px-6 py-16 space-y-20">
+        <main className="max-w-6xl mx-auto mt-16 px-6 py-6 space-y-20">
             <div className="space-y-20">
                 {/* HERO SECTION */}
 
@@ -38,7 +38,10 @@ export default function CareerUI({ data }: ICareerUIProps) {
                         <p className="text-base text-muted-foreground leading-relaxed max-w-4xl">{data.roles.description}</p>
                     </div>
 
-                    <div className={`grid gap-8 pt-4 ${data.roles.engineering_insights.length > 0 ? "grid-cols-2" : "grid-cols-1"}`}>
+                    <div
+                        className={`grid gap-8 pt-4 grid-cols-1 ${data.roles.engineering_insights.length > 0 ? "md:grid-cols-2" : "md:grid-cols-1"
+                            }`}
+                    >
                         <div className="space-y-4 bg-secondary-background p-6 rounded-2xl border shadow-xs">
                             <h3 className="text-xl font-bold  flex items-center gap-2">
                                 <span className="text-primary-foreground text-lg">🎯</span> {strings.keyDeliverablesAndImpact}

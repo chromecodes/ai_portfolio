@@ -1,0 +1,755 @@
+{
+  "slug": "origin",
+  "company": {
+    "name": "الأصل (Origin)",
+    "role": "رحلة في هندسة البرمجيات",
+    "duration": "ديسمبر 2021 – فبراير 2023",
+    "logo": "/icons/flag.png",
+    "media": {
+      "video": "",
+      "images": []
+    },
+    "headline": "التعلم من خلال البناء",
+    "tags": []
+  },
+  "introduction": {
+    "title": "حيث أصبح الفضول مسيرة مهنية",
+    "description": [
+      "لم أبدأ مسيرتي بكتابة البرمجيات مباشرة، بل بدأت بطرح الأسئلة.",
+      "لطالما كنت مبهوراً بكيفية عمل الأنظمة المعقدة—كيف تتفاعل المكونات الفردية وتتواصل معاً لحل مشكلات حقيقية.",
+      "علمتني خلفيتي الأكاديمية في الهندسة الميكانيكية التفكير بالأنظمة: فهم القيود، تحليل العلاقات، وتصميم حلول موثوقة وفعالة.",
+      "عندما اكتشفت هندسة البرمجيات، أدركت أن تلك المبادئ نفسها موجودة في العالم الرقمي. البرمجة لم تكن مجرد كتابة كود—بل كانت تصميم أنظمة وتجريد وتفكير منطقي.",
+      "قدرة تحويل الأفكار إلى منتجات شغالة عبر جهاز حاسوب فقط أشعلت شغفاً جديداً.",
+      "ما بدأ كفضول أصبح تدريجياً التزاماً بإتقان هندسة البرمجيات وبناء منتجات يستمتع الناس بها."
+    ],
+    "modules": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "React",
+      "أساسيات علوم الحاسوب"
+    ]
+  },
+  "learningJourney": {
+    "title": "التعلم من خلال البناء",
+    "description": [
+      "بدأت رحلتي البرمجية مع The Odin Project، وهو منهج مبني على فلسفة بسيطة: أفضل طريقة للتعلم هي بناء برمجيات حقيقية.",
+      "بدلاً من حفظ القواعد، قدم كل مشروع مفهوماً هندسياً جديداً يبني على ما قبله.",
+      "تعلمت فهم ليس فقط كيفية كتابة الكود، بل لماذا توجد لغات البرمجة وأطر العمل وأنماط التصميم.",
+      "خلال هذه الرحلة استكشفت:",
+      [
+        "كيف تقوم المتصفحات بعرض صفحات الويب",
+        "HTML الدلالي وإمكانية الوصول",
+        "تخطيطات CSS الحديثة",
+        "أساسيات JavaScript",
+        "التعامل مع DOM",
+        "الخوارزميات والتفكير الحسابي",
+        "البرمجة كائنية التوجه (OOP)",
+        "البرمجة الوظيفية (FP)",
+        "النطاقات والإنغلاقات (Closures)",
+        "أنماط تصميم البرمجيات",
+        "REST APIs",
+        "معمارية مكونات React"
+      ],
+      "أصبح كل مشروع فرصة لاستكشاف مفهوم هندسي جديد.",
+      "وأصبحت كل مشكلة تمريناً لتنقيح البرمجيات وتصحيح الأخطاء."
+    ]
+  },
+  "projects": [
+    {
+      "id": "origin-html-001",
+      "title": "موقع الوصفات",
+      "tags": ["HTML"],
+      "problem": {
+        "title": "الهدف",
+        "description": "فهم كيفية هيكلة صفحات الويب باستخدام HTML الدلالي وتعلم اللبنات الأساسية للويب."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "بناء موقع وصفات متعدد الصفحات باستخدام HTML الدلالي لفهم كيفية تفسير المتصفحات للمستندات وتنظيم المحتوى وإنشاء نموذج كائن المستند (DOM)."
+      },
+      "media": [
+        {
+          "id": "origin-html-001-image-01",
+          "src": "/images/p1.webp",
+          "blurSrc": "/images/p1_blur.webp",
+          "alt": "الصفحة الرئيسية لموقع الوصفات",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        },
+        {
+          "id": "origin-html-001-image-02",
+          "src": "/images/p2.webp",
+          "blurSrc": "/images/p2_blur.webp",
+          "alt": "صفحة الوصفة",
+          "displayMode": "contain",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/odin-recipes",
+        "live": "https://chromecodes.github.io/odin-recipes/"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["HTML5", "HTML الدلالي", "القوائم", "الروابط", "الصور", "هيكلة المستند"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["نموذج كائن المستند (DOM)", "الترميز الدلالي", "أساسيات إمكانية الوصول", "تحليل المتصفح"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["بناء أول موقع متكامل.", "تعلم كيفية تحويل المتصفحات لـ HTML إلى DOM.", "فهم أهمية الترميز الدلالي."]
+      }
+    },
+    {
+      "id": "origin-css-002",
+      "title": "صفحة الهبوط",
+      "tags": ["HTML", "CSS"],
+      "problem": {
+        "title": "الهدف",
+        "description": "تعلم تقنيات CSS الحديثة وفهم كيفية فصل العرض البصري عن هيكل المستند."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "إعادة بناء صفحة هبوط احترافية مع التركيز على التخطيطات التفاعلية، والخطوط، والمسافات، و Flexbox، وأنماط التنسيق القابلة لإعادة الاستخدام."
+      },
+      "media": [
+        {
+          "id": "origin-css-002-image-01",
+          "src": "/images/p3.webp",
+          "blurSrc": "/images/p3_blur.webp",
+          "alt": "صفحة الهبوط الرئيسية",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/Project-landingpage",
+        "live": "https://chromecodes.github.io/Project-landingpage/"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["CSS3", "Flexbox", "الخطوط", "التصميم التفاعلي", "المسافات", "التخطيط"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["تتابع CSS (Cascade)", "تحديد الأولوية (Specificity)", "وراثة الأنماط", "نموذج الصندوق (Box Model)"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["إنشاء تخطيطات تفاعلية.", "فهم كيفية حساب المتصفحات للتخطيطات.", "تحسين الاهتمام بتفاصيل واجهة المستخدم."]
+      }
+    },
+    {
+      "id": "origin-js-003",
+      "title": "لعبة حجرة ورقة مقص",
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
+        "title": "الهدف",
+        "description": "تعلم أساسيات البرمجة من خلال JavaScript عبر بناء تطبيق تفاعلي."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "تطوير لعبة حجرة ورقة مقص تفاعلية قدمت المتغيرات والشروط والحلقات والدوال ومعالجة الأحداث مع تعزيز التفكير المنطقي."
+      },
+      "media": [
+        {
+          "id": "origin-js-003-image-01",
+          "src": "/images/p4.webp",
+          "blurSrc": "/images/p4_blur.webp",
+          "alt": "لعبة حجرة ورقة مقص",
+          "displayMode": "contain",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/RockPaperSicssor",
+        "live": "https://chromecodes.github.io/RockPaperSicssor/"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["JavaScript", "الدوال", "المتغيرات", "الحلقات", "الشروط", "الأحداث"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["الخوارزميات", "تدفق التحكم", "التفكير الحسابي", "تفكييك المشكلات"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["تطوير التفكير المنطقي.", "تحويل القواعد الواقعية إلى خوارزميات برمجية."]
+      }
+    },
+    {
+      "id": "origin-dom-004",
+      "title": "Etch-a-Sketch (لوحة الرسم)",
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
+        "title": "الهدف",
+        "description": "فهم التعامل مع DOM والبرمجة القائمة على الأحداث عبر إنشاء تطبيق رسم تفاعلي."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "بناء تطبيق رسم تفاعلي عبر توليد عناصر الشبكة ديناميكياً والاستجابة لتفاعلات المستخدم وتحديث DOM في الوقت الفعلي."
+      },
+      "media": [
+        {
+          "id": "origin-js-004-image-01",
+          "src": "/images/p5.webp",
+          "blurSrc": "/images/p5_blur.webp",
+          "alt": "لوحة الرسم Etch-a-Sketch",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/Etch-A-Sketch",
+        "live": "https://chromecodes.github.io/Etch-A-Sketch/"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["تعديل DOM", "مستمعات الأحداث", "التنسيق الديناميكي", "توليد الشبكة"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["حلقة الأحداث (Event Loop)", "انتشار الأحداث", "شجرة DOM", "إدارة الحالة"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["بناء تجارب متصفح تفاعلية.", "فهم كيفية تواصل JavaScript مع المتصفح."]
+      }
+    },
+    {
+      "id": "origin-calculator-005",
+      "title": "الآلة الحاسبة",
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
+        "title": "الهدف",
+        "description": "تعزيز أساسيات البرمجة من خلال بناء آلة حاسبة تدير مدخلات المستخدم وحالة التطبيق والعمليات الرياضية."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "تطوير آلة حاسبة متكاملة قادرة على التعامل مع العمليات المتسلسلة ومدخلات الكيبورد والأعداد العشرية وتتبع الأخطاء."
+      },
+      "media": [
+        {
+          "id": "origin-js-005-image-01",
+          "src": "/images/p6.webp",
+          "blurSrc": "/images/p6_blur.webp",
+          "alt": "الآلة الحاسبة",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/calculator",
+        "live": "https://chromecodes.github.io/calculator/"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["JavaScript", "تعديل DOM", "أحداث لوحة المفاتيح", "إدارة حالة التطبيق"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["إدارة الحالة", "آلات الحالات المنتهية (FSM)", "ترتيب الدوال", "فصل المسؤوليات"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["فصل منطق العمليات عن العرض البصري.", "إدارة حالة التطبيقات المعقدة."]
+      }
+    },
+    {
+      "id": "origin-signup-form-006",
+      "title": "نموذج التسجيل",
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
+        "title": "الهدف",
+        "description": "تعلم كيفية معالجة المتصفح للنماذج وبناء تحقق قوي في جانب العميل لتجربة مستخدم أفضل."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "إنشاء نموذج تسجيل تفاعلي مع تحقق حقيقي في الوقت الفعلي وتأكيد كلمة المرور ورسائل خطأ مخصصة."
+      },
+      "media": [
+        {
+          "id": "origin-js-006-image-01",
+          "src": "/images/p7.webp",
+          "blurSrc": "/images/p7_blur.webp",
+          "alt": "نموذج التسجيل",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/Sign-up-form",
+        "live": "https://chromecodes.github.io/Sign-up-form/"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["نماذج HTML", "JavaScript", "التعبيرات النمطية (Regex)", "معالجة الأحداث"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["التحقق من المدخلات", "سلامة البيانات", "معالجة الأخطاء", "البرمجة الدفاعية"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["التحقق من مدخلات المستخدم بفعالية.", "تحسين تجربة المستخدم من خلال التغذية الراجعة الفورية."]
+      }
+    },
+    {
+      "id": "origin-admin-dashboard-007",
+      "title": "لوحة تحكم الإدارة",
+      "tags": ["HTML", "CSS"],
+      "problem": {
+        "title": "الهدف",
+        "description": "إتقان تخطيطات CSS المتقدمة أثناء إعادة بناء واجهة لوحة تحكم احترافية."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "بناء لوحة تحكم تفاعلية للإدارة باستخدام CSS Grid و Flexbox مع التركيز على دقة إعادة إنتاج التخطيطات المعقدة."
+      },
+      "media": [
+        {
+          "id": "origin-admin-dashboard-007-image-01",
+          "src": "/images/p8.webp",
+          "blurSrc": "/images/p8_blur.webp",
+          "alt": "لوحة تحكم الإدارة",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/admin-dashboard",
+        "live": "https://chromecodes.github.io/admin-dashboard"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["CSS Grid", "Flexbox", "التصميم التفاعلي", "أنظمة التخطيط"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["خوارزميات التخطيط", "الهرمية البصرية", "تركيب واجهات المستخدم"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["بناء تخطيطات لوحات تحكم بأسلوب موجه للإنتاج.", "تحسين الدقة في تنفيذ الواجهات."]
+      }
+    },
+    {
+      "id": "origin-library-008",
+      "title": "تطبيق المكتبة",
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
+        "title": "الهدف",
+        "description": "فهم نموذج الكائنات في JavaScript وتعلم البرمجة كائنية التوجه (OOP) من خلال تطبيق واقعي."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "بناء تطبيق إدارة مكتبة باستخدام الدوال البنائية ونماذج Prototypes في JavaScript واستكشاف كيفية مشاركة السلوك بين الكائنات."
+      },
+      "media": [
+        {
+          "id": "origin-library-008-image-01",
+          "src": "/images/p9.webp",
+          "blurSrc": "/images/p9_blur.webp",
+          "alt": "تطبيق إدارة المكتبة",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/library",
+        "live": "https://chromecodes.github.io/library"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["JavaScript", "الدوال البنائية", "الكائنات", "الأساليب (Methods)", "Prototypes"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["البرمجة كائنية التوجه (OOP)", "سلسلة الـ Prototype", "الوراثة كائنية التوجه", "الكبسلة (Encapsulation)"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["فهم نموذج الوراثة القائم على الـ Prototype في JavaScript.", "تطبيق التجريد لنمذجة كيانات واقعية."]
+      }
+    },
+    {
+      "id": "origin-tictactoe-009",
+      "title": "لعبة X-O (Tic Tac Toe)",
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
+        "title": "الهدف",
+        "description": "تعلم أنماط تصميم البرمجيات وإنشاء تطبيقات قابلة للصيانة باستخدام معمارية JavaScript نمطية."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "بناء لعبة X-O باستخدام Factory Functions ونمط Module Pattern لتنظيم منطق التطبيق في وحدات مستقلة."
+      },
+      "media": [
+        {
+          "id": "origin-tictactoe-009-image-01",
+          "src": "/images/p10.webp",
+          "blurSrc": "/images/p10_blur.webp",
+          "alt": "لعبة X-O",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/tic-tac-toe",
+        "live": "https://chromecodes.github.io/tic-tac-toe"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["JavaScript", "Factory Functions", "الوحدات النمطية", "Closures", "تعديل DOM"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["الكبسلة", "التجريد", "نمط الوحدات (Module Pattern)", "إدارة النطاق (Scope)"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["هيكلة تطبيقات كبيرة.", "فهم أهمية فصل المسؤوليات في الكود."]
+      }
+    },
+    {
+      "id": "origin-restaurant-webpack-010",
+      "title": "موقع المطعم (مع Webpack)",
+      "tags": ["HTML", "CSS", "JavaScript", "Webpack"],
+      "problem": {
+        "title": "الهدف",
+        "description": "فهم تدفقات عمل تطوير JavaScript الحديثة وتعلم كيفية هيكلة التطبيقات الأمامية الاحترافية."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "إنشاء تطبيق مطعم ذو صفحة واحدة باستخدام وحدات JavaScript و Webpack، والتعرف على إدارة التبعيات وحزم الإنتاج."
+      },
+      "media": [
+        {
+          "id": "origin-restaurant-webpack-010-image-01",
+          "src": "/images/p11.webp",
+          "blurSrc": "/images/p11_blur.webp",
+          "alt": "موقع المطعم",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/restaurant-page",
+        "live": "https://chromecodes.github.io/restaurant-page"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["وحدات JavaScript", "Webpack", "NPM", "إدارة الأصول", "أدوات البناء"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["مخطط التبعيات", "أنظمة الوحدات", "التجميع (Bundling)", "أنبوب البناء"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["فهم كيفية بناء تطبيقات الواجهة الأمامية الحديثة.", "الانتقال من السكريبتات البسيطة نحو تطوير التطبيقات."]
+      }
+    },
+    {
+      "id": "origin-todo-solid-011",
+      "title": "تطبيق المهام (Todo App)",
+      "tags": ["HTML", "CSS", "JavaScript"],
+      "problem": {
+        "title": "الهدف",
+        "description": "تطبيق مبادئ هندسة البرمجيات وتعلم تصميم تطبيقات قابلة للتوسع والصيانة."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "تطوير تطبيق مهام نمطي مع تطبيق مبادئ البرمجة كائنية التوجه، والتركيز على المكونات القابلة لإعادة الاستخدام وفصل المسؤوليات."
+      },
+      "media": [
+        {
+          "id": "origin-todo-solid-011-image-01",
+          "src": "/images/p15.webp",
+          "blurSrc": "/images/p15_blur.webp",
+          "alt": "تطبيق المهام",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/todo-list",
+        "live": "https://chromecodes.github.io/todo-list"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["JavaScript", "البرمجة كائنية التوجه", "الوحدات النمطية", "التخزين المحلي (LocalStorage)"]
+      },
+      "concepts": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["مبادئ SOLID", "مبدأ المسؤولية الواحدة", "الاقتران الضعيف (Loose Coupling)", "فصل المسؤوليات"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["تصميم تطبيقات قابلة للنمو والتوسع.", "تطبيق مبادئ هندسة البرمجيات المحترفة."]
+      }
+    },
+    {
+      "id": "origin-weather-api-012",
+      "title": "تطبيق الطقس",
+      "tags": ["HTML", "CSS", "JavaScript", "API"],
+      "problem": {
+        "title": "الهدف",
+        "description": "فهم كيفية تواصل تطبيقات الواجهة الأمامية مع الخدمات الخارجية عبر APIs."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "بناء تطبيق طقس يستهلك بيانات الطقس الخارجية عبر API غير متزامنة ومعالجة استجابات HTTP."
+      },
+      "media": [
+        {
+          "id": "origin-weather-api-012-image-01",
+          "src": "/images/p17.webp",
+          "blurSrc": "/images/p17_blur.webp",
+          "alt": "تطبيق الطقس",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/weather-app",
+        "live": "https://chromecodes.github.io/weather-app"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["Fetch API", "Promises", "Async/Await", "JSON", "تكامل API"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["معمارية REST", "بروتوكول HTTP", "البرمجة غير المتزامنة", "تسلسل البيانات"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["فهم كيفية استهلاك التطبيقات للبيانات الخارجية.", "تعلم الأنماط غير المتزامنة في JavaScript."]
+      }
+    },
+    {
+      "id": "origin-react-cv-013",
+      "title": "تطبيق السيرة الذاتية (React CV)",
+      "tags": ["HTML", "CSS", "JavaScript", "React"],
+      "problem": {
+        "title": "الهدف",
+        "description": "تعلم أساسيات React وفهم كيفية هيكلة التطبيقات الحديثة باستخدام المكونات."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "بناء تطبيق منشئ سير ذاتية تفاعلي باستخدام مكونات React Class وإدارة الحالة والـ Props."
+      },
+      "media": [
+        {
+          "id": "origin-cv-project-013-image-01",
+          "src": "/images/p21.webp",
+          "blurSrc": "/images/p21_blur.webp",
+          "alt": "تطبيق السيرة الذاتية",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/cv-project",
+        "live": "https://chromecodes.github.io/cv-project"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["React", "Class Components", "Props", "State", "دورة حياة المكونات"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["معمارية المكونات", "البرمجة التصريحية", "Virtual DOM", "تدفق البيانات"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["الانتقال من التعديل المباشر لـ DOM إلى التطوير التصريحي.", "فهم كيفية تعبير المكونات عن عناصر قابلة لإعادة الاستخدام."]
+      }
+    },
+    {
+      "id": "origin-react-memory-card-014",
+      "title": "لعبة كروت الذاكرة (Memory Card)",
+      "tags": ["React", "JavaScript"],
+      "problem": {
+        "title": "الهدف",
+        "description": "تعلم تطوير React الحديث باستخدام المكونات الوظيفية والـ Hooks وحالة التطبيق."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "بناء لعبة كروت ذاكرة باستخدام مكونات React الوظيفية و Hooks وإدارة تغيرات الحالة والاستجابة للتفاعلات."
+      },
+      "media": [
+        {
+          "id": "origin-memory-game-014-image-01",
+          "src": "/images/p19.webp",
+          "blurSrc": "/images/p19_blur.webp",
+          "alt": "لعبة كروت الذاكرة",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/memory-game",
+        "live": "https://chromecodes.github.io/memory-game"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["React Functional Components", "React Hooks", "useState", "useEffect"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["البرمجة الوظيفية", "العرض التفاعلي", "مزامنة الحالة", "مزامنة الآثار الجانبية"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["إتقان المكونات الوظيفية الحديثة في React.", "فهم كيفية إدارة الـ Hooks لسلوك التطبيق."]
+      }
+    },
+    {
+      "id": "origin-react-shopping-cart-015",
+      "title": "عربة التسوق (Shopping Cart)",
+      "tags": ["React", "JavaScript"],
+      "problem": {
+        "title": "الهدف",
+        "description": "بناء تطبيق React كبُر حجماً مع تطبيق معمارية المكونات وإدارة الحالة والأنماط التفاعلية."
+      },
+      "solution": {
+        "title": "الحل",
+        "description": "تطوير تطبيق عربة تسوق متكامل باستخدام مكونات React، والحالة المشتركة، ومفاهيم التوجيه، وأنماط واجهة المستخدم القابلة لإعادة الاستخدام."
+      },
+      "media": [
+        {
+          "id": "origin-shopping-cart-015-image-01",
+          "src": "/images/p24.webp",
+          "blurSrc": "/images/p24_blur.webp",
+          "alt": "عربة التسوق",
+          "displayMode": "cover",
+          "width": 1200,
+          "type": "image",
+          "height": 800
+        }
+      ],
+      "links": {
+        "github": "https://github.com/chromecodes/shopping-cart",
+        "live": "https://chromecodes.github.io/shopping-cart"
+      },
+      "skills": {
+        "title": "التقنيات المستخدمة",
+        "items": ["React", "المكونات الوظيفية", "تركيب المكونات", "إدارة الحالة", "التوجيه"]
+      },
+      "technical_details": {
+        "title": "مفاهيم علوم الحاسوب",
+        "items": ["معمارية المكونات", "التركيب (Composition)", "تصميم الواجهات القابلة للتوسع", "فصل المسؤوليات"]
+      },
+      "outcome": {
+        "title": "ما تعلمته",
+        "items": ["تصميم تطبيقات باستخدام أنظمة مكونات قابلة لإعادة الاستخدام.", "استكمال الانتقال من تعلم React إلى بناء تطبيقات موجهة للإنتاج."]
+      }
+    }
+  ],
+  "techStack": {
+    "title": "التقنيات والأسس الهندسية",
+    "categories": {
+      "frontend": ["HTML5", "CSS3", "JavaScript ES6+", "React"],
+      "programmingConcepts": [
+        "الخوارزميات",
+        "التفكير الحسابي",
+        "البرمجة كائنية التوجه",
+        "البرمجة الوظيفية",
+        "Closures",
+        "سلسلة الـ Prototype",
+        "أنماط التصميم"
+      ],
+      "webFundamentals": [
+        "DOM",
+        "معالجة وعرض المتصفح",
+        "HTTP",
+        "REST APIs",
+        "معمارية العميل والعميل الخادم",
+        "البرمجة غير المتزامنة"
+      ],
+      "softwareEngineering": [
+        "مبادئ SOLID",
+        "الكود النظيف",
+        "إعادة الصياغة (Refactoring)",
+        "المعمارية النمطية",
+        "فصل المسؤوليات"
+      ],
+      "tooling": ["Git", "GitHub", "NPM", "Webpack"]
+    }
+  },
+  "learnings": {
+    "title": "المفاهيم الهندسية المكتسبة",
+    "items": [
+      "التفكير الحسابي",
+      "تفكيك المشكلات",
+      "التفكير الخوارزمي",
+      "أساسيات هياكل البيانات",
+      "أنبوب عرض المتصفح",
+      "نموذج كائن المستند",
+      "تطوير الويب الدلالي",
+      "التصميم التفاعلي",
+      "أساسيات JavaScript",
+      "البرمجة القائمة على الأحداث",
+      "إدارة الحالة",
+      "البرمجة كائنية التوجه",
+      "البرمجة الوظيفية",
+      "الوراثة القائمة على الـ Prototype",
+      "Factory Functions",
+      "نمط الوحدات (Module Pattern)",
+      "أنماط التصميم",
+      "تكامل REST API",
+      "اتصالات HTTP",
+      "البرمجة غير المتزامنة",
+      "معالجة الأخطاء",
+      "المعمارية القائمة على المكونات",
+      "تطوير الواجهات التصريحي",
+      "مكونات React",
+      "React Hooks",
+      "أنظمة التصميم القابلة لإعادة الاستخدام",
+      "معمارية البرمجيات",
+      "مبادئ SOLID",
+      "ممارسات الكود النظيف",
+      "تنقيح الكود",
+      "إعادة الصياغة",
+      "قابلية صيانة الكود",
+      "تصميم التطبيقات القابلة للتوسع",
+      "العقلية الهندسية"
+    ]
+  }
+}

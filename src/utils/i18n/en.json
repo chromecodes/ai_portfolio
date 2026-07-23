@@ -3,6 +3,7 @@
   "projects": "Projects",
   "career": "Career",
   "about": "About",
+  "future": "Future",
   "footerLeftWingText": "Powered by AI",
   "agentbarPlaceholder": "Ask anything...",
   "footerRightWingText": "© Portfolio 2026",
@@ -105,5 +106,10 @@
   "visitGithub": "GitHub",
   "visitDemo": "Live Demo",
   "readCaseStudy": "Read Study",
-  "viewForMoreDetails": "View for more details"
+  "viewForMoreDetails": "View for more details",
+  "backToProjects": "Back to Projects",
+  "projectNotFound": "Project Not Found",
+  "projectNotFoundMessage": "We couldn't find the project details you were looking for.",
+  "careerNotFound": "Career Details Not Found",
+  "careerNotFoundMessage": "We couldn't find the career path you were looking for."
 }

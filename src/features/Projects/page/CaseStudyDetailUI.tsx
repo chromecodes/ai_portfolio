@@ -1,69 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import TagsCapsule from "@/components/UI/tags/TagsCapsule";
 import QuotationBox from "@/components/UI/QuotationBox";
 import CareerFooter from "@/features/Career/page/CareerFooter";
-
-export interface CaseStudyData {
-  project_name: string;
-  project_type: string;
-  project_context: string;
-  core_pillars: string[];
-  architecture_diagram: string;
-  architecture: Array<{
-    title: string;
-    description: string;
-  }>;
-  tech_stack: Array<{
-    title: string;
-    items: string[];
-  }>;
-  core_engineering_problems: Array<{
-    id: string;
-    title: string;
-    tags: string[];
-    problem: {
-      title: string;
-      description: string;
-    };
-    solution: {
-      title: string;
-      description: string;
-    };
-    technical_details: {
-      title: string;
-      items: string[];
-    };
-    outcome: {
-      title: string;
-      items: string[];
-    };
-  }>;
-  benchmarks: {
-    sustained_rps: string;
-    total_transactions: string;
-    error_rate: string;
-    idempotency_gate: string;
-    chart_image: string;
-  };
-  local_development: {
-    title: string;
-    description: string;
-    steps: Array<{
-      step: string;
-      title: string;
-      command: string;
-      description: string;
-    }>;
-  };
-  ci_cd: {
-    title: string;
-    pipeline_file: string;
-    description: string;
-  };
-}
+import ImageViewer from "@/components/ImageViewer/ImageViewer";
+import { CaseStudyData } from "../types";
+export type { CaseStudyData };
+import useLanguageStore from "@/utils/i18n/useLanguageStore";
+import NavBackSection from "./NavBackSection";
+import ProjectFooter from "./ProjectFooter";
+import StickyProjectLinks from "./StickyProjectLinks";
+import { Icons } from "@/Icon";
 
 export interface ICaseStudyDetailUIProps {
   data: CaseStudyData;
@@ -71,6 +20,8 @@ export interface ICaseStudyDetailUIProps {
 
 export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const strings = useLanguageStore((state) => state.strings as Record<string, string>);
+
 
   const handleCopy = (command: string, index: number) => {
     navigator.clipboard.writeText(command);
@@ -79,17 +30,13 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
   };
 
   return (
-    <main className="max-w-6xl mx-auto px-6 py-12 space-y-16">
+    <main className="max-w-6xl mx-auto px-6 py-6 space-y-12">
+      {/* Sticky Floating Repo/Demo Links */}
+      <StickyProjectLinks repoUrl={data.project_repo_url} demoUrl={data.project_demo_url} />
+
       {/* NAVIGATION BACK LINK */}
-      <div>
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-accent-color transition-colors duration-200"
-        >
-          <span>←</span>
-          <span>Back to Projects</span>
-        </Link>
-      </div>
+      <NavBackSection />
+
 
       {/* HERO SECTION */}
       <section className="bg-secondary-background/60 backdrop-blur-md p-6 md:p-10 rounded-3xl border border-borderColor shadow-sm space-y-8">
@@ -110,6 +57,21 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
           <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-4xl">
             {data.project_context}
           </p>
+
+          {data.project_repo_url && (
+            <div className="pt-2 flex items-center gap-3">
+              <a
+                href={data.project_repo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-primary-background hover:bg-secondary-background border border-borderColor hover:border-emerald-400/60 text-xs font-bold text-font-color hover:text-emerald-400 transition-all duration-200 shadow-xs hover:-translate-y-0.5"
+              >
+                <Icons.github className="w-4 h-4 text-emerald-400" />
+                <span>View Source Repository</span>
+                <Icons.externalLink className="w-3.5 h-3.5 text-muted-foreground" />
+              </a>
+            </div>
+          )}
         </div>
 
         {/* QUOTATION BOX */}
@@ -388,13 +350,8 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
               1,500 Virtual Users • 15m Saturation
             </span>
           </div>
-
           <div className="relative overflow-hidden rounded-2xl border border-borderColor shadow-lg bg-primary-background">
-            <img
-              src={data.benchmarks.chart_image}
-              alt="Locust Load Test Performance Saturation Benchmark"
-              className="w-full h-auto object-cover max-h-[500px]"
-            />
+            <ImageViewer images={data.benchmarks.chart_image} aspectRatio="landscape" />
           </div>
         </div>
       </section>
@@ -471,7 +428,7 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
       </section>
 
       {/* FOOTER */}
-      <CareerFooter />
+      <ProjectFooter />
     </main>
   );
 }

@@ -7,6 +7,9 @@ import FeaturesTile from "@/features/Career/page/FeaturesTile";
 import CareerFooter from "@/features/Career/page/CareerFooter";
 import TagsCapsule from "@/components/UI/tags/TagsCapsule";
 import useLanguageStore from "@/utils/i18n/useLanguageStore";
+import NavBackSection from "./NavBackSection";
+import ProjectFooter from "./ProjectFooter";
+import StickyProjectLinks from "./StickyProjectLinks";
 
 export interface IProjectDetailUIProps {
   data: ProjectDetail;
@@ -16,7 +19,13 @@ export default function ProjectDetailUI({ data }: IProjectDetailUIProps) {
   const strings = useLanguageStore((state) => state.strings as Record<string, string>);
 
   return (
-    <main className="max-w-6xl mx-auto px-6 py-12 space-y-16">
+    <main className="max-w-6xl mx-auto px-6 py-6 space-y-12">
+      {/* Sticky Floating Repo/Demo Links */}
+      <StickyProjectLinks repoUrl={data.project_repo_url} demoUrl={data.project_demo_url} />
+
+      {/* Navigation Back Link */}
+      <NavBackSection />
+
       {/* HERO SECTION */}
       <ProjectHeroSection
         projectName={data.project_name}
@@ -102,7 +111,7 @@ export default function ProjectDetailUI({ data }: IProjectDetailUIProps) {
       </section>
 
       {/* FOOTER */}
-      <CareerFooter />
+      <ProjectFooter />
     </main>
   );
 }

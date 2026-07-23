@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getProject } from "@/lib/projects/repository";
+import { getFuture } from "@/lib/future/repository";
 
 export async function GET(
   request: Request,
@@ -7,16 +7,13 @@ export async function GET(
     params,
   }: {
     params: Promise<{
-      slug: string;
+      lang: string;
     }>;
   }
 ) {
   try {
-    const { slug } = await params;
-    const { searchParams } = new URL(request.url);
-    const lang = searchParams.get("lang") || "en";
-
-    const data = await getProject(slug, lang);
+    const { lang } = await params;
+    const data = await getFuture(lang);
 
     return NextResponse.json({
       success: true,
@@ -26,7 +23,7 @@ export async function GET(
     return NextResponse.json(
       {
         success: false,
-        message: "Project data not found",
+        message: "Future page data not found",
         error,
       },
       {

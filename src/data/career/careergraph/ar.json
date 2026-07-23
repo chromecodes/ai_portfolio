@@ -1,0 +1,38 @@
+[
+  {
+    "id": "origin",
+    "company_name": "التعلم الذاتي",
+    "time_period": 10,
+    "icon": "/icons/flag.svg",
+    "tooltip_icon": "/icons/flag_light.png",
+    "description": "اكتساب المهارات البرمجية الأساسية من خلال الدراسة الذاتية والدورات عبر الإنترنت.",
+    "projects": ["المشاريع الشخصية"]
+  },
+  {
+    "id": "cognizant",
+    "company_name": "Cognizant",
+    "time_period": 26,
+    "icon": "/icons/cognizant.png",
+    "tooltip_icon": "/icons/cognizant.png",
+    "description": "العمل على أنظمة واجهة أمامية قابلة للتوسع.",
+    "projects": ["لوحات التحكم", "لوحة الإدارة", "التحليلات"]
+  },
+  {
+    "id": "prostack360",
+    "company_name": "Prostack360",
+    "time_period": 38,
+    "icon": "/icons/prostack360.png",
+    "tooltip_icon": "/icons/prostack360.png",
+    "description": "العمل على أنظمة واجهة أمامية قابلة للتوسع.",
+    "projects": ["لوحات التحكم", "لوحة الإدارة", "التحليلات"]
+  },
+  {
+    "id": "future",
+    "company_name": "الهدف المستقبلي",
+    "time_period": 0,
+    "icon": "/icons/question.svg",
+    "tooltip_icon": "/icons/question_light.png",
+    "description": "تطوير برمجيات متكاملة (Full-Stack).",
+    "projects": ["منصة API"]
+  }
+]

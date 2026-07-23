@@ -131,12 +131,12 @@ export default function ImageSlide({ image, isFullLoaded, isVisible = false, cur
                     src={(isFullLoaded || !image.blurSrc) ? image.src : image.blurSrc}
                     alt={image.alt}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 2000px) 100vw, (max-width: 2500px) 50vw, 33vw"
                     onError={() => {
                         setHasError(true);
                     }}
                     style={{ objectFit: image.displayMode }}
-                    className={` object-cover  transition-all duration-500 ${(isFullLoaded || !image.blurSrc) ? "blur-0 scale-100" : "blur-sm scale-105"} ${curvedEdge ? "rounded-2xl" : ""}`}
+                    className={` object-cover transition-all duration-500 ${(isFullLoaded || !image.blurSrc) ? "blur-0 scale-100" : "blur-sm scale-105"} ${curvedEdge ? "rounded-2xl" : ""}`}
                 />
             )}
         </motion.div>

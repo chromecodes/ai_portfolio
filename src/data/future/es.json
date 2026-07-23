@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "badge": "Hoja de Ruta y Visión Futura",
+    "title_part1": "Construyendo Productos que Resuelven Problemas Reales con",
+    "title_part2": "IA y Sistemas de Alto Rendimiento",
+    "subtitle": "Un mapa activo de dónde me encuentro hoy, los caminos de ingeniería hacia los que avanzo y las herramientas de IA locales que se están desarrollando en mi laboratorio.",
+    "vision_pillars": [
+      "Herramientas de IA Locales",
+      "Flujos de Trabajo Agénticos",
+      "Ajuste Fino de LLMs de Código Abierto",
+      "Sistemas de Alto Rendimiento"
+    ]
+  },
+  "telemetry": {
+    "section_title": "Telemetría en Vivo • Estado \"Ahora Mismo\"",
+    "badges": [
+      {
+        "id": "building",
+        "label": "Construyendo Actualmente",
+        "title": "Herramientas de documentación locales guiadas por IA",
+        "icon": "Hammer",
+        "color": "text-accent-color",
+        "bgColor": "bg-accent-color/10"
+      },
+      {
+        "id": "exploring",
+        "label": "Explorando Actualmente",
+        "title": "Ajuste fino de LLM, RAG híbrido y sistemas de IA de alto rendimiento",
+        "icon": "Compass",
+        "color": "text-emerald-500",
+        "bgColor": "bg-emerald-500/10"
+      },
+      {
+        "id": "researching",
+        "label": "Investigando Actualmente",
+        "title": "Arquitecturas de IA y diseños de sistemas para producción",
+        "icon": "BookOpen",
+        "color": "text-amber-500",
+        "bgColor": "bg-amber-500/10"
+      }
+    ]
+  },
+  "vectors": {
+    "section_tag": "Trayectoria Técnica",
+    "section_title": "Vectores Activos de Ingeniería",
+    "section_subtitle": "Los dominios arquitectónicos principales y paradigmas tecnológicos que dan forma a mi trabajo actual y proyectos futuros.",
+    "focus_tech_label": "Tecnología Principal",
+    "items": [
+      {
+        "id": "vector-1",
+        "index_label": "01",
+        "tag": "Vector 1 • Dirección Principal",
+        "title": "Desarrollo de IA Agéntica para Herramientas Locales",
+        "why": "Fascinado por el potencial de la IA para impactar la vida de las personas — haciéndola accesible para todos localmente con privacidad y velocidad.",
+        "icon": "Bot",
+        "tech_stack": [
+          "Ajuste Fino de LLM",
+          "RAG",
+          "Sistemas de IA de Alto Rendimiento",
+          "Modelos Locales",
+          "Ollama"
+        ]
+      },
+      {
+        "id": "vector-2",
+        "index_label": "02",
+        "tag": "Vector 2 • Enfoque de Dominio",
+        "title": "Fintech y Herramientas Financieras para Desarrolladores",
+        "why": "Apasionado por crear herramientas para desarrolladores tras años en sistemas CRM. Fintech es un dominio clave donde la IA puede mejorar enormemente la experiencia.",
+        "icon": "Layers",
+        "tech_stack": [
+          "Diseño de Sistemas",
+          "Sistemas Distribuidos",
+          "Construcción a Escala",
+          "Microservicios",
+          "Integraciones API",
+          "Procesamiento de Datos Financieros"
+        ]
+      },
+      {
+        "id": "vector-3",
+        "index_label": "03",
+        "tag": "Vector 3 • I+D Emergente",
+        "title": "Utilidades CLI de Código Abierto",
+        "why": "Como desarrollador, me encanta contar con potentes herramientas CLI locales que agilicen flujos de trabajo, ahorren tokens y aceleren la programación diaria.",
+        "icon": "Terminal",
+        "tech_stack": [
+          "Herramientas CLI",
+          "Agentes de IA",
+          "Ajuste Fino de LLM",
+          "GraphRAG",
+          "Búsqueda BM25"
+        ]
+      }
+    ]
+  },
+  "pipeline": {
+    "section_tag": "En El Laboratorio",
+    "section_title": "Canal de Proyectos",
+    "section_subtitle": "Proyectos activos clave y software experimental actualmente en desarrollo.",
+    "core_highlights_label": "Aspectos Clave",
+    "tech_stack_label": "Stack Tecnológico",
+    "projects": [
+      {
+        "id": "docgen-cli",
+        "name": "docgen-cli",
+        "status": "En Progreso",
+        "status_type": "progress",
+        "icon": "Terminal",
+        "problem": "Con búsqueda GraphRAG y RAG avanzada combinada con algoritmos BM25, docgen-cli genera documentación precisa del código localmente mientras controla el uso de tokens.",
+        "stack": [
+          "LangChain",
+          "Ollama",
+          "LLMs de Código Abierto",
+          "GraphRAG",
+          "BM25",
+          "Python",
+          "Herramientas CLI"
+        ],
+        "highlights": [
+          "GraphRAG combinado con algoritmo de búsqueda BM25",
+          "Limitador de tokens para controlar operaciones",
+          "Diseño local enfocado en la privacidad",
+          "Generación agéntica de documentación de código"
+        ]
+      },
+      {
+        "id": "quiz-generator",
+        "name": "Generador de Cuestionarios",
+        "status": "I+D",
+        "status_type": "rnd",
+        "icon": "Cpu",
+        "problem": "Genera cuestionarios personalizados para estudiantes y profesores a partir de notas y libros en segundos. Adaptado al estilo de aprendizaje, 100% gratuito y totalmente local.",
+        "stack": [
+          "LangChain",
+          "Ollama",
+          "LLMs de Código Abierto",
+          "GraphRAG",
+          "BM25",
+          "Python",
+          "LLMs Ajustados"
+        ],
+        "highlights": [
+          "Generación rápida y precisa de cuestionarios a partir de documentos",
+          "Ajuste personalizado de dificultad y estilo de aprendizaje",
+          "Interfaz limpia y accesible",
+          "Ejecución 100% Local"
+        ]
+      }
+    ]
+  },
+  "launchpad": {
+    "section_tag": "Plataforma de Lanzamiento",
+    "section_title": "Conectemos y Construyamos",
+    "section_subtitle": "¿Interesado en colaboración de código abierto, discusiones sobre arquitectura de IA, mentoría o roles de IA full-stack? ¡Conectemos!",
+    "topic_select_label": "Selecciona un tema para conversar:",
+    "selected_interest_prefix": "Interés seleccionado:",
+    "default_reach_out_text": "Ponte en contacto mediante tu canal preferido",
+    "topics": [
+      "Colaboración código abierto",
+      "Roles de IA Full-Stack",
+      "Discusiones de arquitectura",
+      "Mentoría",
+      "Aprender de otros",
+      "Construcción de comunidad"
+    ],
+    "contacts": {
+      "email_label": "Enviar Correo",
+      "email_address": "hameedhussain@example.com",
+      "github_label": "GitHub",
+      "github_url": "https://github.com",
+      "linkedin_label": "LinkedIn",
+      "linkedin_url": "https://linkedin.com"
+    }
+  }
+}

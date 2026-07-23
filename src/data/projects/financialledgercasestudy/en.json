@@ -1,6 +1,7 @@
 {
   "project_name": "High-Throughput Distributed Financial Ledger & Analytics Engine",
   "project_type": "Case Study",
+  "project_repo_url": "https://github.com/chromecodes/high-throughput-distributed-financial-ledger",
   "project_context": "A production-grade, asynchronous financial transaction engine built with Python (FastAPI) and SQLAlchemy 2.0. The platform uses the CQRS (Command Query Responsibility Segregation) pattern to isolate high-speed transaction updates from intensive historical queries, guaranteeing mathematical data integrity under heavy traffic.",
   "core_pillars": [
     "CQRS Architecture",
@@ -162,7 +163,17 @@
     "total_transactions": "160,996 Atomic Transactions",
     "error_rate": "0.00% Failures",
     "idempotency_gate": "Redis/SQL caching index gate returning 409 Conflict for network-level duplicate requests",
-    "chart_image": "/images/locust_benchmark.png"
+    "chart_image": [
+      {
+        "id": "locust_benchmark",
+        "src": "/images/locust_benchmark.png",
+        "alt": "Locust Load Test Performance Saturation Benchmark",
+        "type": "image",
+        "blurSrc": "/images/locust_benchmark.png",
+        "displayMode": "contain",
+        "aspectRatio": "landscape"
+      }
+    ]
   },
   "local_development": {
     "title": "Local Development & Ecosystem Execution",

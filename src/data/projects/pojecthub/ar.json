@@ -1,0 +1,74 @@
+[
+  {
+    "id": "easyform",
+    "category": "fullstack",
+    "logo": "/icons/easyform.webp",
+    "icon": "formspree",
+    "title": "Easy Forms",
+    "description": "منصة Easy Forms هي منشئ نماذج حديث وكامل الخصائص يتيح للمستخدمين بناء وتنسيق وتحليل نماذج الويب المخصصة ديناميكياً مع تحليلات في الوقت الفعلي وإمكانيات التصدير الآلي.",
+    "problem": {
+      "title": "المشكلة",
+      "description": "يحتاج المستخدمون إلى واجهة سهلة وبدون كود لبناء نماذج معقدة ومخصصة مع حقول ديناميكية."
+    },
+    "solution": {
+      "title": "الحل",
+      "description": "هندسة منشئ نماذج مرن وقائم على المكونات يتيح تجميع وتعاينة ونشر المخططات بسهولة."
+    },
+    "techStack": {
+      "title": "الحزمة / الأدوات",
+      "items": ["Next.js", "React", "TypeScript", "NextAuth.js", "Redis", "SSE"]
+    },
+    "themeColor": "pink",
+    "badges": ["منشئ النماذج", "التحليلات", "الوقت الفعلي", "تصدير البيانات", "ذكاء اصطناعي محلي"],
+    "tags": ["SaaS", "تجاري", "ذكاء اصطناعي تطبيقي"],
+    "path": "easyform"
+  },
+  {
+    "id": "localllmmemory",
+    "category": "cli",
+    "logo": "/icons/easyform.webp",
+    "icon": "terminal",
+    "title": "Local LLM Memory",
+    "description": "Local LLM Memory هو مساعد برمجي بالذكاء الاصطناعي محلي بالكامل ويحافظ على الخصوصية، يدمج بين توليد الاسترجاع المعزز (RAG) وعمليات الملفات والدوال باللغة الطبيعية.",
+    "problem": {
+      "title": "المشكلة",
+      "description": "تقترح نماذج الذكاء الاصطناعي القياسية تعديلات الكود لكنها لا تستطيع تنفيذ عمليات الملفات مباشرة."
+    },
+    "solution": {
+      "title": "الحل",
+      "description": "تصميم محلل نوايا ثنائي المرحلة يستخرج حمولات JSON هيكلية من النص المباشر ويوزع الأوامر للمعالجات المحلية."
+    },
+    "techStack": {
+      "title": "حزمة الذكاء الاصطناعي والأنظمة",
+      "items": ["Python 3.12", "LangChain", "Ollama", "ChromaDB", "Mistral", "PyTorch"]
+    },
+    "themeColor": "purple",
+    "badges": ["الاستنتاج المحلي", "RAG", "تحليل النوايا", "البحث المتجهي", "ذكاء اصطناعي محلي", "أداة وكيل"],
+    "tags": ["AI", "الخصوصية", "مفتوح المصدر"],
+    "path": "localllmmemory"
+  },
+  {
+    "id": "financial-ledger-casestudy",
+    "category": "casestudy",
+    "logo": "/icons/easyform.webp",
+    "icon": "graduationCap",
+    "title": "دفتر أستاذ مالي موزع عالي الإنتاجية ومحرك تحليلات",
+    "description": "محرك معاملات مالية لا تزامني موجه للإنتاج تم بناؤه باستخدام Python (FastAPI) و SQLAlchemy 2.0 باستخدام معمارية CQRS و Apache Kafka و ClickHouse OLAP.",
+    "problem": {
+      "title": "المشكلة",
+      "description": "معاملات المحفظة ذات التزامن العالي تخاطر بظروف التنافس وتجمد قواعد البيانات التشغيلية."
+    },
+    "solution": {
+      "title": "الحل",
+      "description": "فصل تحديثات المعاملات عالية السرعة عن التحليلات التاريخية باستخدام معمارية CQRS."
+    },
+    "techStack": {
+      "title": "حزمة المعمارية",
+      "items": ["Python", "FastAPI", "PostgreSQL", "Kafka", "ClickHouse", "Docker"]
+    },
+    "themeColor": "emerald",
+    "badges": ["CQRS", "Kafka", "ClickHouse", "Pessimistic Locking", "Transactional Outbox"],
+    "tags": ["FinTech", "التزامن", "إنتاجية عالية"],
+    "path": "financial-ledger-casestudy"
+  }
+]
