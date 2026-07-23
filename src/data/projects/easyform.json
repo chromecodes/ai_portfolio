@@ -1,0 +1,206 @@
+{
+  "project_name": "Easy Forms",
+  "media": [],
+  "project_demo_url": "",
+  "project_repo_url": "",
+  "project_type": "FullStack",
+  "project_context": "Easy Forms is a modern, full-featured form builder and management platform enabling users to dynamically construct, publish, and analyze custom web forms with real-time analytics and automated export capabilities.",
+  "core_pillars": ["Form Builder", "Analytics", "Real-Time", "Data Export", "Internationalization"],
+  "architecture": [
+    {
+      "title": "high_level",
+      "description": "Frontend & Backend (Next.js App Router / React / TypeScript) ➔ Next.js API Routes ➔ Database & Redis Cache"
+    },
+    {
+      "title": "infrastructure",
+      "description": "Next.js Full-Stack deployment paired with Redis for real-time pub/sub and state synchronization."
+    },
+    {
+      "title": "design_paradigm",
+      "description": "Modular component-driven architecture with serverless API route handlers and real-time event distribution."
+    },
+    {
+      "title": "asset_delivery",
+      "description": "Optimized static asset delivery and server-side rendering powered by Next.js."
+    }
+  ],
+  "tech_stack": [
+    {
+      "title": "Core Framework / State Management",
+      "items": ["Next.js (App Router)", "React", "TypeScript", "NextAuth.js", "Redux / Zustand"]
+    },
+    {
+      "title": "Drag and Drop & Dynamic Layouts",
+      "items": ["Drag-and-Drop Builder Modules", "Custom Form Components"]
+    },
+    {
+      "title": "Data Visualization & Utilities",
+      "items": ["Analytics Charting Libraries", "Data Exporters (CSV, JSON, PDF Generator)"]
+    },
+    {
+      "title": "Styling and UI",
+      "items": ["SCSS Modules", "Modular UI Component Library"]
+    },
+    {
+      "title": "Real-Time and Backend Services",
+      "items": ["Server-Sent Events (SSE)", "WebSockets", "Redis", "Transactional Email Engine"]
+    }
+  ],
+  "key_features": [
+    {
+      "id": "easyforms-feature-001",
+      "title": "Drag-and-Drop Form Builder",
+      "tags": ["No-Code Builder", "Drag-and-Drop", "Modular UI"],
+      "problem": {
+        "title": "Problem",
+        "description": "Users needed an intuitive, code-free interface to build complex, customizable forms with custom field types."
+      },
+      "solution": {
+        "title": "Solution",
+        "description": "Engineered a flexible, component-driven form builder allowing users to assemble, preview, and deploy custom form schemas effortlessly."
+      },
+      "technical_details": {
+        "title": "Technical Details",
+        "items": [
+          "Developed modular field components mapping to dynamic JSON schemas stored in the backend.",
+          "Implemented live form preview with support for responsive layouts and customizable styling options.",
+          "Integrated field-level validation and configurable field properties."
+        ]
+      },
+      "outcome": {
+        "title": "Impact",
+        "items": [
+          "Empowered non-technical users to build and publish custom forms in minutes.",
+          "Reduced form creation and publishing lifecycle times significantly."
+        ]
+      },
+      "media": [
+        {
+          "id": "ef-fb-1",
+          "type": "image",
+          "src": "/images/easyforms-builder.webp",
+          "blurSrc": "",
+          "alt": "Drag and drop form builder canvas",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ]
+    },
+    {
+      "id": "easyforms-feature-002",
+      "title": "Real-Time Response Analytics Dashboard",
+      "tags": ["Analytics", "Real-Time Insights", "Data Visualization"],
+      "problem": {
+        "title": "Problem",
+        "description": "Form creators needed instant, actionable insights into response completion rates, submission volumes, and data trends."
+      },
+      "solution": {
+        "title": "Solution",
+        "description": "Constructed an interactive analytics dashboard that translates incoming form submissions into real-time visual charts and structured datasets."
+      },
+      "technical_details": {
+        "title": "Technical Details",
+        "items": [
+          "Integrated charting libraries to render key metrics such as submission counts, field distributions, and completion trends.",
+          "Utilized Redis pub/sub and WebSockets/SSE to trigger real-time UI updates upon new form submissions."
+        ]
+      },
+      "outcome": {
+        "title": "Impact",
+        "items": [
+          "Eliminated page refreshes by delivering live data feeds direct to user dashboards.",
+          "Improved visibility into campaign performance with instant feedback loops."
+        ]
+      },
+      "media": [
+        {
+          "id": "ef-an-1",
+          "type": "image",
+          "src": "/images/easyforms-analytics.webp",
+          "blurSrc": "",
+          "alt": "Form response analytics dashboard",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ]
+    },
+    {
+      "id": "easyforms-feature-003",
+      "title": "Multi-Format Response Exporter",
+      "tags": ["Data Export", "Automation", "Utilities"],
+      "problem": {
+        "title": "Problem",
+        "description": "Form managers needed flexible ways to extract gathered response data for offline analysis, reporting, and external processing."
+      },
+      "solution": {
+        "title": "Solution",
+        "description": "Built an asynchronous multi-format export pipeline capable of outputting form submission datasets into CSV, JSON, and PDF documents."
+      },
+      "technical_details": {
+        "title": "Technical Details",
+        "items": [
+          "Created server-side data extraction routines optimized for batching large response sets.",
+          "Engineered document formatting layers to render structured PDF reports from raw response schemas."
+        ]
+      },
+      "outcome": {
+        "title": "Impact",
+        "items": [
+          "Simplified reporting tasks by providing one-click data exports in standard industry formats."
+        ]
+      },
+      "media": [
+        {
+          "id": "ef-ex-1",
+          "type": "image",
+          "src": "/images/easyforms-export.webp",
+          "blurSrc": "",
+          "alt": "Data export interface options",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ]
+    },
+    {
+      "id": "easyforms-feature-004",
+      "title": "Notification & Event System",
+      "tags": ["Real-Time", "Notifications", "Emails"],
+      "problem": {
+        "title": "Problem",
+        "description": "Users required immediate alerts when high-value form responses were submitted or key thresholds were reached."
+      },
+      "solution": {
+        "title": "Solution",
+        "description": "Implemented a dual in-app and email notification system powered by custom HTML templates and Redis event messaging."
+      },
+      "technical_details": {
+        "title": "Technical Details",
+        "items": [
+          "Designed transactional HTML email templates dynamically hydrated with submission data.",
+          "Utilized background service handlers to deliver real-time in-app alerts without blocking client API threads."
+        ]
+      },
+      "outcome": {
+        "title": "Impact",
+        "items": [
+          "Enhanced user responsiveness to lead captures and submission events."
+        ]
+      },
+      "media": [
+        {
+          "id": "ef-nt-1",
+          "type": "image",
+          "src": "/images/easyforms-notifications.webp",
+          "blurSrc": "",
+          "alt": "Notification settings and email template preview",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ]
+    }
+  ]
+}

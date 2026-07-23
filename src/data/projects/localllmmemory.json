@@ -1,0 +1,174 @@
+{
+  "project_name": "Local LLM Memory",
+  "media": [],
+  "project_repo_url": "",
+  "project_live_url": "",
+  "project_type": "CLI Tools",
+  "project_context": "Local LLM Memory is a fully local, privacy-preserving AI coding assistant that combines Retrieval-Augmented Generation (RAG) with natural-language file and function operations via Ollama, ChromaDB, and structured intent routing.",
+  "core_pillars": ["Local Inference", "RAG", "Intent Parsing", "Codebase Operations", "Vector Search"],
+  "architecture": [
+    {
+      "title": "high_level",
+      "description": "Interactive Python REPL / CLI ➔ Structured LLM Intent Parser ➔ Route Dispatcher (Filesystem Ops) OR RAG Retriever (ChromaDB) ➔ Ollama Local LLM (Mistral)"
+    },
+    {
+      "title": "infrastructure",
+      "description": "100% On-Premise / Local Host Execution via Ollama (localhost:11434) with local PyTorch sentence-transformer embeddings."
+    },
+    {
+      "title": "design_paradigm",
+      "description": "Dual-path architecture separating natural language filesystem mutations from vector-searched conversational code context."
+    },
+    {
+      "title": "asset_delivery",
+      "description": "Local file system operations scoped securely within defined project roots with strict traversal protection."
+    }
+  ],
+
+  "tech_stack": [
+    {
+      "title": "Core Framework / AI Orchestration",
+      "items": ["Python 3.12", "LangChain", "LangChain-Chroma", "LangChain-HuggingFace"]
+    },
+    {
+      "title": "Local Models & Vector DB",
+      "items": [
+        "Ollama (Mistral)",
+        "ChromaDB",
+        "BAAI/bge-small-en-v1.5",
+        "Sentence-Transformers"
+      ]
+    },
+    {
+      "title": "Machine Learning Backend",
+      "items": ["PyTorch 2.7", "HuggingFace Transformers", "Tokenizers"]
+    },
+    {
+      "title": "Utilities and Algorithms",
+      "items": ["SHA-1 Caching", "Difflib (Fuzzy Path Matching)", "Requests", "NumPy", "Scikit-learn"]
+    }
+  ],
+
+  "key_features": [
+    {
+      "id": "llm-memory-feature-001",
+      "title": "Structured Intent Parsing & Routing",
+      "tags": ["Intent Classification", "Natural Language Processing", "Automation"],
+      "problem": {
+        "title": "Problem",
+        "description": "Standard LLM chat models suggest code changes but cannot execute file operations, while generic commands often fail due to unstructured natural language."
+      },
+      "solution": {
+        "title": "Solution",
+        "description": "Architected a dual-stage intent parser that extracts structured JSON payloads from raw prompt text and dispatches commands directly to local handlers."
+      },
+      "technical_details": {
+        "title": "Technical Details",
+        "items": [
+          "Leveraged Mistral via Ollama to classify queries into code/doc RAG requests or actionable file/function mutations.",
+          "Implemented an SHA-1 query caching system (`intent_cache.json`) to skip LLM classification calls for identical prompts.",
+          "Added multi-intent extraction and priority sorting to execute prerequisite file creation steps before subsequent reads or modifications."
+        ]
+      },
+      "outcome": {
+        "title": "Impact",
+        "items": [
+          "Eliminated the need to manually copy-paste code suggestions by executing code operations directly from plain English.",
+          "Reduced LLM processing overhead through deterministic intent caching."
+        ]
+      },
+      "media": [
+        {
+          "id": "llm-ip-1",
+          "type": "image",
+          "src": "/images/intent-parser-flow.webp",
+          "blurSrc": "",
+          "alt": "Structured intent parsing and route dispatcher diagram",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ]
+    },
+    {
+      "id": "llm-memory-feature-002",
+      "title": "Dual Vector-Store Retrieval (RAG)",
+      "tags": ["RAG", "Vector Search", "ChromaDB", "Privacy"],
+      "problem": {
+        "title": "Problem",
+        "description": "Large codebases exceed model context limits, while mixing source code and documentation in a single vector collection dilutes search precision."
+      },
+      "solution": {
+        "title": "Solution",
+        "description": "Constructed an intent-aware dual vector retrieval engine that segregates source code and markdown documentation into dedicated ChromaDB collections."
+      },
+      "technical_details": {
+        "title": "Technical Details",
+        "items": [
+          "Engineered file chunking using `RecursiveCharacterTextSplitter` (500 chunk size / 100 overlap) tuned for source code syntax.",
+          "Embedded code and documentation using local HuggingFace BAAI/bge-small-en-v1.5 embeddings.",
+          "Implemented automated checks (`index_utils.py`) that trigger offline sub-process index builds if database collections are missing."
+        ]
+      },
+      "outcome": {
+        "title": "Impact",
+        "items": [
+          "Delivered relevant codebase context to local models within limited context windows.",
+          "Maintained 100% data privacy by running all embeddings and vector lookups on local hardware."
+        ]
+      },
+      "media": [
+        {
+          "id": "llm-rag-1",
+          "type": "image",
+          "src": "/images/rag-retriever-demo.webp",
+          "blurSrc": "",
+          "alt": "Dual vector store architecture visualization",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ]
+    },
+    {
+      "id": "llm-memory-feature-003",
+      "title": "Fuzzy Path & File System Dispatcher",
+      "tags": ["Filesystem Operations", "Fuzzy Search", "Security"],
+      "problem": {
+        "title": "Problem",
+        "description": "User prompts frequently contain typos or partial directory paths, causing traditional direct path filesystem lookups to crash or execute outside the project."
+      },
+      "solution": {
+        "title": "Solution",
+        "description": "Developed a fuzzy path resolution engine paired with a sandboxed file dispatcher that translates approximate names into safe, relative project paths."
+      },
+      "technical_details": {
+        "title": "Technical Details",
+        "items": [
+          "Maintained an offline `structure_index.json` map of all folders and files relative to the codebase root.",
+          "Integrated `difflib.get_close_matches` to resolve approximate directory inputs (e.g., matching 'sever' to 'server/').",
+          "Enforced strict path normalization (`resolve_codebase_path`) in `config.py` to prevent directory traversal attacks (e.g., `../`)."
+        ]
+      },
+      "outcome": {
+        "title": "Impact",
+        "items": [
+          "Prevented filesystem access errors caused by user typos during conversational code creation.",
+          "Guaranteed complete file safety by locking all system operations within the target project directory."
+        ]
+      },
+      "media": [
+        {
+          "id": "llm-fs-1",
+          "type": "image",
+          "src": "/images/filesystem-resolution.webp",
+          "blurSrc": "",
+          "alt": "Fuzzy path resolution interface",
+          "displayMode": "contain",
+          "width": 1200,
+          "height": 800
+        }
+      ]
+    }
+  ]
+}

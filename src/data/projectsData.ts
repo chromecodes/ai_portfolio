@@ -23,7 +23,7 @@ export const PROJECTS_DATA: Project[] = [
     themeColor: "pink",
     tags: ["Applied AI", "Dynamic Modules", "Scalable"],
     badges: ["SaaS", "Commercial", "Featured"],
-    path:"easyformai",
+    path: "easyform",
   },
   
 ];

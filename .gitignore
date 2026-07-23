@@ -9,14 +9,13 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
+.code-review-graph/
 node_modules/
 .env
 .next/
 .vscode/
 dist/
-
-venv/
+.venv/
 # testing
 /coverage
 
