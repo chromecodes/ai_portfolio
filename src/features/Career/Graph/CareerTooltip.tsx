@@ -1,7 +1,10 @@
 import { CareerNode } from "./types"
+import useLanguageStore from "@/utils/i18n/useLanguageStore"
 
 function CareerTooltip({ node }: { node: CareerNode }) {
     const { data } = node
+
+    const strings = useLanguageStore((state) => state.strings as Record<string, string>);
 
     return (
         <div className="
@@ -19,7 +22,7 @@ function CareerTooltip({ node }: { node: CareerNode }) {
                 <div>
                     <div className="font-semibold">{data.company_name}</div>
                     <div className="text-xs ">
-                        {data.time_period} months
+                        {data.time_period + " " + strings.months}
                     </div>
                 </div>
             </div>

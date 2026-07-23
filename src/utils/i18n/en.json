@@ -26,7 +26,7 @@
   "roleAndResponseibilities": "Role & Responsibilities",
   "github": "GitHub",
   "liveDemo": "Live Demo",
-  
+  "months": "Months",
   "homePageName": "HAMEED HUSSAIN",
   "homePageTitle": "Full-Stack Software Engineer",
   "homePageIntro": "I'm a full-stack engineer who enjoys building clean, scalable web products that solve real problems with elegant solutions.",
@@ -107,6 +107,9 @@
   "visitDemo": "Live Demo",
   "readCaseStudy": "Read Study",
   "viewForMoreDetails": "View for more details",
+  "viewSourceRepository": "View Source Repository",
+  "stage" : "Stage",
+  "problemStudy":"Problem Study",
   "backToProjects": "Back to Projects",
   "projectNotFound": "Project Not Found",
   "projectNotFoundMessage": "We couldn't find the project details you were looking for.",

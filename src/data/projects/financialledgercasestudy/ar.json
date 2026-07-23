@@ -1,111 +1,279 @@
 {
   "project_name": "دفتر أستاذ مالي موزع عالي الإنتاجية ومحرك تحليلات",
   "project_type": "Case Study",
+  "quotation_text": "فصل معاملات OLTP التشغيلية عن مستودعات بيانات OLAP يضمن سلامة البيانات الرياضية وصفر زمن تأخير أثناء الاستعلامات التحليلية المكثفة.",
   "project_repo_url": "https://github.com/chromecodes/high-throughput-distributed-financial-ledger",
   "project_context": "محرك معاملات مالية لا تزامني موجه للإنتاج تم بناؤه باستخدام Python (FastAPI) و SQLAlchemy 2.0. تستخدم المنصة نمط CQRS لفصل تحديثات المعاملات عالية السرعة عن الاستعلامات التاريخية الكثيفة، مما يضمن سلامة البيانات الرياضية تحت الترافيك العالي.",
-  "core_pillars": [
-    "معمارية CQRS",
-    "Transactional Outbox",
-    "القفل المتفائل والحذر",
-    "Apache Kafka",
-    "ClickHouse OLAP",
-    "سلامة ACID بدون فقدان بيانات"
-  ],
-  "architecture_diagram": "                                [ طلب العميل ]\n                                         │\n                                         ▼\n                            [ FastAPI Ingestion API ]\n                                         │\n                    ┌────────────────────┴────────────────────┐\n                    ▼                                         ▼\n         [ PostgreSQL (OLTP) ]                     [ Transactional Outbox ]\n      (قفل الصفوف / ACID صارم)                 (مرتبط ذرياً بقاعدة البيانات)\n                                                              │\n                                                              ▼ (يتم استطلاعه بواسطة)\n                                                   [ خادم Outbox Worker Daemon ]\n                                                              │\n                                                              ▼ (ينشر إلى)\n                                                    [ Apache Kafka ]\n                                                              │\n                                                              ▼ (يستهلك بواسطة)\n                                                   [ المستهلك بالدفعة ]\n                                                              │\n                                                              ▼ (مجموعات مصغرة)\n                                                 [ مستودع ClickHouse OLAP ]\n                                                  (تخزين بيانات عمودي ضخم)",
-  "architecture": [
-    {
-      "title": "oltp_ingestion",
-      "description": "يستقبل FastAPI Ingestion API طلبات العملاء، وينفذ معاملات ACID صارمة مع قفل صفوف متفائل في PostgreSQL."
-    },
-    {
-      "title": "transactional_outbox",
-      "description": "يسجل جدول transaction_outbox المحلي الأحداث في نفس كتلة معاملات ACID الذرية، مما يمنع عدم تزامن الكتابة المزدوجة."
-    },
-    {
-      "title": "outbox_daemon_kafka",
-      "description": "يقوم Outbox Worker Daemon باستطلاع مدخلات Outbox وينشر الأحداث بشكل غير متزامن إلى مواضيع Apache Kafka."
-    },
-    {
-      "title": "batch_consumer_olap",
-      "description": "يستهلك Batch Consumer رسائل Kafka ويجمع الأحداث في تخزين ClickHouse العمودي لاستعلامات تحليلات فائقة السرعة."
-    }
-  ],
-  "tech_stack": [
-    {
-      "title": "أطر الواجهة الخلفية وقواعد البيانات الأساسية",
-      "items": ["Python 3.12", "FastAPI", "SQLAlchemy 2.0", "PostgreSQL (OLTP)", "Asyncpg"]
-    },
-    {
-      "title": "بث الأحداث وتخزين البيانات",
-      "items": ["Apache Kafka", "ClickHouse (OLAP)", "Redis (Idempotency Gate)"]
-    },
-    {
-      "title": "البنية التحتية واختبارات الأداء",
-      "items": ["Docker / Docker Compose", "Locust", "PyTest", "GitHub Actions CI/CD"]
-    }
-  ],
-  "core_engineering_problems": [
-    {
-      "id": "prob-001",
-      "title": "ظروف التنافس والتزامن (OLTP)",
-      "tags": ["Pessimistic Locking", "PostgreSQL", "سلامة البيانات"],
-      "problem": {
-        "title": "المشكلة",
-        "description": "الطلبات المتزامنة التي تحاول السحب من نفس رصيد المحفظة المستهدفة قد تسبب قراءات غير صحيحة وتلف الرصيد في الترافيك العالي."
-      },
-      "solution": {
-        "title": "الحل",
-        "description": "تنفيذ قفل الصفوف الحذر (`SELECT ... FOR UPDATE`) في PostgreSQL، مما يجبر الطلبات المتزامنة على الانتظار في طابور متسلسل يضمن سلامة البيانات."
-      },
-      "technical_details": {
-        "title": "آلية الهندسة",
-        "items": [
-          "الحصول على أقفال صريحة على مستوى الصف لسجلات رصيد المحفظة أثناء تنفيذ المعاملة.",
-          "منع ظروف التنافس والإنفاق المزدوج عبر خيوط API المتزامنة.",
-          "ضمان أرصدة دفتر أستاذ رياضية دقيقة حتى مع أكثر من 100 طلب سحب متزامن."
-        ]
-      },
-      "outcome": {
-        "title": "الأثر",
-        "items": [
-          "تحقيق معدل فشل 0% وعدم وجود أي انحراف في رصيد دفتر الأستاذ تحت اختبارات الأداء.",
-          "ضمان السلامة التعددية والذرية عبر جميع تعديلات الرصيد."
-        ]
-      }
-    }
-  ],
-  "benchmarks": {
-    "sustained_rps": "152.8 RPS",
-    "total_transactions": "160,996 معاملة ذرية",
-    "error_rate": "0.00% أخطاء",
-    "idempotency_gate": "بوابة Redis/SQL لإرجاع 409 Conflict للطلبات المكررة",
-    "chart_image": [
-      {
-        "id": "locust_benchmark",
-        "src": "/images/locust_benchmark.png",
-        "alt": "مخطط قياس الأداء تحت الحمل العالي",
-        "type": "image",
-        "blurSrc": "/images/locust_benchmark.png",
-        "displayMode": "contain",
-        "aspectRatio": "landscape"
-      }
+  "core_pillars": {
+    "title": "المحاور المعمارية الأساسية",
+    "items": [
+      "معمارية CQRS",
+      "Transactional Outbox",
+      "القفل المتفائل والحذر",
+      "Apache Kafka",
+      "ClickHouse OLAP",
+      "سلامة ACID بدون فقدان بيانات"
     ]
   },
-  "local_development": {
-    "title": "التطوير المحلي وتنفيذ البيئة",
-    "description": "حزمة الشبكة بالكامل (PostgreSQL, Kafka, ClickHouse) كبسولة بالكامل بواسطة Docker.",
-    "steps": [
-      {
-        "step": "1",
-        "title": "تشغيل البنية التحتية",
-        "command": "docker-compose up -d",
-        "description": "تشغيل حاويات PostgreSQL و Apache Kafka و Zookeeper و Redis و ClickHouse."
+  "sections": {
+    "system_topology": {
+      "title": "طوبولوجيا النظام",
+      "sub_title": "معمارية CQRS الموزعة وبث الأحداث",
+      "flow_diagram": "PostgreSQL ➔ Outbox ➔ Kafka ➔ ClickHouse"
+    },
+    "terminal_architecture": {
+      "title": "عرض أنبوب معمارية CQRS",
+      "file_name": "architecture_flow.ascii",
+      "architecture_diagram": "                                [ طلب العميل ]\n                                         │\n                                         ▼\n                            [ FastAPI Ingestion API ]\n                                         │\n                    ┌────────────────────┴────────────────────┐\n                    ▼                                         ▼\n         [ PostgreSQL (OLTP) ]                     [ Transactional Outbox ]\n      (قفل الصفوف / ACID صارم)                 (مرتبط ذرياً بقاعدة البيانات)\n                                                              │\n                                                              ▼ (يتم استطلاعه بواسطة)\n                                                   [ خادم Outbox Worker Daemon ]\n                                                              │\n                                                              ▼ (ينشر إلى)\n                                                    [ Apache Kafka ]\n                                                              │\n                                                              ▼ (يستهلك بواسطة)\n                                                   [ المستهلك بالدفعة ]\n                                                              │\n                                                              ▼ (مجموعات مصغرة)\n                                                 [ مستودع ClickHouse OLAP ]\n                                                  (تخزين بيانات عمودي ضخم)",
+      "architecture": [
+        {
+          "title": "استيعاب OLTP",
+          "description": "يستقبل FastAPI Ingestion API طلبات العملاء، وينفذ معاملات ACID صارمة مع قفل صفوف حذر في PostgreSQL."
+        },
+        {
+          "title": "Transactional Outbox",
+          "description": "يسجل جدول transaction_outbox المحلي الأحداث في نفس كتلة معاملات ACID الذرية، مما يمنع عدم تزامن الكتابة المزدوجة."
+        },
+        {
+          "title": "Outbox Worker Daemon",
+          "description": "يقوم Outbox Worker Daemon باستطلاع مدخلات Outbox وينشر الأحداث بشكل غير متزامن إلى مواضيع Apache Kafka."
+        },
+        {
+          "title": "المستهلك بالدفعة (OLAP)",
+          "description": "يستهلك Batch Consumer رسائل Kafka ويجمع الأحداث في تخزين ClickHouse العمودي لاستعلامات تحليلات فائقة السرعة."
+        }
+      ]
+    },
+    "tech_stack": {
+      "title": "حزمة التقنيات والبنية التحتية التطبيقية",
+      "items": [
+        {
+          "title": "أطر الواجهة الخلفية وقواعد البيانات الأساسية",
+          "items": [
+            "Python 3.12",
+            "FastAPI",
+            "SQLAlchemy 2.0",
+            "PostgreSQL (OLTP)",
+            "Asyncpg"
+          ]
+        },
+        {
+          "title": "بث الأحداث وتخزين البيانات",
+          "items": [
+            "Apache Kafka",
+            "ClickHouse (OLAP)",
+            "Redis (Idempotency Gate)"
+          ]
+        },
+        {
+          "title": "البنية التحتية واختبارات الأداء",
+          "items": [
+            "Docker / Docker Compose",
+            "Locust (Saturation Testing)",
+            "PyTest",
+            "GitHub Actions CI/CD"
+          ]
+        }
+      ]
+    },
+    "core_engineering_problems": {
+      "title": "الهندسة النظرية وتحليل الأنظمة",
+      "sub_title": "المشكلات الهندسية الرئيسية وحلولها",
+      "description": "تحليل نظري متعمق لوسائل حماية التزامن، ومنع الكتابة المزدوجة، وعزل OLAP، وآليات امتصاص صدمات الشبكة.",
+      "items": [
+        {
+          "id": "prob-001",
+          "title": "ظروف التنافس والتزامن (OLTP)",
+          "tags": ["Pessimistic Locking", "PostgreSQL", "سلامة البيانات"],
+          "problem": {
+            "title": "المشكلة",
+            "description": "الطلبات المتزامنة التي تحاول السحب من نفس رصيد المحفظة المستهدفة قد تسبب قراءات غير صحيحة وتلف الرصيد في الترافيك العالي."
+          },
+          "solution": {
+            "title": "الحل",
+            "description": "تنفيذ قفل الصفوف الحذر (`SELECT ... FOR UPDATE`) في PostgreSQL. تُجبر طلبات المحفظة المتزامنة على الانتظار في طابور متسلسل يضمن سلامة البيانات."
+          },
+          "technical_details": {
+            "title": "آلية الهندسة",
+            "items": [
+              "الحصول على أقفال صريحة على مستوى الصف لسجلات رصيد المحفظة أثناء تنفيذ المعاملة.",
+              "منع ظروف التنافس والإنفاق المزدوج عبر خيوط API المتزامنة.",
+              "ضمان أرصدة دفتر أستاذ رياضية دقيقة حتى مع أكثر من 100 طلب سحب متزامن."
+            ]
+          },
+          "outcome": {
+            "title": "الأثر",
+            "items": [
+              "تحقيق معدل فشل 0% وعدم وجود أي انحراف في رصيد دفتر الأستاذ تحت اختبارات الأداء.",
+              "ضمان السلامة التعددية والذرية عبر جميع تعديلات الرصيد."
+            ]
+          }
+        },
+        {
+          "id": "prob-002",
+          "title": "مشكلة الكتابة المزدوجة الموزعة",
+          "tags": [
+            "Transactional Outbox",
+            "معاملات ACID",
+            "الرسائل الموثوقة"
+          ],
+          "problem": {
+            "title": "المشكلة",
+            "description": "تنفيذ كتابات شبكية مزدوجة مباشرة لكل من SQL والطوابير الخارجية في وقت واحد يسبب عدم تزامن الحالة إذا فشل الاتصال الثانوي في المنتصف."
+          },
+          "solution": {
+            "title": "الحل",
+            "description": "اعتماد نمط Transactional Outbox عبر كتابة الأحداث مباشرة في جدول `transaction_outbox` في PostgreSQL داخل كتلة معاملات ACID الذرية نفسها."
+          },
+          "technical_details": {
+            "title": "آلية الهندسة",
+            "items": [
+              "تخزين سجلات Outbox بشكل ذري جنباً إلى جنب مع تحديثات رصيد دفتر الأستاذ في PostgreSQL.",
+              "نشر خادم مستقل (Outbox Worker Daemon) باستطلاع السجلات غير المكتملة ونشرها إلى Apache Kafka.",
+              "القضاء على عدم التزامن بين قواعد البيانات دون تكاليف البروتوكولات الثقيلة (2PC)."
+            ]
+          },
+          "outcome": {
+            "title": "الأثر",
+            "items": [
+              "ضمان الاتساق الذري بين قاعدة البيانات التشغيلية وقنوات البث اللاحقة.",
+              "منع المعاملات الوهمية وفقدان الرسائل غير المؤكدة."
+            ]
+          }
+        },
+        {
+          "id": "prob-003",
+          "title": "استنزاف الموارد التحليلية (OLAP)",
+          "tags": [
+            "ClickHouse",
+            "CQRS",
+            "التخزين العمودي",
+            "تحليلات البيانات الضخمة"
+          ],
+          "problem": {
+            "title": "المشكلة",
+            "description": "تنفيذ استعلامات التجميع التاريخية الثقيلة على جداول المعاملات التشغيلية يجمد أقفال الصفوف ويؤدي إلى تدهور شديد في زمن استجابة API الحي."
+          },
+          "solution": {
+            "title": "الحل",
+            "description": "هندسة معمارية CQRS توجه أحداث دفتر الأستاذ إلى ClickHouse—مستودع البيانات العمودي—مما يتيح تحليلات فائقة السرعة عبر ملايين الصفوف دون المساس بالجداول الحية."
+          },
+          "technical_details": {
+            "title": "آلية الهندسة",
+            "items": [
+              "تجميع الأحداث من Kafka في دفعات مصغرة مباشرة إلى جداول ClickHouse العمودية.",
+              "تنفيذ استعلامات تحليلية معقدة عبر ملايين الصفوف في أجزاء من الثانية.",
+              "عزل أداء معاملات OLTP تماماً عن أعباء تقارير OLAP التحليلية."
+            ]
+          },
+          "outcome": {
+            "title": "الأثر",
+            "items": [
+              "زمن استجابة استعلام تحليلي أقل من 10 مللي ثانية عبر مجموعات بيانات المعاملات الضخمة.",
+              "عدم وجود أي تدهور في أداء نقاط نهاية كتابة المعاملات الحية."
+            ]
+          }
+        },
+        {
+          "id": "prob-004",
+          "title": "امتصاص صدمات الشبكة والسيادة على الأعطال",
+          "tags": [
+            "Apache Kafka",
+            "تسليم مرة واحدة على الأقل",
+            "المعمارية المتميزة"
+          ],
+          "problem": {
+            "title": "المشكلة",
+            "description": "صيانة خدمات مستودع البيانات اللاحقة أو انقطاعات الشبكة المؤقتة قد تسبب فقدان الأحداث أو حظر طلبات API أثناء ذروة الترافيك."
+          },
+          "solution": {
+            "title": "الحل",
+            "description": "تنفيذ Apache Kafka لعزل الاستيعاب عن التخزين. يقوم Kafka بتخزين إزاحات الرسائل بأمان، مما يضمن التسليم مرة واحدة على الأقل عبر جميع عقد التحليل."
+          },
+          "technical_details": {
+            "title": "آلية الهندسة",
+            "items": [
+              "يخزن Kafka إزاحات الرسائل باستمرار في حال خضوع ClickHouse أو الخدمات اللاحقة للصيانة.",
+              "استعادة التوازن التلقائي لمجموعات المستهلكين تستأنف استيعاب الدفعات بسلاسة فور تعافي العقد.",
+              "دمج بوابة التخزين المؤقت في Redis/SQL لإرجاع 409 Conflict والتقاط الطلبات المكررة."
+            ]
+          },
+          "outcome": {
+            "title": "الأثر",
+            "items": [
+              "ضمان التسليم مرة واحدة على الأقل مع صفر فقدان للأحداث أثناء انقطاعات الخدمة المحاكاة.",
+              "حماية عقد التحليل اللاحقة من الارتفاعات المفاجئة في ترافيك الشبكة."
+            ]
+          }
+        }
+      ]
+    },
+    "benchmarks": {
+      "title": "التحقق من تشبع النظام وموثوقيته",
+      "sub_title": "اختبارات الإجهاد وقياسات الأداء",
+      "description": "تم إخضاع محرك المعاملات الأساسي في FastAPI لاختبار تشبع باستخدام Locust لتقييم حواجز التزامن وسلامة بوابة مطابقة الهوية.",
+      "chart_title": "مخطط قياس الأداء وتلافي التشبع (اختبار Locust)",
+      "chart_index": "1,500 مستخدم افتراضي • 15 دقيقة تشبع",
+      "results": {
+        "sustained_rps": {
+          "title": "أقصى RPS",
+          "item": "152.8 RPS"
+        },
+        "total_transactions": {
+          "title": "إجمالي المعاملات",
+          "item": "160,996"
+        },
+        "error_rate": {
+          "title": "معدل الخطأ",
+          "item": "0.00%"
+        },
+        "idempotency_gate": {
+          "title": "بوابة مطابقة الهوية",
+          "item": "بوابة Redis/SQL لإرجاع 409 Conflict للطلبات المكررة"
+        },
+        "chart_image": [
+          {
+            "id": "locust_benchmark",
+            "src": "/images/locust_benchmark.png",
+            "alt": "مخطط قياس الأداء تحت الحمل العالي",
+            "type": "image",
+            "blurSrc": "/images/locust_benchmark.png",
+            "displayMode": "contain",
+            "aspectRatio": "landscape"
+          }
+        ]
       }
-    ]
-  },
-  "ci_cd": {
-    "title": "أنبوب التكامل المستمر (CI/CD)",
-    "pipeline_file": ".github/workflows/ci-pipeline.yml",
-    "description": "أنبوب GitHub Actions الذي يشغل الحاويات تلقائياً ويتأكد من سلامة النظام عبرPyTest."
+    },
+    "local_development": {
+      "title": "واجهة السطر البرمجي وإدارة الحاوية",
+      "sub_title": "التطوير المحلي وتنفيذ البيئة",
+      "description": "حزمة الشبكة بالكامل (PostgreSQL, Kafka, ClickHouse) مغلّفة بالكامل بواسطة Docker.",
+      "steps": [
+        {
+          "step": "1",
+          "title": "تشغيل البنية التحتية",
+          "command": "docker-compose up -d",
+          "description": "تشغيل حاويات PostgreSQL (OLTP) و Apache Kafka و Zookeeper و Redis و ClickHouse (OLAP)."
+        },
+        {
+          "step": "2",
+          "title": "تشغيل أداة الأتمتة بأمر واحد",
+          "command": "chmod +x run_system.sh && ./run_system.sh",
+          "description": "يفحص صحة البنية التحتية، ويهيئ ترحيل جداول قاعدة البيانات، ويطلق جميع خوادم الخلفية في وقت واحد."
+        },
+        {
+          "step": "3",
+          "title": "التحقق من استيعاب التحليلات (ClickHouse)",
+          "command": "docker-compose exec clickhouse clickhouse-client --query \"SELECT * FROM analytical_ledger_events\"",
+          "description": "يستعلم عن مستودع البيانات العمودي للتحقق من استيعاب الأحداث المجمعة في الوقت الفعلي."
+        }
+      ]
+    },
+    "ci_cd": {
+      "title": "الاختبار الآلي والتراجع",
+      "sub_title": "أنبوب التكامل المستمر (CI/CD)",
+      "pipeline_file": ".github/workflows/ci-pipeline.yml",
+      "description": "أنبوب GitHub Actions الأصلي الذي يطلق حاويات الخدمات المعزولة تلقائياً في سحابة GitHub عند كل التزام، ويشغل طبقات المحرك، ويتأكد من قواعد سلامة النظام باستخدام حزمة اختبارات PyTest."
+    }
   }
 }

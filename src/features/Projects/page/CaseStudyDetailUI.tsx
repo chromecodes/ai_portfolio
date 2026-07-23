@@ -67,7 +67,7 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
                 className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-primary-background hover:bg-secondary-background border border-borderColor hover:border-emerald-400/60 text-xs font-bold text-font-color hover:text-emerald-400 transition-all duration-200 shadow-xs hover:-translate-y-0.5"
               >
                 <Icons.github className="w-4 h-4 text-emerald-400" />
-                <span>View Source Repository</span>
+                <span>{strings.viewSourceRepository}</span>
                 <Icons.externalLink className="w-3.5 h-3.5 text-muted-foreground" />
               </a>
             </div>
@@ -76,41 +76,41 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
 
         {/* QUOTATION BOX */}
         <QuotationBox
-          quote="Isolating operational OLTP transactions from OLAP data warehousing guarantees mathematical integrity and zero latencies during heavy analytical queries."
+          quote={data.quotation_text}
         />
 
         {/* CORE PILLARS TAGS & METRIC SNAPSHOT BAR */}
         <div className="grid md:grid-cols-12 gap-6 items-center pt-2 border-t border-borderColor/60">
           <div className="md:col-span-7 space-y-2">
             <span className="text-xs font-extrabold uppercase tracking-widest text-accent-color block">
-              Architectural Pillars
+              {data.core_pillars.title}
             </span>
-            <TagsCapsule tags={data.core_pillars} />
+            <TagsCapsule tags={data.core_pillars.items} />
           </div>
 
           <div className="md:col-span-5 flex flex-wrap gap-4 justify-start md:justify-end">
             <div className="bg-primary-background/80 px-4 py-2 rounded-2xl border border-borderColor/80 shadow-xs">
               <span className="text-[10px] text-muted-foreground uppercase font-bold block">
-                Peak RPS
+                {data.sections.benchmarks.results.sustained_rps.title}
               </span>
               <span className="text-sm font-mono font-extrabold text-emerald-400">
-                {data.benchmarks.sustained_rps}
+                {data.sections.benchmarks.results.sustained_rps.item}
               </span>
             </div>
             <div className="bg-primary-background/80 px-4 py-2 rounded-2xl border border-borderColor/80 shadow-xs">
               <span className="text-[10px] text-muted-foreground uppercase font-bold block">
-                Volume
+                {data.sections.benchmarks.results.total_transactions.title}
               </span>
               <span className="text-sm font-mono font-extrabold text-teal-400">
-                160.9K Ops
+                {data.sections.benchmarks.results.total_transactions.item}
               </span>
             </div>
             <div className="bg-primary-background/80 px-4 py-2 rounded-2xl border border-borderColor/80 shadow-xs">
               <span className="text-[10px] text-muted-foreground uppercase font-bold block">
-                Error Rate
+                {data.sections.benchmarks.results.error_rate.title}
               </span>
               <span className="text-sm font-mono font-extrabold text-cyan-400">
-                {data.benchmarks.error_rate}
+                {data.sections.benchmarks.results.error_rate.item}
               </span>
             </div>
           </div>
@@ -122,14 +122,14 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-borderColor pb-4">
           <div>
             <span className="text-xs uppercase tracking-widest font-extrabold text-accent-color block mb-1">
-              System Topology
+              {data.sections.system_topology.title}
             </span>
             <h2 className="text-2xl font-extrabold text-font-color flex items-center gap-2">
-              <span>🏗️</span> Distributed CQRS & Event Streaming Architecture
+              {data.sections.system_topology.sub_title}
             </h2>
           </div>
           <span className="text-xs font-mono px-3 py-1.5 rounded-full bg-primary-background border border-borderColor text-muted-foreground">
-            PostgreSQL ➔ Outbox ➔ Kafka ➔ ClickHouse
+            {data.sections.system_topology.flow_diagram}
           </span>
         </div>
 
@@ -140,25 +140,25 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
               <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
               <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
               <span className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-              <span className="ml-2 font-semibold">architecture_flow.ascii</span>
+              <span className="ml-2 font-semibold">{`${data.sections.terminal_architecture.file_name}`}</span>
             </div>
-            <span>CQRS Pipeline View</span>
+            <span>{`${data.sections.terminal_architecture.title}`}</span>
           </div>
           <pre className="leading-relaxed font-mono select-all text-[11px] md:text-xs text-emerald-300/90 whitespace-pre">
-            {data.architecture_diagram}
+            {data.sections.terminal_architecture.architecture_diagram}
           </pre>
         </div>
 
         {/* 4-STAGE PIPELINE CARDS */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-          {data.architecture.map((arch, idx) => (
+          {data.sections.terminal_architecture.architecture.map((arch, idx) => (
             <div
               key={idx}
               className="bg-primary-background/40 p-4 rounded-2xl border border-borderColor/60 space-y-2 hover:border-accent-color/40 transition-colors"
             >
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-accent-color">
-                  Stage 0{idx + 1}
+                  {strings.stage} {"0" + (idx + 1)}
                 </span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
@@ -176,12 +176,12 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
       {/* APPLIED TECH STACK */}
       <section className="bg-secondary-background/60 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-borderColor shadow-sm space-y-6">
         <h3 className="text-xl font-bold tracking-tight border-b border-borderColor pb-3 flex items-center gap-2 text-font-color">
-          <span>🛠️</span> Applied Technology Stack & Infrastructure
+          <span>🛠️</span> {data.sections.tech_stack.title}
         </h3>
         <div className="grid md:grid-cols-3 gap-6">
-          {data.tech_stack.map((group, gIdx) => (
+          {data.sections.tech_stack.items.map((group, gIdx) => (
             <div key={gIdx} className="space-y-3 p-4 rounded-2xl bg-primary-background/30 border border-borderColor/50">
-              <h4 className="text-xs font-bold text-font-color uppercase tracking-wider">
+              <h4 className="text-xs font-bold text-font-color tracking-wider">
                 {group.title}
               </h4>
               <TagsCapsule tags={group.items} />
@@ -194,18 +194,18 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
       <section className="space-y-8 border-t border-borderColor pt-12">
         <div className="space-y-2">
           <span className="text-xs uppercase tracking-widest font-extrabold text-accent-color">
-            Theoretical Engineering & Systems Analysis
+            {data.sections.core_engineering_problems.title}
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-font-color">
-            Core Engineering Problems Solved
+            {data.sections.core_engineering_problems.sub_title}
           </h2>
           <p className="text-sm text-muted-foreground max-w-3xl">
-            In-depth theoretical breakdown of concurrency safeguards, dual-write prevention, OLAP isolation, and network shock absorption mechanisms.
+            {data.sections.core_engineering_problems.description}
           </p>
         </div>
 
         <div className="space-y-8">
-          {data.core_engineering_problems.map((item, index) => (
+          {data.sections.core_engineering_problems.items.map((item, index) => (
             <article
               key={item.id || index}
               className="bg-secondary-background/60 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-borderColor shadow-sm space-y-6"
@@ -214,7 +214,7 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-borderColor/60 pb-4">
                 <div className="space-y-1">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-accent-color">
-                    Problem Study #0{index + 1}
+                    {strings.problemStudy} #0{index + 1}
                   </span>
                   <h3 className="text-xl md:text-2xl font-bold text-font-color">
                     {item.title}
@@ -287,13 +287,13 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
       <section className="bg-secondary-background/60 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-borderColor shadow-sm space-y-8 border-t border-borderColor/80">
         <div className="space-y-2">
           <span className="text-xs uppercase tracking-widest font-extrabold text-accent-color">
-            System Saturation & Reliability Verification
+            {data.sections.benchmarks.title}
           </span>
           <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-font-color flex items-center gap-2">
-            <span>📊</span> Stress-Test & Performance Benchmarks
+            <span>📊</span> {data.sections.benchmarks.sub_title}
           </h2>
           <p className="text-sm text-muted-foreground max-w-3xl">
-            The core FastAPI transactional engine was subjected to a multi-user Locust saturation swarm to evaluate concurrency barriers and idempotency gate safety.
+            {data.sections.benchmarks.description}
           </p>
         </div>
 
@@ -301,42 +301,38 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-primary-background/70 border border-borderColor/80 p-5 rounded-2xl space-y-1">
             <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
-              Sustained Throughput
+              {data.sections.benchmarks.results.sustained_rps.title}
             </span>
             <span className="text-2xl font-mono font-extrabold text-emerald-400">
-              {data.benchmarks.sustained_rps}
+              {data.sections.benchmarks.results.sustained_rps.item}
             </span>
-            <span className="text-[10px] text-muted-foreground block">Locust Swarm Rate</span>
           </div>
 
           <div className="bg-primary-background/70 border border-borderColor/80 p-5 rounded-2xl space-y-1">
             <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
-              Volume Processed
+              {data.sections.benchmarks.results.total_transactions.title}
             </span>
             <span className="text-2xl font-mono font-extrabold text-teal-400">
-              160,996
+              {data.sections.benchmarks.results.total_transactions.item}
             </span>
-            <span className="text-[10px] text-muted-foreground block">Atomic Transactions</span>
           </div>
 
           <div className="bg-primary-background/70 border border-borderColor/80 p-5 rounded-2xl space-y-1">
             <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
-              System Error Rate
+              {data.sections.benchmarks.results.error_rate.title}
             </span>
             <span className="text-2xl font-mono font-extrabold text-cyan-400">
-              {data.benchmarks.error_rate}
+              {data.sections.benchmarks.results.error_rate.item}
             </span>
-            <span className="text-[10px] text-muted-foreground block">Zero Data Failures</span>
           </div>
 
           <div className="bg-primary-background/70 border border-borderColor/80 p-5 rounded-2xl space-y-1">
             <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block">
-              Idempotency Gate
+              {data.sections.benchmarks.results.idempotency_gate.title}
             </span>
-            <span className="text-sm font-mono font-bold text-accent-color">
-              409 Conflict Gate
+            <span className="text-xs font-mono font-bold text-accent-color">
+              {data.sections.benchmarks.results.idempotency_gate.item}
             </span>
-            <span className="text-[10px] text-muted-foreground block">Redis Network Protection</span>
           </div>
         </div>
 
@@ -344,14 +340,14 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
         <div className="space-y-3 pt-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-font-color uppercase tracking-wider flex items-center gap-2">
-              <span>📈</span> Real-Time Performance Saturation Chart (Locust Load Test)
+              <span>📈</span> {data.sections.benchmarks.chart_title}
             </span>
             <span className="text-[11px] text-muted-foreground font-mono">
-              1,500 Virtual Users • 15m Saturation
+              {data.sections.benchmarks.chart_index}
             </span>
           </div>
           <div className="relative overflow-hidden rounded-2xl border border-borderColor shadow-lg bg-primary-background">
-            <ImageViewer images={data.benchmarks.chart_image} aspectRatio="landscape" />
+            <ImageViewer images={data.sections.benchmarks.results.chart_image} aspectRatio="landscape" />
           </div>
         </div>
       </section>
@@ -360,19 +356,19 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
       <section className="bg-secondary-background/60 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-borderColor shadow-sm space-y-6">
         <div className="space-y-2 border-b border-borderColor pb-4">
           <span className="text-xs uppercase tracking-widest font-extrabold text-accent-color">
-            CLI & Container Orchestration
+            {data.sections.local_development.title}
           </span>
           <h3 className="text-2xl font-extrabold text-font-color flex items-center gap-2">
-            <span>⚙️</span> {data.local_development.title}
+            <span>⚙️</span> {data.sections.local_development.sub_title}
           </h3>
           <p className="text-sm text-muted-foreground">
-            {data.local_development.description}
+            {data.sections.local_development.description}
           </p>
         </div>
 
         {/* STEP-BY-STEP SHELL ROUTINES */}
         <div className="space-y-4">
-          {data.local_development.steps.map((stepItem, idx) => (
+          {data.sections.local_development.steps.map((stepItem, idx) => (
             <div
               key={idx}
               className="bg-primary-background/70 border border-borderColor/80 rounded-2xl p-4 md:p-5 space-y-3"
@@ -411,19 +407,19 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <span className="text-xs uppercase tracking-widest font-extrabold text-accent-color">
-              Automated Testing & Regression
+              {data.sections.ci_cd.sub_title}
             </span>
             <h3 className="text-2xl font-extrabold text-font-color flex items-center gap-2">
-              <span>🚀</span> {data.ci_cd.title}
+              <span>🚀</span> {data.sections.ci_cd.title}
             </h3>
           </div>
           <span className="text-xs font-mono px-3 py-1.5 rounded-full bg-primary-background border border-borderColor text-accent-color">
-            {data.ci_cd.pipeline_file}
+            {data.sections.ci_cd.pipeline_file}
           </span>
         </div>
 
         <p className="text-sm text-muted-foreground leading-relaxed">
-          {data.ci_cd.description}
+          {data.sections.ci_cd.description}
         </p>
       </section>
 

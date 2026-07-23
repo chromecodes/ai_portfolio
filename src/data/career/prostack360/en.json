@@ -39,19 +39,19 @@
       "core_pillars": ["CRM", "Forms", "Email", "Analytics", "Real-Time"],
       "architecture": [
         {
-          "title": "high_level",
+          "title": "High-level Architecture",
           "description": "Frontend (React / Next.js / TypeScript) ➔ REST APIs & WebSockets ➔ Backend (PHP)"
         },
         {
-          "title": "infrastructure",
+          "title": "Infrastructure",
           "description": "Cloud Infrastructure: AWS S3, EC2, CloudFront CDN"
         },
         {
-          "title": "design_paradigm",
+          "title": "Design paradigm",
           "description": "Modular frontend architecture paired with event-driven, real-time communication."
         },
         {
-          "title": "asset_delivery",
+          "title": "Asset delivery",
           "description": "CDN-backed static and media delivery for optimal performance."
         }
       ],

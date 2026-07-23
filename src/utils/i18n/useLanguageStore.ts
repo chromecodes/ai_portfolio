@@ -1,6 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import en from './en.json';
 import es from './es.json';
 import ar from './ar.json';
@@ -24,18 +25,36 @@ interface LanguageStore {
   setLanguage: (lang: Lang) => void;
 }
 
-const useLanguageStore = create<LanguageStore>((set) => ({
-  language: 'en',
-  strings: en,
+const useLanguageStore = create<LanguageStore>()(
+  persist(
+    (set) => ({
+      language: 'en',
+      strings: en,
 
-  setLanguage: (lang) => {
-    updateDocumentDir(lang);
-    set({
-      language: lang,
-      strings: translations[lang] || en, // fallback to English
-    });
-  },
-}));
+      setLanguage: (lang: Lang) => {
+        updateDocumentDir(lang);
+        set({
+          language: lang,
+          strings: translations[lang] || en,
+        });
+      },
+    }),
+    {
+      name: 'portfolio_language',
+      storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
+        getItem: () => null,
+        setItem: () => {},
+        removeItem: () => {},
+      })),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          const lang = state.language || 'en';
+          updateDocumentDir(lang);
+          state.strings = translations[lang] || en;
+        }
+      },
+    }
+  )
+);
 
 export default useLanguageStore;
-

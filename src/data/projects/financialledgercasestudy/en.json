@@ -1,207 +1,280 @@
 {
   "project_name": "High-Throughput Distributed Financial Ledger & Analytics Engine",
   "project_type": "Case Study",
+  "quotation_text": "Isolating operational OLTP transactions from OLAP data warehousing guarantees mathematical integrity and zero latencies during heavy analytical queries.",
   "project_repo_url": "https://github.com/chromecodes/high-throughput-distributed-financial-ledger",
   "project_context": "A production-grade, asynchronous financial transaction engine built with Python (FastAPI) and SQLAlchemy 2.0. The platform uses the CQRS (Command Query Responsibility Segregation) pattern to isolate high-speed transaction updates from intensive historical queries, guaranteeing mathematical data integrity under heavy traffic.",
-  "core_pillars": [
-    "CQRS Architecture",
-    "Transactional Outbox",
-    "Pessimistic Locking",
-    "Apache Kafka",
-    "ClickHouse OLAP",
-    "Zero-Data-Loss ACID"
-  ],
-  "architecture_diagram": "                                [ Client Request ]\n                                         │\n                                         ▼\n                            [ FastAPI Ingestion API ]\n                                         │\n                    ┌────────────────────┴────────────────────┐\n                    ▼                                         ▼\n         [ PostgreSQL (OLTP) ]                     [ Transactional Outbox ]\n      (Strict ACID / Row Locking)                 (Atomically Bound to DB)\n                                                              │\n                                                              ▼ (Polled by)\n                                                   [ Outbox Worker Daemon ]\n                                                              │\n                                                              ▼ (Publishes to)\n                                                    [ Apache Kafka ]\n                                                              │\n                                                              ▼ (Consumed by)\n                                                   [ Batch Consumer ]\n                                                              │\n                                                              ▼ (Micro-Batched)\n                                                 [ ClickHouse OLAP Warehouse ]\n                                                  (Columnar Big Data Storage)",
-  "architecture": [
-    {
-      "title": "oltp_ingestion",
-      "description": "FastAPI Ingestion API receives client requests, executing strict ACID transactions with pessimistic row locking in PostgreSQL."
-    },
-    {
-      "title": "transactional_outbox",
-      "description": "Local PostgreSQL transaction_outbox table records events in the same atomic ACID transaction block, preventing dual-write desynchronization."
-    },
-    {
-      "title": "outbox_daemon_kafka",
-      "description": "Outbox Worker Daemon polls outbox entries and publishes events asynchronously to Apache Kafka topics."
-    },
-    {
-      "title": "batch_consumer_olap",
-      "description": "Batch Consumer consumes Kafka messages and micro-batches immutable events into ClickHouse columnar storage for high-speed analytical queries."
-    }
-  ],
-  "tech_stack": [
-    {
-      "title": "Core Backend & Database Frameworks",
-      "items": ["Python 3.12", "FastAPI", "SQLAlchemy 2.0", "PostgreSQL (OLTP)", "Asyncpg"]
-    },
-    {
-      "title": "Event Streaming & Data Warehousing",
-      "items": ["Apache Kafka", "ClickHouse (OLAP)", "Redis (Idempotency Gate)"]
-    },
-    {
-      "title": "Infrastructure & Testing Suite",
-      "items": ["Docker / Docker Compose", "Locust (Saturation Testing)", "PyTest", "GitHub Actions CI/CD"]
-    }
-  ],
-  "core_engineering_problems": [
-    {
-      "id": "prob-001",
-      "title": "Race Conditions & Concurrency (OLTP)",
-      "tags": ["Pessimistic Locking", "PostgreSQL", "Data Integrity"],
-      "problem": {
-        "title": "Problem",
-        "description": "Concurrent requests trying to withdraw from the same target wallet balance can cause dirty reads, balance corruption, and race conditions under high traffic."
-      },
-      "solution": {
-        "title": "Solution",
-        "description": "Implemented Pessimistic Row-Locking (`SELECT ... FOR UPDATE`) in PostgreSQL. Concurrent wallet requests are forced into a sequential database queue, guaranteeing mathematical data integrity."
-      },
-      "technical_details": {
-        "title": "Engineering Mechanism",
-        "items": [
-          "Acquires explicit row-level locks on wallet balance records during transaction execution.",
-          "Prevents race conditions and double-spending across concurrent API worker threads.",
-          "Guarantees exact mathematical ledger balances even under 100+ concurrent withdrawal requests."
-        ]
-      },
-      "outcome": {
-        "title": "Impact",
-        "items": [
-          "Achieved 0% failure rate and zero ledger balance drift under saturation testing.",
-          "Guaranteed thread safety and transactional atomicity across all balance mutations."
-        ]
-      }
-    },
-    {
-      "id": "prob-002",
-      "title": "The Distributed Dual-Write Problem",
-      "tags": ["Transactional Outbox", "ACID Transactions", "Reliable Messaging"],
-      "problem": {
-        "title": "Problem",
-        "description": "Running dual network writes directly to both SQL and external queues simultaneously causes state desynchronization if the secondary network call fails halfway."
-      },
-      "solution": {
-        "title": "Solution",
-        "description": "Adopted the Transactional Outbox Pattern by committing events directly to a local PostgreSQL `transaction_outbox` table within the same atomic ACID transaction block."
-      },
-      "technical_details": {
-        "title": "Engineering Mechanism",
-        "items": [
-          "Persists outbox records atomically alongside ledger balance updates in PostgreSQL.",
-          "Deployed a decoupled Outbox Worker Daemon to poll unfulfilled records and publish to Apache Kafka.",
-          "Eliminated cross-database desynchronization without heavy two-phase commit (2PC) overhead."
-        ]
-      },
-      "outcome": {
-        "title": "Impact",
-        "items": [
-          "Guaranteed atomic consistency between operational DB and downstream streaming channels.",
-          "Prevented ghost transaction writes and unacknowledged message drops."
-        ]
-      }
-    },
-    {
-      "id": "prob-003",
-      "title": "Analytical Resource Starvation (OLAP)",
-      "tags": ["ClickHouse", "CQRS", "Columnar Storage", "Big Data Analytics"],
-      "problem": {
-        "title": "Problem",
-        "description": "Executing heavy historical aggregation queries on operational transaction tables freezes database row locks and severely degrades live API latency."
-      },
-      "solution": {
-        "title": "Solution",
-        "description": "Engineered a CQRS architecture that pipes immutable ledger events into ClickHouse—a columnar data warehouse—enabling lightning-fast analytics across millions of rows without touching live tables."
-      },
-      "technical_details": {
-        "title": "Engineering Mechanism",
-        "items": [
-          "Micro-batches immutable ledger events from Kafka directly into ClickHouse columnar tables.",
-          "Executes complex analytical queries over millions of transaction rows in single-digit milliseconds.",
-          "Completely isolates operational OLTP transactional throughput from analytical OLAP reporting workload."
-        ]
-      },
-      "outcome": {
-        "title": "Impact",
-        "items": [
-          "Sub-10ms analytical query latency across high-volume transaction datasets.",
-          "Zero performance degradation on live transactional write API endpoints."
-        ]
-      }
-    },
-    {
-      "id": "prob-004",
-      "title": "Network Shock Absorption & Resilience",
-      "tags": ["Apache Kafka", "At-Least-Once Delivery", "Decoupled Architecture"],
-      "problem": {
-        "title": "Problem",
-        "description": "Downstream data warehouse service maintenance or temporary network outages could cause event loss or block API requests during traffic spikes."
-      },
-      "solution": {
-        "title": "Solution",
-        "description": "Implemented Apache Kafka to decouple ingestion from warehousing. Kafka securely buffers message offsets, guaranteeing At-Least-Once Delivery across all analytical worker nodes."
-      },
-      "technical_details": {
-        "title": "Engineering Mechanism",
-        "items": [
-          "Kafka buffers message offsets continuously if ClickHouse or downstream services undergo maintenance.",
-          "Automatic consumer group rebalancing resumes batch ingestion seamlessly once warehouse nodes recover.",
-          "Integrated Redis/SQL caching index gate to return 409 Conflict and catch network-level duplicates."
-        ]
-      },
-      "outcome": {
-        "title": "Impact",
-        "items": [
-          "Guaranteed At-Least-Once delivery with zero event loss during simulated service outages.",
-          "Protected downstream analytical nodes from sudden network traffic surges."
-        ]
-      }
-    }
-  ],
-  "benchmarks": {
-    "sustained_rps": "152.8 RPS",
-    "total_transactions": "160,996 Atomic Transactions",
-    "error_rate": "0.00% Failures",
-    "idempotency_gate": "Redis/SQL caching index gate returning 409 Conflict for network-level duplicate requests",
-    "chart_image": [
-      {
-        "id": "locust_benchmark",
-        "src": "/images/locust_benchmark.png",
-        "alt": "Locust Load Test Performance Saturation Benchmark",
-        "type": "image",
-        "blurSrc": "/images/locust_benchmark.png",
-        "displayMode": "contain",
-        "aspectRatio": "landscape"
-      }
+  "core_pillars": {
+    "title": "Architectural Pillars",
+    "items": [
+      "CQRS Architecture",
+      "Transactional Outbox",
+      "Pessimistic Locking",
+      "Apache Kafka",
+      "ClickHouse OLAP",
+      "Zero-Data-Loss ACID"
     ]
   },
-  "local_development": {
-    "title": "Local Development & Ecosystem Execution",
-    "description": "The entire network stack (PostgreSQL, Kafka, ClickHouse) is fully containerized via Docker.",
-    "steps": [
-      {
-        "step": "1",
-        "title": "Spin up cluster infrastructure",
-        "command": "docker-compose up -d",
-        "description": "Boots PostgreSQL (OLTP), Apache Kafka event bus, Zookeeper, Redis, and ClickHouse (OLAP) containers."
-      },
-      {
-        "step": "2",
-        "title": "Execute single-command automation bootstrapper",
-        "command": "chmod +x run_system.sh && ./run_system.sh",
-        "description": "Checks infrastructure health, configures database table migrations, and launches all background workers simultaneously."
-      },
-      {
-        "step": "3",
-        "title": "Verify analytics ingestion (ClickHouse)",
-        "command": "docker-compose exec clickhouse clickhouse-client --query \"SELECT * FROM analytical_ledger_events\"",
-        "description": "Queries the columnar warehouse to verify real-time micro-batched event ingestion."
+  "sections": {
+    "system_topology": {
+      "title": "System Topology",
+      "sub_title": "Distributed CQRS & Event Streaming Architecture",
+      "flow_diagram": "PostgreSQL ➔ Outbox ➔ Kafka ➔ ClickHouse"
+    },
+    "terminal_architecture": {
+      "title": "CQRS Pipeline View",
+      "file_name": "architecture_flow.ascii",
+      "architecture_diagram": "                                [ Client Request ]\n                                         │\n                                         ▼\n                            [ FastAPI Ingestion API ]\n                                         │\n                    ┌────────────────────┴────────────────────┐\n                    ▼                                         ▼\n         [ PostgreSQL (OLTP) ]                     [ Transactional Outbox ]\n      (Strict ACID / Row Locking)                 (Atomically Bound to DB)\n                                                              │\n                                                              ▼ (Polled by)\n                                                   [ Outbox Worker Daemon ]\n                                                              │\n                                                              ▼ (Publishes to)\n                                                    [ Apache Kafka ]\n                                                              │\n                                                              ▼ (Consumed by)\n                                                   [ Batch Consumer ]\n                                                              │\n                                                              ▼ (Micro-Batched)\n                                                 [ ClickHouse OLAP Warehouse ]\n                                                  (Columnar Big Data Storage)",
+      "architecture": [
+        {
+          "title": "OLTP Ingestion",
+          "description": "FastAPI Ingestion API receives client requests, executing strict ACID transactions with pessimistic row locking in PostgreSQL."
+        },
+        {
+          "title": "Transactional Outbox",
+          "description": "Local PostgreSQL transaction_outbox table records events in the same atomic ACID transaction block, preventing dual-write desynchronization."
+        },
+        {
+          "title": "Outbox Worker Daemon",
+          "description": "Outbox Worker Daemon polls outbox entries and publishes events asynchronously to Apache Kafka topics."
+        },
+        {
+          "title": "Batch Consumer (OLAP)",
+          "description": "Batch Consumer consumes Kafka messages and micro-batches immutable events into ClickHouse columnar storage for high-speed analytical queries."
+        }
+      ]
+    },
+    "tech_stack": {
+      "title": "Applied Technology Stack & Infrastructure",
+      "items": [
+        {
+          "title": "Core Backend & Database Frameworks",
+          "items": [
+            "Python 3.12",
+            "FastAPI",
+            "SQLAlchemy 2.0",
+            "PostgreSQL (OLTP)",
+            "Asyncpg"
+          ]
+        },
+        {
+          "title": "Event Streaming & Data Warehousing",
+          "items": [
+            "Apache Kafka",
+            "ClickHouse (OLAP)",
+            "Redis (Idempotency Gate)"
+          ]
+        },
+        {
+          "title": "Infrastructure & Testing Suite",
+          "items": [
+            "Docker / Docker Compose",
+            "Locust (Saturation Testing)",
+            "PyTest",
+            "GitHub Actions CI/CD"
+          ]
+        }
+      ]
+    },
+
+    "core_engineering_problems": {
+      "title": "Theoretical Engineering & Systems Analysis",
+      "sub_title": "Core Engineering Problems Solved",
+      "description": "In-depth theoretical breakdown of concurrency safeguards, dual-write prevention, OLAP isolation, and network shock absorption mechanisms.",
+      "items": [
+        {
+          "id": "prob-001",
+          "title": "Race Conditions & Concurrency (OLTP)",
+          "tags": ["Pessimistic Locking", "PostgreSQL", "Data Integrity"],
+          "problem": {
+            "title": "Problem",
+            "description": "Concurrent requests trying to withdraw from the same target wallet balance can cause dirty reads, balance corruption, and race conditions under high traffic."
+          },
+          "solution": {
+            "title": "Solution",
+            "description": "Implemented Pessimistic Row-Locking (`SELECT ... FOR UPDATE`) in PostgreSQL. Concurrent wallet requests are forced into a sequential database queue, guaranteeing mathematical data integrity."
+          },
+          "technical_details": {
+            "title": "Engineering Mechanism",
+            "items": [
+              "Acquires explicit row-level locks on wallet balance records during transaction execution.",
+              "Prevents race conditions and double-spending across concurrent API worker threads.",
+              "Guarantees exact mathematical ledger balances even under 100+ concurrent withdrawal requests."
+            ]
+          },
+          "outcome": {
+            "title": "Impact",
+            "items": [
+              "Achieved 0% failure rate and zero ledger balance drift under saturation testing.",
+              "Guaranteed thread safety and transactional atomicity across all balance mutations."
+            ]
+          }
+        },
+        {
+          "id": "prob-002",
+          "title": "The Distributed Dual-Write Problem",
+          "tags": [
+            "Transactional Outbox",
+            "ACID Transactions",
+            "Reliable Messaging"
+          ],
+          "problem": {
+            "title": "Problem",
+            "description": "Running dual network writes directly to both SQL and external queues simultaneously causes state desynchronization if the secondary network call fails halfway."
+          },
+          "solution": {
+            "title": "Solution",
+            "description": "Adopted the Transactional Outbox Pattern by committing events directly to a local PostgreSQL `transaction_outbox` table within the same atomic ACID transaction block."
+          },
+          "technical_details": {
+            "title": "Engineering Mechanism",
+            "items": [
+              "Persists outbox records atomically alongside ledger balance updates in PostgreSQL.",
+              "Deployed a decoupled Outbox Worker Daemon to poll unfulfilled records and publish to Apache Kafka.",
+              "Eliminated cross-database desynchronization without heavy two-phase commit (2PC) overhead."
+            ]
+          },
+          "outcome": {
+            "title": "Impact",
+            "items": [
+              "Guaranteed atomic consistency between operational DB and downstream streaming channels.",
+              "Prevented ghost transaction writes and unacknowledged message drops."
+            ]
+          }
+        },
+        {
+          "id": "prob-003",
+          "title": "Analytical Resource Starvation (OLAP)",
+          "tags": [
+            "ClickHouse",
+            "CQRS",
+            "Columnar Storage",
+            "Big Data Analytics"
+          ],
+          "problem": {
+            "title": "Problem",
+            "description": "Executing heavy historical aggregation queries on operational transaction tables freezes database row locks and severely degrades live API latency."
+          },
+          "solution": {
+            "title": "Solution",
+            "description": "Engineered a CQRS architecture that pipes immutable ledger events into ClickHouse—a columnar data warehouse—enabling lightning-fast analytics across millions of rows without touching live tables."
+          },
+          "technical_details": {
+            "title": "Engineering Mechanism",
+            "items": [
+              "Micro-batches immutable ledger events from Kafka directly into ClickHouse columnar tables.",
+              "Executes complex analytical queries over millions of transaction rows in single-digit milliseconds.",
+              "Completely isolates operational OLTP transactional throughput from analytical OLAP reporting workload."
+            ]
+          },
+          "outcome": {
+            "title": "Impact",
+            "items": [
+              "Sub-10ms analytical query latency across high-volume transaction datasets.",
+              "Zero performance degradation on live transactional write API endpoints."
+            ]
+          }
+        },
+        {
+          "id": "prob-004",
+          "title": "Network Shock Absorption & Resilience",
+          "tags": [
+            "Apache Kafka",
+            "At-Least-Once Delivery",
+            "Decoupled Architecture"
+          ],
+          "problem": {
+            "title": "Problem",
+            "description": "Downstream data warehouse service maintenance or temporary network outages could cause event loss or block API requests during traffic spikes."
+          },
+          "solution": {
+            "title": "Solution",
+            "description": "Implemented Apache Kafka to decouple ingestion from warehousing. Kafka securely buffers message offsets, guaranteeing At-Least-Once Delivery across all analytical worker nodes."
+          },
+          "technical_details": {
+            "title": "Engineering Mechanism",
+            "items": [
+              "Kafka buffers message offsets continuously if ClickHouse or downstream services undergo maintenance.",
+              "Automatic consumer group rebalancing resumes batch ingestion seamlessly once warehouse nodes recover.",
+              "Integrated Redis/SQL caching index gate to return 409 Conflict and catch network-level duplicates."
+            ]
+          },
+          "outcome": {
+            "title": "Impact",
+            "items": [
+              "Guaranteed At-Least-Once delivery with zero event loss during simulated service outages.",
+              "Protected downstream analytical nodes from sudden network traffic surges."
+            ]
+          }
+        }
+      ]
+    },
+    "benchmarks": {
+      "title": "System Saturation & Reliability Verification",
+      "sub_title": "Stress-Test & Performance Benchmarks",
+      "description": "The core FastAPI transactional engine was subjected to a multi-user Locust saturation swarm to evaluate concurrency barriers and idempotency gate safety.",
+      "chart_title": "Real-Time Performance Saturation Chart (Locust Load Test)",
+      "chart_index": "1,500 Virtual Users • 15m Saturation",
+      "results": {
+        "sustained_rps": {
+          "title": "Peak RPS",
+          "item": "152.8 RPS"
+        },
+        "total_transactions": {
+          "title": "Total Transactions",
+          "item": "160,996"
+        },
+        "error_rate": {
+          "title": "Error Rate",
+          "item": "0.00%"
+        },
+        "idempotency_gate": {
+          "title": "Idempotency Gate",
+          "item": "Redis/SQL caching index gate returning 409 Conflict for network-level duplicate requests"
+        },
+        "chart_image": [
+          {
+            "id": "locust_benchmark",
+            "src": "/images/locust_benchmark.png",
+            "alt": "Locust Load Test Performance Saturation Benchmark",
+            "type": "image",
+            "blurSrc": "/images/locust_benchmark.png",
+            "displayMode": "contain",
+            "aspectRatio": "landscape"
+          }
+        ]
       }
-    ]
-  },
-  "ci_cd": {
-    "title": "Continuous Integration (CI/CD) Pipeline",
-    "pipeline_file": ".github/workflows/ci-pipeline.yml",
-    "description": "Native GitHub Actions Pipeline that automatically triggers isolated service containers in GitHub's cloud on every commit, boots the engine layers, and verifies system integrity rules using an integrated PyTest regression suite."
+    },
+    "local_development": {
+      "title": "CLI & Container Orchestration",
+      "sub_title": "Local Development & Ecosystem Execution",
+      "description": "The entire network stack (PostgreSQL, Kafka, ClickHouse) is fully containerized via Docker.",
+      "steps": [
+        {
+          "step": "1",
+          "title": "Spin up cluster infrastructure",
+          "command": "docker-compose up -d",
+          "description": "Boots PostgreSQL (OLTP), Apache Kafka event bus, Zookeeper, Redis, and ClickHouse (OLAP) containers."
+        },
+        {
+          "step": "2",
+          "title": "Execute single-command automation bootstrapper",
+          "command": "chmod +x run_system.sh && ./run_system.sh",
+          "description": "Checks infrastructure health, configures database table migrations, and launches all background workers simultaneously."
+        },
+        {
+          "step": "3",
+          "title": "Verify analytics ingestion (ClickHouse)",
+          "command": "docker-compose exec clickhouse clickhouse-client --query \"SELECT * FROM analytical_ledger_events\"",
+          "description": "Queries the columnar warehouse to verify real-time micro-batched event ingestion."
+        }
+      ]
+    },
+    "ci_cd": {
+      "title" : "Automated Testing & Regression",
+      "sub_title": "Continuous Integration (CI/CD) Pipeline",
+      "pipeline_file": ".github/workflows/ci-pipeline.yml",
+      "description": "Native GitHub Actions Pipeline that automatically triggers isolated service containers in GitHub's cloud on every commit, boots the engine layers, and verifies system integrity rules using an integrated PyTest regression suite."
+    }
   }
 }

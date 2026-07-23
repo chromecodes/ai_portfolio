@@ -39,19 +39,19 @@
       "core_pillars": ["CRM", "النماذج", "البريد الإلكتروني", "التحليلات", "الوقت الفعلي"],
       "architecture": [
         {
-          "title": "high_level",
+          "title": "هيكل عالي المستوى",
           "description": "الواجهة الأمامية (React / Next.js / TypeScript) ➔ REST APIs & WebSockets ➔ الواجهة الخلفية (PHP)"
         },
         {
-          "title": "infrastructure",
+          "title": "بنية تحتية",
           "description": "البنية التحتية السحابية: AWS S3, EC2, CloudFront CDN"
         },
         {
-          "title": "design_paradigm",
+          "title": "نموذج التصميم",
           "description": "معمارية نمطية للواجهة الأمامية مقترنة بتواصل حي قائم على الأحداث."
         },
         {
-          "title": "asset_delivery",
+          "title": "تسليم الأصول",
           "description": "تسليم وسائط وأصول ثابتة مدعوم بـ CDN لأداء مثالي."
         }
       ],

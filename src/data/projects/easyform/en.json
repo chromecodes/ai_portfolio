@@ -8,19 +8,19 @@
   "core_pillars": ["Form Builder", "Analytics", "Real-Time", "Data Export", "Internationalization"],
   "architecture": [
     {
-      "title": "high_level",
+      "title": "High Level",
       "description": "Frontend & Backend (Next.js App Router / React / TypeScript) ➔ Next.js API Routes ➔ Database & Redis Cache"
     },
     {
-      "title": "infrastructure",
+      "title": "Infrastructure",
       "description": "Next.js Full-Stack deployment paired with Redis for real-time pub/sub and state synchronization."
     },
     {
-      "title": "design_paradigm",
+      "title": "Design Paradigm",
       "description": "Modular component-driven architecture with serverless API route handlers and real-time event distribution."
     },
     {
-      "title": "asset_delivery",
+      "title": "Asset Delivery",
       "description": "Optimized static asset delivery and server-side rendering powered by Next.js."
     }
   ],
