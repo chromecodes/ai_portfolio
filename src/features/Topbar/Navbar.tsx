@@ -14,6 +14,10 @@ export default function Navbar(props: INavbarProps) {
     const { pages, height, onNavigate, index } = props;
     const [currentIndex, setCurrentIndex] = useState(index || 0);
 
+    React.useEffect(() => {
+        setCurrentIndex(index);
+    }, [index]);
+
     const [isAnimating, setIsAnimating] = useState(false);
 
     const lang = useLanguageStore((state) => state.language);

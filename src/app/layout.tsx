@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
 
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" dir="ltr" suppressHydrationWarning className={inter.className}>
       <body className="bg-primary-background text-font-color antialiased h-full flex flex-col min-h-screen max-h-screen">
         <ThemeInitializer />
         {/* <MainBg /> */}
