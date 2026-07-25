@@ -6,10 +6,68 @@
     "role": "Software Developer – Frontend",
     "duration": "Jun 2023 – Jul 2025",
     "headline": "Building a metadata-driven enterprise CRM capable of generating complete business systems from configuration.",
-    "media": {
-      "video": "/videos/prostack360-overview.mp4",
-      "images": ["/images/prostack360-cover.webp"]
-    },
+    "media": [
+      {
+        "id": "ov-1",
+        "type": "image",
+        "src": "/images/p360_overview_01.webp",
+        "blurSrc": "/images/p360_overview_blur_01.webp",
+        "alt": "Overview Example 1",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "id": "ov-2",
+        "type": "image",
+        "src": "/images/p360_overview_02.webp",
+        "blurSrc": "/images/p360_overview_blur_02.webp",
+        "alt": "Overview Example 2",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "id": "ov-3",
+        "type": "image",
+        "src": "/images/p360_overview_03.webp",
+        "blurSrc": "/images/p360_overview_blur_03.webp",
+        "alt": "Overview Example 3",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "id": "ov-4",
+        "type": "image",
+        "src": "/images/p360_overview_04.webp",
+        "blurSrc": "/images/p360_overview_blur_04.webp",
+        "alt": "Overview Example 4",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "id": "ov-5",
+        "type": "image",
+        "src": "/images/p360_overview_05.webp",
+        "blurSrc": "/images/p360_overview_blur_05.webp",
+        "alt": "Overview Example 5",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "id": "ov-6",
+        "type": "image",
+        "src": "/images/p360_overview_06.webp",
+        "blurSrc": "/images/p360_overview_blur_06.webp",
+        "alt": "Overview Example 6",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      }
+    ],
     "tags": [
       "Enterprise CRM",
       "No-Code",
@@ -138,25 +196,65 @@
           "media": [
             {
               "id": "mb-1",
-              "type": "video",
-              "src": "/videos/prostack360-mb.mp4",
-              "blurSrc": "",
-              "alt": "Module Builder Interface Demo",
-              "displayMode": "contain",
+              "type": "image",
+              "src": "/images/p360_module_01.webp",
+              "blurSrc": "/images/p360_module_blur_01.webp",
+              "alt": "Module Builder Interface",
+              "displayMode": "cover",
               "width": 1200,
               "height": 800
             },
             {
               "id": "mb-2",
               "type": "image",
-              "src": "/images/p28.webp",
-              "blurSrc": "/images/p28-blur.webp",
+              "src": "/images/p360_module_02.webp",
+              "blurSrc": "/images/p360_module_blur_02.webp",
               "alt": "Module Builder Interface",
-              "displayMode": "contain",
+              "displayMode": "cover",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "mb-3",
+              "type": "image",
+              "src": "/images/p360_module_03.webp",
+              "blurSrc": "/images/p360_module_blur_03.webp",
+              "alt": "Module Builder Interface",
+              "displayMode": "cover",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "mb-4",
+              "type": "image",
+              "src": "/images/p360_module_04.webp",
+              "blurSrc": "/images/p360_module_blur_04.webp",
+              "alt": "Module Builder Interface",
+              "displayMode": "cover",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "mb-5",
+              "type": "image",
+              "src": "/images/p360_module_05.webp",
+              "blurSrc": "/images/p360_module_blur_05.webp",
+              "alt": "Module Builder Interface",
+              "displayMode": "cover",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "mb-6",
+              "type": "image",
+              "src": "/images/p360_module_06.webp",
+              "blurSrc": "/images/p360_module_blur_06.webp",
+              "alt": "Module Builder Interface",
+              "displayMode": "cover",
               "width": 1200,
               "height": 800
             }
-          ]
+            ]
         },
         {
           "id": "prostack360-feature-002",
@@ -186,21 +284,31 @@
           },
           "media": [
             {
-              "id": "ee-1",
-              "type": "video",
-              "src": "/videos/email-editor-demo.mp4",
-              "blurSrc": "",
-              "alt": "Email drag and drop demo",
+              "id": "eb-1",
+              "type": "image",
+              "src": "/images/p360_email_01.webp",
+              "blurSrc": "/images/p360_email_blur_01.webp",
+              "alt": "Email Builder Interface",
               "displayMode": "contain",
               "width": 1200,
               "height": 800
             },
             {
-              "id": "ee-2",
+              "id": "eb-2",
               "type": "image",
-              "src": "/images/email-templates.webp",
-              "blurSrc": "",
-              "alt": "Email templates view",
+              "src": "/images/p360_email_02.webp",
+              "blurSrc": "/images/p360_email_blur_02.webp",
+              "alt": "Email Builder Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "eb-3",
+              "type": "image",
+              "src": "/images/p360_email_03.webp",
+              "blurSrc": "/images/p360_email_blur_03.webp",
+              "alt": "Email Builder Interface",
               "displayMode": "contain",
               "width": 1200,
               "height": 800
@@ -236,10 +344,30 @@
           "media": [
             {
               "id": "wf-1",
-              "type": "video",
-              "src": "/videos/webform-builder.mp4",
-              "blurSrc": "",
-              "alt": "WebForm drag and drop interaction",
+              "type": "image",
+              "src": "/images/p360_web_01.webp",
+              "blurSrc": "/images/p360_web_blur_01.webp",
+              "alt": "WebForm Builder Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "wf-2",
+              "type": "image",
+              "src": "/images/p360_web_02.webp",
+              "blurSrc": "/images/p360_web_blur_02.webp",
+              "alt": "WebForm Builder Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "wf-3",
+              "type": "image",
+              "src": "/images/p360_web_03.webp",
+              "blurSrc": "/images/p360_web_blur_03.webp",
+              "alt": "WebForm Builder Interface",
               "displayMode": "contain",
               "width": 1200,
               "height": 800
@@ -274,11 +402,41 @@
           },
           "media": [
             {
-              "id": "ad-1",
+              "id": "db-1",
               "type": "image",
-              "src": "/images/analytics-dashboard.webp",
-              "blurSrc": "",
-              "alt": "Real-time analytics grid layout",
+              "src": "/images/p360_dash_01.webp",
+              "blurSrc": "/images/p360_dash_blur_01.webp",
+              "alt": "Dashboard Builder Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "db-2",
+              "type": "image",
+              "src": "/images/p360_dash_02.webp",
+              "blurSrc": "/images/p360_dash_blur_02.webp",
+              "alt": "Dashboard Builder Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "db-3",
+              "type": "image",
+              "src": "/images/p360_dash_03.webp",
+              "blurSrc": "/images/p360_dash_blur_03.webp",
+              "alt": "Dashboard Builder Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "db-4",
+              "type": "image",
+              "src": "/images/p360_dash_04.webp",
+              "blurSrc": "/images/p360_dash_blur_04.webp",
+              "alt": "Dashboard Builder Interface",
               "displayMode": "contain",
               "width": 1200,
               "height": 800
@@ -313,11 +471,31 @@
           },
           "media": [
             {
-              "id": "ic-1",
+              "id": "cal-1",
               "type": "image",
-              "src": "/images/calendar-sync.webp",
-              "blurSrc": "",
-              "alt": "Synced React Big Calendar view",
+              "src": "/images/p360_date_01.webp",
+              "blurSrc": "/images/p360_date_blur_01.webp",
+              "alt": "Calendar Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "cal-2",
+              "type": "image",
+              "src": "/images/p360_date_02.webp",
+              "blurSrc": "/images/p360_date_blur_02.webp",
+              "alt": "Calendar Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "cal-3",
+              "type": "image",
+              "src": "/images/p360_date_03.webp",
+              "blurSrc": "/images/p360_date_blur_03.webp",
+              "alt": "Calendar Interface",
               "displayMode": "contain",
               "width": 1200,
               "height": 800
@@ -352,11 +530,51 @@
           },
           "media": [
             {
-              "id": "pt-1",
-              "type": "video",
-              "src": "/videos/table-view-scroll.mp4",
-              "blurSrc": "",
-              "alt": "Infinite scroll and lazy loading in action",
+              "id": "tb-1",
+              "type": "image",
+              "src": "/images/p360_table_01.webp",
+              "blurSrc": "/images/p360_table_blur_01.webp",
+              "alt": "Table view Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "tb-2",
+              "type": "image",
+              "src": "/images/p360_table_02.webp",
+              "blurSrc": "/images/p360_table_blur_02.webp",
+              "alt": "Table view Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "tb-3",
+              "type": "image",
+              "src": "/images/p360_table_03.webp",
+              "blurSrc": "/images/p360_table_blur_03.webp",
+              "alt": "Table view Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "tb-4",
+              "type": "image",
+              "src": "/images/p360_table_04.webp",
+              "blurSrc": "/images/p360_table_blur_04.webp",
+              "alt": "Table view Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "tb-5",
+              "type": "image",
+              "src": "/images/p360_table_05.webp",
+              "blurSrc": "/images/p360_table_blur_05.webp",
+              "alt": "Table view Interface",
               "displayMode": "contain",
               "width": 1200,
               "height": 800
@@ -391,11 +609,11 @@
           },
           "media": [
             {
-              "id": "at-1",
+              "id": "ts-1",
               "type": "image",
-              "src": "/images/timesheet-tracking.webp",
-              "blurSrc": "",
-              "alt": "Live status update dashboard",
+              "src": "/images/p360_time_01.webp",
+              "blurSrc": "/images/p360_time_blur_01.webp",
+              "alt": "Working time tracking Interface",
               "displayMode": "contain",
               "width": 1200,
               "height": 800

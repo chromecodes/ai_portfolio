@@ -1,5 +1,5 @@
 "use client";
-import { HeroSection } from "./HeroSecrion";
+import { HeroSection } from "./HeroSection";
 import TagsCapsule from "@/components/UI/tags/TagsCapsule";
 import FeaturesTile from "./FeaturesTile";
 import careerTypes from "@/types/career";

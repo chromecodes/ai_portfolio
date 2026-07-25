@@ -1,8 +1,8 @@
 {
   "project_name": "Easy Forms",
   "media": [],
-  "project_demo_url": "",
-  "project_repo_url": "",
+  "project_demo_url": "https://easyforms-sf.vercel.app",
+  "project_repo_url": "https://github.com/simpliflowcorp/easy_forms",
   "project_type": "FullStack",
   "project_context": "منصة Easy Forms هي منشئ نماذج حديث وكامل الخصائص يتيح للمستخدمين بناء وتنسيق وتحليل نماذج الويب المخصصة ديناميكياً مع تحليلات في الوقت الفعلي وإمكانيات التصدير الآلي.",
   "core_pillars": ["منشئ النماذج", "التحليلات", "الوقت الفعلي", "تصدير البيانات", "تدويل اللغة"],

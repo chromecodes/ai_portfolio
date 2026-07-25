@@ -19,7 +19,7 @@ export const ProjectTileFooter = ({ project }: { project: Project }) => {
                     <a
                         href={project.demoUrl || project.githubUrl}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noopener noreferrer nofollow"
                         className="flex justify-between items-center text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground group-hover:text-accent-color transition-colors duration-200 group-hover:cursor-pointer"
                     >
                         <span>{strings.viewForMoreDetails}</span>

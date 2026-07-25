@@ -1,8 +1,8 @@
 {
   "project_name": "Easy Forms",
   "media": [],
-  "project_demo_url": "",
-  "project_repo_url": "",
+  "project_demo_url": "https://easyforms-sf.vercel.app",
+  "project_repo_url": "https://github.com/simpliflowcorp/easy_forms",
   "project_type": "FullStack",
   "project_context": "Easy Forms is a modern, full-featured form builder and management platform enabling users to dynamically construct, publish, and analyze custom web forms with real-time analytics and automated export capabilities.",
   "core_pillars": ["Form Builder", "Analytics", "Real-Time", "Data Export", "Internationalization"],

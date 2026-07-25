@@ -1,3 +1,5 @@
+import { ImageViewerItem } from "@/components/ImageViewer/types";
+
 export default interface careerTypes {
   slug: string;
   company: {
@@ -6,10 +8,7 @@ export default interface careerTypes {
     role: string;
     duration: string;
     headline: string;
-    media: {
-      video: string;
-      images: string[];
-    };
+    media: ImageViewerItem[];
     tags: string[];
   };
   roles: {
@@ -60,12 +59,7 @@ export default interface careerTypes {
       solution: {title:string, description:string};
       technical_details: {title:string, items:string[]};
       outcome: {title:string, items:string[]};
-      media: {
-        id: string;
-        type: "video" | "image";
-        src: string;
-        alt: string;
-      }[];
+      media: ImageViewerItem[];
       links?: {
         github?: string;
         live?: string;
