@@ -5,6 +5,7 @@ import QuotationBox from "@/components/UI/QuotationBox";
 import Tags from "@/components/UI/tags/Tags";
 import TagsCapsule from "@/components/UI/tags/TagsCapsule";
 import { PlaceholderTerminal } from "./PlaceholderTerminal";
+import MediaViewer from "@/components/ImageViewer/MediaViewer";
 interface IHeroSectionProps {
     data: careerTypes["company"];
 }
@@ -84,17 +85,9 @@ export const HeroSection: FC<IHeroSectionProps> = ({ data }) => {
                     {data.tags.length > 0 && <TagsCapsule tags={data.tags} />}
                 </div>
 
-                {data.media.video || data.media.images.length > 0 ? (
+                {data.media.length > 0 ? (
                     <div className="relative group overflow-hidden rounded-2xl shadow-2xl border border-gray-150/50 dark:border-gray-800">
-                        <video
-                            src={data.media.video}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
-                        />
-                        <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent pointer-events-none" />
+                        <MediaViewer media={data.media} />
                     </div>
                 ) : (
                     /* simulated IDE/terminal mockup */

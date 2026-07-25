@@ -3,7 +3,7 @@ import { useParams } from "next/navigation";
 import type careerTypes from "@/types/career";
 import Image from "next/image";
 import ImageViewer from "@/components/ImageViewer/ImageViewer";
-import { HeroSection } from "./HeroSecrion";
+import { HeroSection } from "./HeroSection";
 import FeaturesTile from "./FeaturesTile";
 import CareerFooter from "./CareerFooter";
 import TagsCapsule from "@/components/UI/tags/TagsCapsule";

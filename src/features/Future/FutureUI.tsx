@@ -367,7 +367,7 @@ export default function FutureUI({ initialData }: IFutureUIProps) {
                                     whileTap={{ scale: 0.97 }}
                                     href={data.launchpad.contacts.github_url}
                                     target="_blank"
-                                    rel="noopener noreferrer"
+                                    rel="noopener noreferrer nofollow"
                                     className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-background hover:bg-secondary-background text-font-color font-semibold text-xs border border-borderColor justify-center transition-colors"
                                 >
                                     <Icons.github className="w-4 h-4" />
@@ -379,7 +379,7 @@ export default function FutureUI({ initialData }: IFutureUIProps) {
                                     whileTap={{ scale: 0.97 }}
                                     href={data.launchpad.contacts.linkedin_url}
                                     target="_blank"
-                                    rel="noopener noreferrer"
+                                    rel="noopener noreferrer nofollow"
                                     className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-background hover:bg-secondary-background text-font-color font-semibold text-xs border border-borderColor justify-center transition-colors"
                                 >
                                     <Icons.linkedin className="w-4 h-4" />

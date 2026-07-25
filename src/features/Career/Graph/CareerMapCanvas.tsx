@@ -131,42 +131,31 @@ function layoutCareerNodes(
     canvasHeight: number
 ): CareerNode[] {
     const nodes: CareerNode[] = []
+    const count = data.length
+    if (count === 0) return nodes
 
-    let x = PADDING_X
-    let y = PADDING_Y
-    let rowHeight = 0
+    const marginX = 70
+    const marginY = 70
+    const usableW = Math.max(100, canvasWidth - marginX * 2)
+    const usableH = Math.max(100, canvasHeight - marginY * 2)
 
-    const maxRowWidth = canvasWidth * MAX_ROW_WIDTH_RATIO
-
-    for (const item of data) {
+    // Step 1: Initial organic placement with random non-linear 2D scattering
+    for (let i = 0; i < count; i++) {
+        const item = data[i]
         const radius = experienceToRadius(item.time_period)
-        const diameter = radius * 2
 
-        const gapX =
-            GAP_X_MIN + Math.random() * (GAP_X_MAX - GAP_X_MIN)
-        const gapY =
-            GAP_Y_MIN + Math.random() * (GAP_Y_MAX - GAP_Y_MIN)
+        // General progress spread across X with generous random variation
+        const progress = count > 1 ? i / (count - 1) : 0.5
+        const baseX = marginX + progress * usableW
+        const randomOffsetX = (Math.random() - 0.5) * (usableW / Math.max(2, count)) * 0.9
 
-        if (x + diameter > maxRowWidth) {
-            x = PADDING_X
-            y += rowHeight + gapY
-            rowHeight = 0
-        }
+        // Random organic Y placement using alternating wave curves + random offset
+        const waveY = Math.sin(i * 2.3 + 0.5) * (usableH * 0.3)
+        const randomOffsetY = (Math.random() - 0.5) * (usableH * 0.45)
+        const baseY = marginY + usableH / 2 + waveY + randomOffsetY
 
-        const jitterX = (Math.random() - 0.5) * 40
-        const jitterY = (Math.random() - 0.5) * 40
-
-        const cx = clamp(
-            x + radius + jitterX,
-            radius + 20,
-            canvasWidth - radius - 20
-        )
-
-        const cy = clamp(
-            y + radius + jitterY,
-            radius + 20,
-            canvasHeight - radius - 20
-        )
+        const cx = clamp(baseX + randomOffsetX, radius + 25, canvasWidth - radius - 25)
+        const cy = clamp(baseY, radius + 25, canvasHeight - radius - 25)
 
         nodes.push({
             id: item.id,
@@ -175,9 +164,50 @@ function layoutCareerNodes(
             radius,
             data: item,
         })
+    }
 
-        x += diameter + gapX
-        rowHeight = Math.max(rowHeight, diameter)
+    // Step 2: Force-directed relaxation pass to ensure NO overlapping nodes
+    const MIN_CLEARANCE = 40 // minimum border clearance between nodes
+    const ITERATIONS = 120
+
+    for (let iter = 0; iter < ITERATIONS; iter++) {
+        let moved = false
+        for (let i = 0; i < count; i++) {
+            for (let j = i + 1; j < count; j++) {
+                const n1 = nodes[i]
+                const n2 = nodes[j]
+
+                const minDist = n1.radius + n2.radius + MIN_CLEARANCE
+                const d = dist(n1, n2)
+
+                if (d < minDist) {
+                    moved = true
+                    const overlap = minDist - (d || 0.001)
+
+                    // Repulsion vector direction
+                    let dx = n2.x - n1.x
+                    let dy = n2.y - n1.y
+                    if (d === 0) {
+                        dx = (Math.random() - 0.5) || 1
+                        dy = (Math.random() - 0.5) || 1
+                    } else {
+                        dx /= d
+                        dy /= d
+                    }
+
+                    // Push nodes apart equally along repulsion vector
+                    const pushX = dx * overlap * 0.5
+                    const pushY = dy * overlap * 0.5
+
+                    n1.x = clamp(n1.x - pushX, n1.radius + 25, canvasWidth - n1.radius - 25)
+                    n1.y = clamp(n1.y - pushY, n1.radius + 25, canvasHeight - n1.radius - 25)
+
+                    n2.x = clamp(n2.x + pushX, n2.radius + 25, canvasWidth - n2.radius - 25)
+                    n2.y = clamp(n2.y + pushY, n2.radius + 25, canvasHeight - n2.radius - 25)
+                }
+            }
+        }
+        if (!moved) break
     }
 
     return nodes
@@ -201,34 +231,38 @@ function canvasToDom(
     }
 }
 
-
 function getTooltipPositionDom(
     domX: number,
     domY: number,
     radius: number,
     rect: DOMRect
 ) {
-    const offset = TOOLTIP_OFFSET
+    const offset = 12
+    const tooltipWidth = 256 // matches w-64 (16rem = 256px)
+    const tooltipHeight = 140 // approximate tooltip height
 
-    const placeRight =
-        domX + radius + offset + TOOLTIP_WIDTH < rect.right
+    const screenWidth = window.innerWidth
+    const screenHeight = window.innerHeight
 
-    const left = placeRight
+    // Determine horizontal alignment based on screen space
+    const spaceRight = screenWidth - (domX + radius)
+    const placeRight = spaceRight >= tooltipWidth + offset || domX < screenWidth / 2
+
+    let left = placeRight
         ? domX + radius + offset
-        : domX - TOOLTIP_WIDTH + offset + 60
+        : domX - radius - offset - tooltipWidth
 
-    let top = domY - TOOLTIP_HEIGHT / 2
+    // Clamp horizontal position strictly inside viewport with 12px margin
+    left = clamp(left, 12, screenWidth - tooltipWidth - 12)
 
-    top = clamp(
-        top,
-        rect.top + 8,
-        rect.bottom - TOOLTIP_HEIGHT - 8
-    )
+    // Vertically center relative to node
+    let top = domY - tooltipHeight / 2
+
+    // Clamp vertical position within viewport bounds with 12px margin
+    top = clamp(top, 12, screenHeight - tooltipHeight - 12)
 
     return { left, top }
 }
-
-
 
 /* ================= COMPONENT ================= */
 
@@ -369,7 +403,7 @@ export default function CareerMapCanvas() {
                 ctx.beginPath()
                 ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2)
                 ctx.fillStyle =
-                    hoveredNode.current?.id === n.id
+                    hoveredNode.current === n
                         ? "#ffffff"
                         : "#dddddd"
                 ctx.fill()
@@ -431,7 +465,7 @@ export default function CareerMapCanvas() {
             <canvas ref={canvasRef} className="flex flex-1 grow" />
             {tooltip && (
                 <div
-                    className="absolute z-50 pointer-events-none"
+                    className="fixed z-50 pointer-events-none"
                     style={{ left: tooltip.left, top: tooltip.top }}
                 >
                     <CareerTooltip node={tooltip.node} />

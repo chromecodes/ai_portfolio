@@ -2,6 +2,7 @@ import { Icons } from "@/Icon";
 import careerTypes from "@/types/career";
 import useLanguageStore from "@/utils/i18n/useLanguageStore";
 import { Button } from "@/components/ui/button";
+import { openBackgroundTab } from "@/utils/openBackgroundTab";
 
 export default function ProjectLinks({ links }: { links: careerTypes["projects"][number]["key_features"][number]["links"] }) {
     const strings = useLanguageStore((state) => state.strings as Record<string, string>);
@@ -17,7 +18,8 @@ export default function ProjectLinks({ links }: { links: careerTypes["projects"]
                     <a
                         href={links.github}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noopener noreferrer nofollow"
+                        onClick={(e) => openBackgroundTab(links.github!, e)}
                     >
                         <Icons.github className="w-4 h-4" />
                         <span>{strings.github}</span>
@@ -33,7 +35,8 @@ export default function ProjectLinks({ links }: { links: careerTypes["projects"]
                     <a
                         href={links.live}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noopener noreferrer nofollow"
+                        onClick={(e) => openBackgroundTab(links.live!, e)}
                     >
                         <Icons.externalLink className="w-3.5 h-3.5" />
                         <span>{strings.liveDemo}</span>

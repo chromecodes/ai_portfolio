@@ -279,7 +279,7 @@ export default function AboutPage() {
                                 whileTap={{ scale: 0.95 }}
                                 href="https://github.com"
                                 target="_blank"
-                                rel="noopener noreferrer"
+                                rel="noopener noreferrer nofollow"
                                 className="flex items-center gap-2 px-6 py-3 rounded-full bg-secondary-background hover:bg-secondary-background/80 text-font-color font-semibold border border-borderColor w-full sm:w-auto justify-center transition-colors"
                             >
                                 <Icons.github className="w-4 h-4" />
@@ -291,7 +291,7 @@ export default function AboutPage() {
                                 whileTap={{ scale: 0.95 }}
                                 href="https://linkedin.com"
                                 target="_blank"
-                                rel="noopener noreferrer"
+                                rel="noopener noreferrer nofollow"
                                 className="flex items-center gap-2 px-6 py-3 rounded-full bg-secondary-background hover:bg-secondary-background/80 text-font-color font-semibold border border-borderColor w-full sm:w-auto justify-center transition-colors"
                             >
                                 <Icons.linkedin className="w-4 h-4" />

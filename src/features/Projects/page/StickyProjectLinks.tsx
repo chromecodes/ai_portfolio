@@ -3,6 +3,7 @@
 import React from "react";
 import { Icons } from "@/Icon";
 import useLanguageStore from "@/utils/i18n/useLanguageStore";
+import { openBackgroundTab } from "@/utils/openBackgroundTab";
 
 interface StickyProjectLinksProps {
   repoUrl?: string;
@@ -20,8 +21,9 @@ export default function StickyProjectLinks({ repoUrl, demoUrl }: StickyProjectLi
         <a
           href={repoUrl}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer nofollow"
           aria-label="GitHub Repository"
+          onClick={(e) => openBackgroundTab(repoUrl, e)}
           className="group flex items-center bg-secondary-background/80 hover:bg-secondary-background backdrop-blur-md border border-borderColor hover:border-accent-color/60 p-3 rounded-full shadow-lg hover:shadow-accent-color/10 transition-all duration-300 text-font-color hover:text-accent-color cursor-pointer"
         >
           <Icons.github className="w-5 h-5 shrink-0 text-accent-color group-hover:scale-110 transition-transform duration-200" />
@@ -35,8 +37,9 @@ export default function StickyProjectLinks({ repoUrl, demoUrl }: StickyProjectLi
         <a
           href={demoUrl}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer nofollow"
           aria-label="Live Demo"
+          onClick={(e) => openBackgroundTab(demoUrl, e)}
           className="group flex items-center gap-2.5 bg-secondary-background/80 hover:bg-secondary-background backdrop-blur-md border border-borderColor hover:border-accent-color/60 p-3 rounded-full shadow-lg hover:shadow-accent-color/10 transition-all duration-300 text-font-color hover:text-accent-color cursor-pointer"
         >
           <Icons.externalLink className="w-5 h-5 shrink-0 text-accent-color group-hover:scale-110 transition-transform duration-200" />

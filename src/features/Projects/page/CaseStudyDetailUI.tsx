@@ -63,7 +63,7 @@ export default function CaseStudyDetailUI({ data }: ICaseStudyDetailUIProps) {
               <a
                 href={data.project_repo_url}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-primary-background hover:bg-secondary-background border border-borderColor hover:border-emerald-400/60 text-xs font-bold text-font-color hover:text-emerald-400 transition-all duration-200 shadow-xs hover:-translate-y-0.5"
               >
                 <Icons.github className="w-4 h-4 text-emerald-400" />
