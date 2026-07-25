@@ -267,7 +267,7 @@ export default function AboutPage() {
                             <motion.a
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                href="mailto:hameedhussain@example.com"
+                                href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`}
                                 className="flex items-center gap-2 px-6 py-3 rounded-full bg-accent-color text-white font-semibold shadow-md shadow-accent-color/20 hover:bg-accent-color/90 transition-colors w-full sm:w-auto justify-center"
                             >
                                 <Mail className="w-4 h-4" />
@@ -277,7 +277,7 @@ export default function AboutPage() {
                             <motion.a
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                href="https://github.com"
+                                href={process.env.NEXT_PUBLIC_GITHUB}
                                 target="_blank"
                                 rel="noopener noreferrer nofollow"
                                 className="flex items-center gap-2 px-6 py-3 rounded-full bg-secondary-background hover:bg-secondary-background/80 text-font-color font-semibold border border-borderColor w-full sm:w-auto justify-center transition-colors"
@@ -289,7 +289,7 @@ export default function AboutPage() {
                             <motion.a
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                href="https://linkedin.com"
+                                href={process.env.NEXT_PUBLIC_LINKEDIN}
                                 target="_blank"
                                 rel="noopener noreferrer nofollow"
                                 className="flex items-center gap-2 px-6 py-3 rounded-full bg-secondary-background hover:bg-secondary-background/80 text-font-color font-semibold border border-borderColor w-full sm:w-auto justify-center transition-colors"

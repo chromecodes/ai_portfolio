@@ -7,7 +7,66 @@
     "duration": "Jun 2023 – Jul 2025",
     "headline": "Building a metadata-driven enterprise CRM capable of generating complete business systems from configuration.",
     "media": [
-
+      {
+        "id": "ov-1",
+        "type": "image",
+        "src": "/images/p360_overview_01.webp",
+        "blurSrc": "/images/p360_overview_blur_01.webp",
+        "alt": "Overview Example 1",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "id": "ov-2",
+        "type": "image",
+        "src": "/images/p360_overview_02.webp",
+        "blurSrc": "/images/p360_overview_blur_02.webp",
+        "alt": "Overview Example 2",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "id": "ov-3",
+        "type": "image",
+        "src": "/images/p360_overview_03.webp",
+        "blurSrc": "/images/p360_overview_blur_03.webp",
+        "alt": "Overview Example 3",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "id": "ov-4",
+        "type": "image",
+        "src": "/images/p360_overview_04.webp",
+        "blurSrc": "/images/p360_overview_blur_04.webp",
+        "alt": "Overview Example 4",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "id": "ov-5",
+        "type": "image",
+        "src": "/images/p360_overview_05.webp",
+        "blurSrc": "/images/p360_overview_blur_05.webp",
+        "alt": "Overview Example 5",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "id": "ov-6",
+        "type": "image",
+        "src": "/images/p360_overview_06.webp",
+        "blurSrc": "/images/p360_overview_blur_06.webp",
+        "alt": "Overview Example 6",
+        "displayMode": "cover",
+        "width": 1200,
+        "height": 800
+      }
     ],
     "tags": [
       "Enterprise CRM",
@@ -170,6 +229,26 @@
               "type": "image",
               "src": "/images/p360_module_04.webp",
               "blurSrc": "/images/p360_module_blur_04.webp",
+              "alt": "Module Builder Interface",
+              "displayMode": "cover",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "mb-5",
+              "type": "image",
+              "src": "/images/p360_module_05.webp",
+              "blurSrc": "/images/p360_module_blur_05.webp",
+              "alt": "Module Builder Interface",
+              "displayMode": "cover",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "mb-6",
+              "type": "image",
+              "src": "/images/p360_module_06.webp",
+              "blurSrc": "/images/p360_module_blur_06.webp",
               "alt": "Module Builder Interface",
               "displayMode": "cover",
               "width": 1200,
@@ -394,8 +473,8 @@
             {
               "id": "cal-1",
               "type": "image",
-              "src": "/images/p360_cal_01.webp",
-              "blurSrc": "/images/p360_cal_blur_01.webp",
+              "src": "/images/p360_date_01.webp",
+              "blurSrc": "/images/p360_date_blur_01.webp",
               "alt": "Calendar Interface",
               "displayMode": "contain",
               "width": 1200,
@@ -404,8 +483,18 @@
             {
               "id": "cal-2",
               "type": "image",
-              "src": "/images/p360_cal_02.webp",
-              "blurSrc": "/images/p360_cal_blur_02.webp",
+              "src": "/images/p360_date_02.webp",
+              "blurSrc": "/images/p360_date_blur_02.webp",
+              "alt": "Calendar Interface",
+              "displayMode": "contain",
+              "width": 1200,
+              "height": 800
+            },
+            {
+              "id": "cal-3",
+              "type": "image",
+              "src": "/images/p360_date_03.webp",
+              "blurSrc": "/images/p360_date_blur_03.webp",
               "alt": "Calendar Interface",
               "displayMode": "contain",
               "width": 1200,

@@ -166,11 +166,8 @@
     ],
     "contacts": {
       "email_label": "Email Me",
-      "email_address": "hameedhussain@example.com",
       "github_label": "GitHub",
-      "github_url": "https://github.com",
-      "linkedin_label": "LinkedIn",
-      "linkedin_url": "https://linkedin.com"
+      "linkedin_label": "LinkedIn"
     }
   }
 }
