@@ -90,6 +90,8 @@ export async function POST(req: NextRequest) {
       title,
       referrer,
       leadSource,
+      visitorEmail,
+      visitorName,
       stayDuration,
       maxScrollPercentage,
       selectedText,
@@ -111,9 +113,21 @@ export async function POST(req: NextRequest) {
     // Resolve Location via CDN headers or IP Geolocation API
     const { country, city, region } = await resolveGeoLocation(rawIp, req.headers);
 
+    // Read cookie_id from incoming HTTP cookies or payload
+    const cookieId = req.cookies.get('portfolio_lead_cookie')?.value || body.cookieId || undefined;
+    let cookieExpiry: string | undefined = undefined;
+    if (cookieId) {
+      // Calculate 90 days expiry string for database mapping
+      const expDate = new Date();
+      expDate.setDate(expDate.getDate() + 90);
+      cookieExpiry = expDate.toISOString();
+    }
+
     // 1. Always update/upsert Session
     const sessionObj: VisitorSession = {
       id: sessionId,
+      cookie_id: cookieId,
+      cookie_expiry: cookieExpiry,
       ip_address: rawIp,
       country,
       city,
@@ -124,9 +138,12 @@ export async function POST(req: NextRequest) {
       screen_resolution: screenResolution || 'Unknown',
       language: language || 'en',
       lead_source: leadSource || 'Direct / Organic',
+      ...(visitorName ? { visitor_name: visitorName } : {}),
+      ...(visitorEmail ? { visitor_email: visitorEmail } : {}),
       started_at: now,
       last_seen_at: now,
     };
+
 
     await saveSession(sessionObj);
 
@@ -152,15 +169,44 @@ export async function POST(req: NextRequest) {
           created_at: now,
         });
       }
-    } else if (type === 'scroll') {
+    } else if (type === 'outbound_click') {
       await saveEvent({
         session_id: sessionId,
         path: routePath || '/',
-        event_type: 'scroll',
-        scroll_depth: scrollDepth || 0,
+        event_type: 'click',
+        selected_text: selectedText || 'Outbound Link',
+        selected_context: selectedContext || '',
+        created_at: now,
+      });
+    } else if (type === 'toast_dropoff') {
+      await saveEvent({
+        session_id: sessionId,
+        path: routePath || '/',
+        event_type: 'click',
+        selected_text: 'Toast Dismissed (Drop-off)',
+        selected_context: selectedContext || 'Toast Closed',
+        created_at: now,
+      });
+    } else if (type === 'toast_step') {
+      await saveEvent({
+        session_id: sessionId,
+        path: routePath || '/',
+        event_type: 'click',
+        selected_text: `Toast Category Selected: ${selectedText}`,
+        selected_context: 'Toast Flow Step',
+        created_at: now,
+      });
+    } else if (type === 'inactivity_event') {
+      await saveEvent({
+        session_id: sessionId,
+        path: routePath || '/',
+        event_type: 'route_change',
+        selected_text: 'Tab Inactive / Hidden',
+        selected_context: selectedContext || 'Tab Hidden',
         created_at: now,
       });
     }
+
 
     return NextResponse.json({ success: true });
   } catch (err: any) {

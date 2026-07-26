@@ -32,10 +32,18 @@ export default function AnalyticsTracker() {
   const currentPathRef = useRef<string>(pathname);
   const lastSelectedTextRef = useRef<string>('');
 
+  // Helper to extract portfolio_lead_cookie from document.cookie
+  const getLeadCookieId = (): string | undefined => {
+    if (typeof document === 'undefined') return undefined;
+    const match = document.cookie.match(/(?:^|; )portfolio_lead_cookie=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : undefined;
+  };
+
   // Send payload non-blockingly using sendBeacon or keepalive fetch
   const sendTelemetry = (payload: Record<string, any>) => {
     if (typeof window === 'undefined') return;
-    const body = JSON.stringify(payload);
+    const cookieId = getLeadCookieId();
+    const body = JSON.stringify({ ...payload, cookieId });
     if (navigator.sendBeacon) {
       const blob = new Blob([body], { type: 'application/json' });
       navigator.sendBeacon('/api/analytics/track', blob);
@@ -49,21 +57,7 @@ export default function AnalyticsTracker() {
     }
   };
 
-  const calculateScrollPercentage = (): number => {
-    const scrollContainer = document.querySelector('.overflow-auto') || document.querySelector('main');
-    if (scrollContainer) {
-      const scrollTop = scrollContainer.scrollTop;
-      const scrollHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-      if (scrollHeight > 0) {
-        return Math.min(100, Math.round((scrollTop / scrollHeight) * 100));
-      }
-    }
 
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    if (docHeight <= 0) return 0;
-    return Math.min(100, Math.round((scrollTop / docHeight) * 100));
-  };
 
   // 1. Route Change & Pageview tracking (Batched on exit/route switch to save Vercel requests)
   useEffect(() => {
@@ -71,6 +65,8 @@ export default function AnalyticsTracker() {
     if (!sessionId) return;
 
     const leadSource = detectLeadSource(searchParams, document.referrer);
+    const visitorEmail = searchParams.get('email') || searchParams.get('visitor_email') || undefined;
+    const visitorName = searchParams.get('name') || searchParams.get('visitor_name') || undefined;
 
     // On route change: flush stats for the previous route
     if (currentPathRef.current !== pathname) {
@@ -84,6 +80,8 @@ export default function AnalyticsTracker() {
         stayDuration: duration,
         maxScrollPercentage: finalScroll,
         leadSource,
+        visitorEmail,
+        visitorName,
       });
 
       startTimeRef.current = Date.now();
@@ -100,12 +98,35 @@ export default function AnalyticsTracker() {
       title: document.title,
       referrer: document.referrer,
       leadSource,
+      visitorEmail,
+      visitorName,
       screenResolution: `${window.screen.width}x${window.screen.height}`,
       language: navigator.language,
     });
   }, [pathname, searchParams]);
 
-  // 2. Scroll Depth tracking (passive local recording, no API calls during scrolling)
+  const calculateScrollPercentage = (): number => {
+    // 1. Try finding custom scrollable container in layout (`.overflow-auto`, `[data-scroll-container]`, `main`)
+    const containers = Array.from(document.querySelectorAll('.overflow-auto, main, [data-scroll-container]'));
+    for (const container of containers) {
+      const el = container as HTMLElement;
+      if (el.scrollHeight > el.clientHeight && el.clientHeight > 0) {
+        const scrollTop = el.scrollTop;
+        const scrollHeight = el.scrollHeight - el.clientHeight;
+        if (scrollHeight > 0) {
+          return Math.min(100, Math.max(0, Math.round((scrollTop / scrollHeight) * 100)));
+        }
+      }
+    }
+
+    // 2. Fallback to global window/document element scroll
+    const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const docHeight = (document.documentElement.scrollHeight || document.body.scrollHeight || 0) - window.innerHeight;
+    if (docHeight <= 0) return 100; // If page content fits on screen without scroll, engagement is 100%
+    return Math.min(100, Math.max(0, Math.round((scrollTop / docHeight) * 100)));
+  };
+
+  // 2. Scroll Depth tracking (attaches to both window and all scrollable div containers)
   useEffect(() => {
     const handleScroll = () => {
       const current = calculateScrollPercentage();
@@ -114,19 +135,19 @@ export default function AnalyticsTracker() {
       }
     };
 
+    // Calculate initial scroll position immediately
+    handleScroll();
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    const scrollContainer = document.querySelector('.overflow-auto') || document.querySelector('main');
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
-    }
+    const containers = document.querySelectorAll('.overflow-auto, main, [data-scroll-container]');
+    containers.forEach((c) => c.addEventListener('scroll', handleScroll, { passive: true }));
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (scrollContainer) {
-        scrollContainer.removeEventListener('scroll', handleScroll);
-      }
+      containers.forEach((c) => c.removeEventListener('scroll', handleScroll));
     };
   }, [pathname]);
+
 
   // 3. Mouse Text Selection tracking (Debounced & throttled)
   useEffect(() => {
@@ -168,7 +189,57 @@ export default function AnalyticsTracker() {
     };
   }, [pathname]);
 
-  // 4. Page exit/unload stay duration tracking
+  // 5. Outbound & Social Link Click Tracking (LinkedIn, GitHub, Resume, Email links)
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement)?.closest('a, button');
+      if (!target) return;
+
+      const href = (target as HTMLAnchorElement).href || '';
+      const text = (target as HTMLElement).innerText?.trim().slice(0, 100) || target.getAttribute('aria-label') || '';
+
+      const isOutbound = href.startsWith('http') && !href.includes(window.location.hostname);
+      const isContactLink = href.startsWith('mailto:') || href.startsWith('tel:') || href.includes('linkedin.com') || href.includes('github.com');
+
+      if (isOutbound || isContactLink) {
+        const sessionId = getOrCreateSessionId();
+        sendTelemetry({
+          sessionId,
+          type: 'outbound_click',
+          path: pathname,
+          selectedText: text,
+          selectedContext: href,
+        });
+      }
+    };
+
+    document.addEventListener('click', handleClick, { capture: true });
+    return () => document.removeEventListener('click', handleClick, { capture: true });
+  }, [pathname]);
+
+  // 6. Tab Inactivity / Exit Intent Tracking (for identified lead cookie sessions)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        const cookieId = getLeadCookieId();
+        // Track exit/tab hide intent for returning/identified leads
+        if (cookieId) {
+          const sessionId = getOrCreateSessionId();
+          sendTelemetry({
+            sessionId,
+            type: 'inactivity_event',
+            path: pathname,
+            selectedContext: 'tab_hidden',
+          });
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [pathname]);
+
+  // 7. Page exit/unload stay duration tracking
   useEffect(() => {
     const handleUnload = () => {
       const sessionId = getOrCreateSessionId();
@@ -189,6 +260,7 @@ export default function AnalyticsTracker() {
     window.addEventListener('beforeunload', handleUnload);
     return () => window.removeEventListener('beforeunload', handleUnload);
   }, [pathname, searchParams]);
+
 
   return null;
 }

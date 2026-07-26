@@ -1,7 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getAnalyticsData, clearAnalyticsData } from '@/lib/analyticsDb';
+import { verifyAuth } from '@/lib/analyticsAuth';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  if (!verifyAuth(req)) {
+    return NextResponse.json({ error: 'Unauthorized access to analytics data' }, { status: 401 });
+  }
+
   try {
     const data = await getAnalyticsData();
     return NextResponse.json(data);
@@ -10,7 +15,11 @@ export async function GET() {
   }
 }
 
-export async function DELETE() {
+export async function DELETE(req: NextRequest) {
+  if (!verifyAuth(req)) {
+    return NextResponse.json({ error: 'Unauthorized access to analytics data' }, { status: 401 });
+  }
+
   try {
     await clearAnalyticsData();
     return NextResponse.json({ success: true, message: 'Analytics data cleared' });

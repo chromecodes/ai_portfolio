@@ -1,7 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getAnalyticsData } from '@/lib/analyticsDb';
+import { verifyAuth } from '@/lib/analyticsAuth';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  if (!verifyAuth(req)) {
+    return NextResponse.json({ error: 'Unauthorized access to analytics backup' }, { status: 401 });
+  }
+
   try {
     const data = await getAnalyticsData();
     const dateStr = new Date().toISOString().split('T')[0];

@@ -16,6 +16,8 @@ if (supabaseUrl && supabaseKey) {
 
 export interface VisitorSession {
   id: string;
+  cookie_id?: string;
+  cookie_expiry?: string;
   ip_address: string;
   country?: string;
   city?: string;
@@ -26,9 +28,12 @@ export interface VisitorSession {
   screen_resolution?: string;
   language?: string;
   lead_source?: string;
+  visitor_name?: string;
+  visitor_email?: string;
   started_at: string;
   last_seen_at: string;
 }
+
 
 export interface PageviewEvent {
   id?: string;
@@ -185,6 +190,119 @@ export async function getAnalyticsData() {
   };
 }
 
+export interface LeadSubmission {
+  id?: string;
+  cookie_id?: string;
+  cookie_expiry?: string;
+  name?: string;
+  email: string;
+  reason: string;
+  ip_address: string;
+  location?: string;
+  source?: string;
+  created_at: string;
+}
+
+export async function findLeadByEmail(email: string): Promise<LeadSubmission | null> {
+  const normalizedEmail = email.trim().toLowerCase();
+  if (supabase) {
+    try {
+      const { data, error } = await (supabase as any)
+        .from('lead_submissions')
+        .select('*')
+        .eq('email', normalizedEmail)
+        .limit(1);
+
+      if (!error && data && data.length > 0) {
+        return data[0];
+      }
+    } catch (e) {
+      console.warn('Supabase findLeadByEmail fallback:', e);
+    }
+  }
+
+  const emails = ensureEmailsFile();
+  const found = emails.find((e) => e.email.toLowerCase() === normalizedEmail);
+  return found || null;
+}
+
+
+const EMAILS_DB_PATH = path.join(process.cwd(), '.data', 'emails.json');
+
+function ensureEmailsFile(): LeadSubmission[] {
+  try {
+    const dir = path.dirname(EMAILS_DB_PATH);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    if (!fs.existsSync(EMAILS_DB_PATH)) {
+      fs.writeFileSync(EMAILS_DB_PATH, JSON.stringify([], null, 2), 'utf-8');
+      return [];
+    }
+    const content = fs.readFileSync(EMAILS_DB_PATH, 'utf-8');
+    return JSON.parse(content);
+  } catch {
+    return [];
+  }
+}
+
+function writeEmailsFile(emails: LeadSubmission[]) {
+  try {
+    const dir = path.dirname(EMAILS_DB_PATH);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(EMAILS_DB_PATH, JSON.stringify(emails, null, 2), 'utf-8');
+  } catch (e) {
+    console.error('Failed to write emails local file:', e);
+  }
+}
+
+export async function saveLeadSubmission(lead: LeadSubmission): Promise<void> {
+  if (supabase) {
+    try {
+      const { error } = await (supabase as any)
+        .from('lead_submissions')
+        .upsert([lead], { onConflict: 'id' });
+      if (!error) return;
+      console.warn('Supabase upsert lead error, using local fallback:', error.message);
+    } catch (err) {
+      console.warn('Supabase lead exception:', err);
+    }
+  }
+
+  // Permanent local fallback (never cleared by clearAnalyticsData)
+  const emails = ensureEmailsFile();
+  const index = emails.findIndex((e) => e.id === lead.id || e.email.toLowerCase() === lead.email.toLowerCase());
+  if (index >= 0) {
+    emails[index] = { ...emails[index], ...lead };
+  } else {
+    emails.unshift(lead);
+  }
+  writeEmailsFile(emails);
+}
+
+
+export async function getLeadSubmissions(): Promise<LeadSubmission[]> {
+  if (supabase) {
+    try {
+      const { data, error } = await (supabase as any)
+        .from('lead_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!error && data) {
+        return data;
+      }
+    } catch (err) {
+      console.warn('Error querying Supabase leads, using local fallback:', err);
+    }
+  }
+
+  const emails = ensureEmailsFile();
+  return emails.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+}
+
 export async function clearAnalyticsData() {
   if (supabase) {
     try {
@@ -200,3 +318,4 @@ export async function clearAnalyticsData() {
 
   writeLocalFile({ sessions: {}, pageviews: [], events: [] });
 }
+

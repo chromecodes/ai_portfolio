@@ -13,6 +13,7 @@ import { useCursor } from '@/lib/useCursor';
 const inter = Inter({ subsets: ['latin'] })
 
 import AnalyticsTracker from '@/components/AnalyticsTracker';
+import LeadWelcomeToast from '@/components/LeadWelcomeToast';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="bg-primary-background text-font-color antialiased h-full flex flex-col min-h-screen max-h-screen">
         <Suspense fallback={null}>
           <AnalyticsTracker />
+          <LeadWelcomeToast delayMs={15000} />
         </Suspense>
         <ThemeInitializer />
         {/* <MainBg /> */}
@@ -36,3 +38,4 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     </html>
   );
 }
+

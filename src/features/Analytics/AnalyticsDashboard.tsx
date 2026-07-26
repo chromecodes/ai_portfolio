@@ -23,10 +23,20 @@ import {
   FileText,
   Activity,
   Download,
+  Lock,
+  Unlock,
+  KeyRound,
+  ShieldAlert,
+  UserCheck,
 } from 'lucide-react';
 import { VisitorSession, PageviewEvent, InteractionEvent } from '@/lib/analyticsDb';
 
 export default function AnalyticsDashboard() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [passcode, setPasscode] = useState<string>('');
+  const [authError, setAuthError] = useState<string>('');
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
+
   const [data, setData] = useState<{
     sessions: VisitorSession[];
     pageviews: PageviewEvent[];
@@ -34,10 +44,85 @@ export default function AnalyticsDashboard() {
   }>({ sessions: [], pageviews: [], events: [] });
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [activeTab, setActiveTab] = useState<'sessions' | 'selections' | 'navigation' | 'devices'>('sessions');
+  const [leads, setLeads] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState<'sessions' | 'leads' | 'selections' | 'navigation' | 'devices'>('sessions');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedSession, setSelectedSession] = useState<VisitorSession | null>(null);
   const [isClearing, setIsClearing] = useState<boolean>(false);
+
+  const fetchLeads = async () => {
+    try {
+      const res = await fetch('/api/leads', { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        setLeads(json.leads || []);
+      }
+    } catch (e) {
+      console.error('Error fetching leads:', e);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchLeads();
+    }
+  }, [isAuthenticated]);
+
+
+  const checkAuthStatus = async () => {
+    try {
+      const res = await fetch('/api/analytics/auth', { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        setIsAuthenticated(json.authenticated);
+        if (json.authenticated) {
+          fetchAnalytics();
+        }
+      } else {
+        setIsAuthenticated(false);
+      }
+    } catch {
+      setIsAuthenticated(false);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!passcode.trim()) return;
+    setIsAuthenticating(true);
+    setAuthError('');
+
+    try {
+      const res = await fetch('/api/analytics/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: passcode }),
+      });
+
+      if (res.ok) {
+        setIsAuthenticated(true);
+        setPasscode('');
+        fetchAnalytics();
+      } else {
+        const json = await res.json();
+        setAuthError(json.error || 'Incorrect passcode');
+      }
+    } catch {
+      setAuthError('Connection error. Please try again.');
+    } finally {
+      setIsAuthenticating(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/analytics/auth', { method: 'DELETE' });
+      setIsAuthenticated(false);
+      setData({ sessions: [], pageviews: [], events: [] });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const fetchAnalytics = async () => {
     setLoading(true);
@@ -50,6 +135,8 @@ export default function AnalyticsDashboard() {
           pageviews: json.pageviews || [],
           events: json.events || [],
         });
+      } else if (res.status === 401) {
+        setIsAuthenticated(false);
       }
     } catch (e) {
       console.error('Error fetching analytics:', e);
@@ -59,14 +146,14 @@ export default function AnalyticsDashboard() {
   };
 
   useEffect(() => {
-    fetchAnalytics();
+    checkAuthStatus();
     const interval = setInterval(() => {
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === 'visible' && isAuthenticated) {
         fetchAnalytics();
       }
     }, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isAuthenticated]);
 
   const handleBackup = () => {
     window.open('/api/analytics/backup', '_blank');
@@ -85,7 +172,7 @@ export default function AnalyticsDashboard() {
     }
   };
 
-  // Aggregated Stats
+  // Aggregated Stats (Calculated at top level before early returns)
   const totalVisitors = data.sessions.length;
   const uniqueIps = useMemo(() => new Set(data.sessions.map((s) => s.ip_address)).size, [data.sessions]);
   
@@ -123,6 +210,77 @@ export default function AnalyticsDashboard() {
         s.os?.toLowerCase().includes(q)
     );
   }, [data.sessions, searchQuery]);
+
+  // --------------------------------------------------
+  // Render Auth Security Lock Gate if not authenticated
+  // --------------------------------------------------
+  if (isAuthenticated === null) {
+    return (
+      <div className="w-full min-h-[60vh] flex items-center justify-center">
+        <div className="flex items-center gap-3 text-neutral-400 text-sm">
+          <RefreshCw className="w-5 h-5 animate-spin text-indigo-400" />
+          <span>Verifying security credentials...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="w-full max-w-md mx-auto px-4 py-16 text-neutral-100 flex flex-col items-center">
+        <div className="w-full p-8 rounded-2xl bg-neutral-900/80 border border-neutral-800 shadow-2xl backdrop-blur-xl flex flex-col items-center gap-6">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 text-indigo-400">
+            <Lock className="w-8 h-8" />
+          </div>
+
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-neutral-100">Analytics Security Gate</h2>
+            <p className="text-xs text-neutral-400 mt-1">
+              Restricted Admin Access. Enter your security passcode to view portfolio telemetry.
+            </p>
+          </div>
+
+          <form onSubmit={handleLogin} className="w-full flex flex-col gap-4">
+            <div className="relative">
+              <KeyRound className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
+              <input
+                type="password"
+                placeholder="Enter passcode..."
+                value={passcode}
+                onChange={(e) => setPasscode(e.target.value)}
+                autoFocus
+                className="w-full pl-9 pr-4 py-2.5 text-sm bg-neutral-950 border border-neutral-800 rounded-xl text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-indigo-500/60 transition"
+              />
+            </div>
+
+            {authError && (
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
+                <ShieldAlert className="w-4 h-4 shrink-0" />
+                <span>{authError}</span>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={isAuthenticating}
+              className="w-full py-2.5 px-4 rounded-xl font-medium text-xs bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 transition duration-150 flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              {isAuthenticating ? (
+                <RefreshCw className="w-4 h-4 animate-spin" />
+              ) : (
+                <Unlock className="w-4 h-4" />
+              )}
+              Unlock Dashboard
+            </button>
+          </form>
+
+          <div className="text-[11px] text-neutral-400 text-center border-t border-neutral-800/80 pt-4 w-full">
+            Tip: Passcode defaults to <code className="text-neutral-300">admin123</code>. Set <code className="text-neutral-300">ANALYTICS_PASSWORD</code> in <code className="text-neutral-300">.env.local</code> to customize.
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8 text-neutral-100 flex flex-col gap-8">
@@ -167,6 +325,13 @@ export default function AnalyticsDashboard() {
           >
             <Trash2 className="w-3.5 h-3.5" />
             Clear Logs
+          </button>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700 transition duration-150"
+          >
+            <Lock className="w-3.5 h-3.5 text-neutral-400" />
+            Lock
           </button>
         </div>
       </div>
@@ -227,12 +392,20 @@ export default function AnalyticsDashboard() {
             count={filteredSessions.length}
           />
           <TabButton
+            active={activeTab === 'leads'}
+            onClick={() => setActiveTab('leads')}
+            icon={<UserCheck className="w-4 h-4 text-emerald-400" />}
+            label="Collected Emails & Leads"
+            count={leads.length}
+          />
+          <TabButton
             active={activeTab === 'selections'}
             onClick={() => setActiveTab('selections')}
             icon={<MousePointer className="w-4 h-4" />}
             label="Selected Words & Text"
             count={textSelectionEvents.length}
           />
+
           <TabButton
             active={activeTab === 'navigation'}
             onClick={() => setActiveTab('navigation')}
@@ -271,7 +444,10 @@ export default function AnalyticsDashboard() {
         />
       )}
 
+      {activeTab === 'leads' && <LeadsTab leads={leads} />}
+
       {activeTab === 'selections' && <WordSelectionsTab events={textSelectionEvents} />}
+
 
       {activeTab === 'navigation' && <NavigationTab pageviews={data.pageviews} />}
 
@@ -367,8 +543,72 @@ function TabButton({
 }
 
 // --------------------------------------------------
+// Tab: Permanent Collected Leads & Emails
+// --------------------------------------------------
+
+function LeadsTab({ leads }: { leads: any[] }) {
+  if (leads.length === 0) {
+    return (
+      <div className="p-12 text-center rounded-2xl bg-neutral-900/40 border border-neutral-800 text-neutral-400 flex flex-col items-center gap-3">
+        <UserCheck className="w-10 h-10 text-emerald-500 animate-pulse" />
+        <p className="text-sm font-medium text-neutral-200">No email leads collected yet.</p>
+        <p className="text-xs text-neutral-400">
+          When visitors fill in the welcome toast form, their email and reason will be saved permanently here.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="overflow-x-auto rounded-xl border border-neutral-800 bg-neutral-900/40">
+      <table className="w-full text-left text-xs text-neutral-300">
+        <thead className="bg-neutral-900/80 text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
+          <tr>
+            <th className="px-4 py-3">Visitor / Email</th>
+            <th className="px-4 py-3">Reason / Category</th>
+            <th className="px-4 py-3">Location</th>
+            <th className="px-4 py-3">IP Address</th>
+            <th className="px-4 py-3">Lead Source</th>
+            <th className="px-4 py-3">Date Submitted</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-neutral-800/60">
+          {leads.map((lead, idx) => (
+            <tr key={lead.id || idx} className="hover:bg-neutral-800/40 transition duration-150">
+              <td className="px-4 py-3">
+                <div className="flex flex-col">
+                  <span className="font-semibold text-emerald-300">{lead.email}</span>
+                  {lead.name && <span className="text-[11px] text-neutral-400">Name: {lead.name}</span>}
+                </div>
+              </td>
+              <td className="px-4 py-3">
+                <span className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                  {lead.reason}
+                </span>
+              </td>
+              <td className="px-4 py-3 text-neutral-300">
+                <div className="flex items-center gap-1">
+                  <MapPin className="w-3 h-3 text-indigo-400" />
+                  <span>{lead.location || 'Unknown'}</span>
+                </div>
+              </td>
+              <td className="px-4 py-3 font-mono text-neutral-400">{lead.ip_address}</td>
+              <td className="px-4 py-3 text-neutral-300">{lead.source || 'Direct / Organic'}</td>
+              <td className="px-4 py-3 text-neutral-400">
+                {new Date(lead.created_at).toLocaleString()}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// --------------------------------------------------
 // Tab 1: Visitor Sessions Table
 // --------------------------------------------------
+
 
 function SessionsTab({
   sessions,
@@ -417,13 +657,27 @@ function SessionsTab({
               <tr key={session.id} className="hover:bg-neutral-800/40 transition duration-150">
                 {/* IP & Location */}
                 <td className="px-4 py-3">
-                  <div className="flex flex-col">
-                    <span className="font-mono text-neutral-100 font-medium">{session.ip_address}</span>
+                  <div className="flex flex-col gap-0.5">
+                    {session.visitor_name || session.visitor_email ? (
+                      <div className="flex items-center gap-1.5 text-indigo-300 font-semibold">
+                        <UserCheck className="w-3.5 h-3.5 text-indigo-400" />
+                        <span>{session.visitor_name || session.visitor_email}</span>
+                        {session.visitor_email && session.visitor_name && (
+                          <span className="text-[10px] text-neutral-400 font-mono">({session.visitor_email})</span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="font-mono text-neutral-100 font-medium">{session.ip_address}</span>
+                    )}
+
                     <div className="flex items-center gap-1 text-[11px] text-neutral-400 mt-0.5">
                       <MapPin className="w-3 h-3 text-indigo-400" />
                       <span>
                         {session.city || 'Unknown'}, {session.country || 'Unknown'}
                       </span>
+                      {(session.visitor_name || session.visitor_email) && (
+                        <span className="text-[10px] text-neutral-400 font-mono ml-1">· {session.ip_address}</span>
+                      )}
                     </div>
                   </div>
                 </td>

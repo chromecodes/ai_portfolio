@@ -10,6 +10,11 @@ export interface LeadSourceConfig {
 }
 
 export const KNOWN_LEAD_SOURCES: LeadSourceConfig[] = [
+    {
+    key: 'dm',
+    name: 'DM',
+    aliases: ['dm', 'DM'],
+  },
   {
     key: 'resume',
     name: 'Resume / CV',
