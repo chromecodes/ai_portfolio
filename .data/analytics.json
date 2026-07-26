@@ -1,0 +1,21 @@
+{
+  "sessions": {
+    "sess_0hvs7dl0u_1785057007555": {
+      "id": "sess_0hvs7dl0u_1785057007555",
+      "ip_address": "127.0.0.1 (Localhost)",
+      "country": "United Arab Emirates",
+      "city": "Dubai",
+      "region": "Dubai",
+      "device_type": "Desktop",
+      "browser": "Chrome",
+      "os": "Linux",
+      "screen_resolution": "Unknown",
+      "language": "en",
+      "lead_source": "Direct / Organic",
+      "started_at": "2026-07-26T09:29:17.837Z",
+      "last_seen_at": "2026-07-26T09:29:18.683Z"
+    }
+  },
+  "pageviews": [],
+  "events": []
+}
