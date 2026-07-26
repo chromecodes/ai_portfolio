@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { detectLeadSource } from '@/lib/leadSources';
+import useLanguageStore from "@/utils/i18n/useLanguageStore";
 
 export interface ToastCategoryOption {
   id: number;
@@ -30,12 +31,12 @@ export const DEFAULT_CATEGORIES: ToastCategoryOption[] = [
     id: 4,
     label: 'Just a lurker',
     responseMsg: 'Spotted! Feel free to lurk around silently, but leave a trail if you like!',
-  },
-  {
-    id: 5,
-    label: 'I need help',
-    responseMsg: "Hi! It's really great you are reaching out, don't hesitate to drop me an email with details on how I can help you.",
-  },
+  }
+  // {
+  //   id: 5,
+  //   label: 'I need help',
+  //   responseMsg: "Hi! It's really great you are reaching out, don't hesitate to drop me an email with details on how I can help you.",
+  // },
 ];
 
 interface LeadWelcomeToastProps {
@@ -44,16 +45,35 @@ interface LeadWelcomeToastProps {
 }
 
 export default function LeadWelcomeToast({
-  delayMs = 15000,
+  delayMs = 5000,
   categories = DEFAULT_CATEGORIES,
 }: LeadWelcomeToastProps) {
   const searchParams = useSearchParams();
+  const strings = useLanguageStore((state) => state.strings as Record<string, string>);
+
+  const localizedDefaultCategories: ToastCategoryOption[] = [
+    { id: 1, label: strings.toastCat1Label || 'I am a recruiter', responseMsg: strings.toastCat1Response || 'Have a look at my career, and projects.' },
+    { id: 2, label: strings.toastCat2Label || 'Looking for collaborator', responseMsg: strings.toastCat2Response || 'Take a look at the projects I did or collaborated with.' },
+    { id: 3, label: strings.toastCat3Label || 'Looking for inspiration', responseMsg: strings.toastCat3Response || 'Take your time exploring!' },
+    { id: 4, label: strings.toastCat4Label || 'Just a lurker', responseMsg: strings.toastCat4Response || 'Spotted! Feel free to lurk around silently, but leave a trail if you like!' },
+  ];
+
+  const effectiveCategories = categories === DEFAULT_CATEGORIES ? localizedDefaultCategories : categories;
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ToastCategoryOption | null>(null);
-  
+
   // URL Param name detection
-  const urlName = searchParams.get('name') || searchParams.get('visitor_name') || '';
+  let urlName = searchParams.get('name') || searchParams.get('visitor_name') || searchParams.get('refname') || '';
+
+  if (typeof sessionStorage !== 'undefined') {
+    if (urlName) {
+      sessionStorage.setItem('portfolio_lead_name', urlName);
+    } else {
+      urlName = sessionStorage.getItem('portfolio_lead_name') || '';
+    }
+  }
+
   const hasUrlName = Boolean(urlName.trim());
 
   const [nameInput, setNameInput] = useState(urlName);
@@ -63,17 +83,21 @@ export default function LeadWelcomeToast({
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    // Check if 90-day lead cookie or session dismiss flag is present
-    const hasLeadCookie = typeof document !== 'undefined' && document.cookie.includes('portfolio_lead_cookie=');
+    // If already dismissed during this session, do not set timer
     const dismissed = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('lead_toast_dismissed');
-
-    if (hasLeadCookie || dismissed) {
+    if (dismissed) {
       setIsDismissed(true);
       return;
     }
 
     const timer = setTimeout(() => {
-      setIsVisible(true);
+      // Check for cookie right before showing, in case it was created during the delay
+      const hasLeadCookie = typeof document !== 'undefined' && document.cookie.includes('portfolio_lead_cookie=');
+      if (!hasLeadCookie) {
+        setIsVisible(true);
+      } else {
+        setIsDismissed(true);
+      }
     }, delayMs);
 
     return () => clearTimeout(timer);
@@ -96,7 +120,7 @@ export default function LeadWelcomeToast({
           type: 'toast_dropoff',
           selectedContext: selectedCategory ? `Selected: ${selectedCategory.label}` : 'Closed before selection',
         }),
-      }).catch(() => {});
+      }).catch(() => { });
     }
   };
 
@@ -115,7 +139,7 @@ export default function LeadWelcomeToast({
           type: 'toast_step',
           selectedText: cat.label,
         }),
-      }).catch(() => {});
+      }).catch(() => { });
     }
   };
 
@@ -123,13 +147,13 @@ export default function LeadWelcomeToast({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailInput || !emailInput.includes('@')) {
-      setErrorMsg('Please enter a valid email address.');
+      setErrorMsg(strings.toastInvalidEmail || 'Please enter a valid email address.');
       return;
     }
 
     const finalName = hasUrlName ? urlName : nameInput;
     if (!hasUrlName && !finalName.trim()) {
-      setErrorMsg('Please enter your name.');
+      setErrorMsg(strings.toastMissingName || 'Please enter your name.');
       return;
     }
 
@@ -138,6 +162,8 @@ export default function LeadWelcomeToast({
 
     try {
       const source = detectLeadSource(searchParams, typeof document !== 'undefined' ? document.referrer : '');
+      const sessionId = typeof window !== 'undefined' ? localStorage.getItem('portfolio_analytics_sid') : null;
+
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -146,6 +172,7 @@ export default function LeadWelcomeToast({
           email: emailInput.trim(),
           reason: selectedCategory?.label || 'General Inquiry',
           source,
+          sessionId,
         }),
       });
 
@@ -156,13 +183,13 @@ export default function LeadWelcomeToast({
 
       setIsSubmitted(true);
       sessionStorage.setItem('lead_toast_dismissed', 'true');
-      
+
       // Auto hide after 4 seconds
       setTimeout(() => {
         setIsVisible(false);
       }, 4000);
     } catch (err: any) {
-      setErrorMsg(err.message || 'Something went wrong. Please try again.');
+      setErrorMsg(err.message || strings.toastSubmitError || 'Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -180,7 +207,9 @@ export default function LeadWelcomeToast({
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-purple-500"></span>
           </span>
           <h4 className="text-xs font-semibold uppercase tracking-wider text-purple-400">
-            {hasUrlName ? `Hello ${urlName}!` : 'Hello there!'}
+            {hasUrlName 
+              ? (strings.toastHelloName ? `${strings.toastHelloName} ${urlName}!` : `Hello ${urlName}!`)
+              : (strings.toastHelloThere || 'Hello there!')}
           </h4>
         </div>
         <button
@@ -198,10 +227,10 @@ export default function LeadWelcomeToast({
             /* STEP 1: Category Selection */
             <div className="space-y-3">
               <p className="text-sm font-medium text-zinc-200">
-                Welcome to my portfolio! What brings you here today?
+                {strings.toastWelcomeMsg || 'Welcome to my portfolio! What brings you here today?'}
               </p>
               <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
-                {categories.map((cat) => (
+                {effectiveCategories.map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => handleSelectCategory(cat)}
@@ -220,7 +249,7 @@ export default function LeadWelcomeToast({
                 onClick={() => setSelectedCategory(null)}
                 className="text-[11px] text-zinc-400 hover:text-purple-400 flex items-center gap-1 transition-colors"
               >
-                ← Change option
+                {strings.toastChangeOption || '← Change option'}
               </button>
 
               <div className="p-3 rounded-xl bg-purple-950/30 border border-purple-800/40 text-purple-200 text-xs leading-relaxed">
@@ -229,14 +258,14 @@ export default function LeadWelcomeToast({
 
               <form onSubmit={handleSubmit} className="space-y-2.5 pt-1">
                 <p className="text-xs text-zinc-300 font-medium">
-                  Just drop your email here, I'll shoot you a mail later:
+                  {strings.toastEmailPrompt || "Just drop your email here, I'll shoot you a mail later:"}
                 </p>
 
                 {!hasUrlName && (
                   <div>
                     <input
                       type="text"
-                      placeholder="Your Name"
+                      placeholder={strings.toastYourName || "Your Name"}
                       value={nameInput}
                       onChange={(e) => setNameInput(e.target.value)}
                       className="w-full px-3 py-2 text-xs rounded-xl bg-zinc-800/90 border border-zinc-700 text-zinc-100 focus:outline-none focus:border-purple-500 transition-colors"
@@ -248,7 +277,7 @@ export default function LeadWelcomeToast({
                 <div>
                   <input
                     type="email"
-                    placeholder="your.email@example.com"
+                    placeholder={strings.toastYourEmail || "your.email@example.com"}
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                     className="w-full px-3 py-2 text-xs rounded-xl bg-zinc-800/90 border border-zinc-700 text-zinc-100 focus:outline-none focus:border-purple-500 transition-colors"
@@ -263,7 +292,7 @@ export default function LeadWelcomeToast({
                   disabled={isSubmitting}
                   className="w-full py-2 px-3 text-xs font-semibold rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-900/30 transition-all disabled:opacity-50"
                 >
-                  {isSubmitting ? 'Sending...' : 'Keep in touch →'}
+                  {isSubmitting ? (strings.toastSending || 'Sending...') : (strings.toastKeepInTouch || 'Keep in touch →')}
                 </button>
               </form>
             </div>
@@ -275,9 +304,9 @@ export default function LeadWelcomeToast({
           <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 text-base">
             ✓
           </div>
-          <h5 className="text-sm font-semibold text-zinc-100">Thank you!</h5>
+          <h5 className="text-sm font-semibold text-zinc-100">{strings.toastThankYou || 'Thank you!'}</h5>
           <p className="text-xs text-zinc-400">
-            Got it! I will send you an email soon. Enjoy exploring!
+            {strings.toastSuccessMsg || 'Got it! I will send you an email soon. Enjoy exploring!'}
           </p>
         </div>
       )}

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { saveLeadSubmission, getLeadSubmissions, findLeadByEmail } from '@/lib/analyticsDb';
 
-
+export const dynamic = 'force-dynamic';
 function getIpAddress(req: NextRequest): string {
   const forwarded = req.headers.get('x-forwarded-for');
   let ip = '';
@@ -45,7 +45,7 @@ async function resolveGeoLocation(rawIp: string, reqHeaders: Headers): Promise<s
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, reason, source } = body;
+    const { name, email, reason, source, sessionId } = body;
 
     if (!email || !email.includes('@')) {
       return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
       created_at: now,
     };
 
-    await saveLeadSubmission(leadRecord);
+    await saveLeadSubmission(leadRecord, sessionId);
 
     const response = NextResponse.json({ success: true, lead: leadRecord, cookieId, cookieExpiry: cookieExpiryIso });
 

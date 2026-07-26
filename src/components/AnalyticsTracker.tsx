@@ -8,7 +8,7 @@ const ONE_HOUR_MS = 60 * 60 * 1000;
 
 function getOrCreateSessionId(): string {
   if (typeof window === 'undefined') return '';
-  
+
   const storedId = localStorage.getItem('portfolio_analytics_sid');
   const storedExp = localStorage.getItem('portfolio_analytics_sid_exp');
   const now = Date.now();
@@ -53,7 +53,7 @@ export default function AnalyticsTracker() {
         headers: { 'Content-Type': 'application/json' },
         body,
         keepalive: true,
-      }).catch(() => {});
+      }).catch(() => { });
     }
   };
 
@@ -72,7 +72,7 @@ export default function AnalyticsTracker() {
     if (currentPathRef.current !== pathname) {
       const duration = Math.round((Date.now() - startTimeRef.current) / 1000);
       const finalScroll = Math.max(maxScrollRef.current, calculateScrollPercentage());
-      
+
       sendTelemetry({
         sessionId,
         type: 'pageview',
@@ -103,7 +103,27 @@ export default function AnalyticsTracker() {
       screenResolution: `${window.screen.width}x${window.screen.height}`,
       language: navigator.language,
     });
+
+    // Auto-create lead submission & 90-day cookie if visitor arrives with both email & name params in URL
+    if (visitorEmail && (visitorName)) {
+      const finalName = visitorName;
+      const hasCookie = typeof document !== 'undefined' && document.cookie.includes('portfolio_lead_cookie=');
+
+      if (!hasCookie) {
+        fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: finalName,
+            email: visitorEmail,
+            reason: `Direct Link (${leadSource})`,
+            source: leadSource,
+          }),
+        }).catch((err) => console.warn('Auto lead capture error:', err));
+      }
+    }
   }, [pathname, searchParams]);
+
 
   const calculateScrollPercentage = (): number => {
     // 1. Try finding custom scrollable container in layout (`.overflow-auto`, `[data-scroll-container]`, `main`)
@@ -166,9 +186,8 @@ export default function AnalyticsTracker() {
         const anchorNode = selection.anchorNode;
         const parentElement = anchorNode?.parentElement;
         const context = parentElement
-          ? `${parentElement.tagName.toLowerCase()}${parentElement.id ? '#' + parentElement.id : ''}${
-              parentElement.className ? '.' + String(parentElement.className).split(' ')[0] : ''
-            }`
+          ? `${parentElement.tagName.toLowerCase()}${parentElement.id ? '#' + parentElement.id : ''}${parentElement.className ? '.' + String(parentElement.className).split(' ')[0] : ''
+          }`
           : 'body';
 
         const sessionId = getOrCreateSessionId();

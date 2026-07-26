@@ -68,20 +68,30 @@ export function detectLeadSource(searchParams: URLSearchParams, referrer?: strin
     const paramLower = urlParam.trim().toLowerCase();
     for (const source of KNOWN_LEAD_SOURCES) {
       if (source.aliases.some((alias) => paramLower.includes(alias))) {
+        if (typeof sessionStorage !== 'undefined') sessionStorage.setItem('portfolio_lead_source', source.name);
         return source.name;
       }
     }
     // Custom URL param fallback
-    return urlParam.charAt(0).toUpperCase() + urlParam.slice(1);
+    const customSource = urlParam.charAt(0).toUpperCase() + urlParam.slice(1);
+    if (typeof sessionStorage !== 'undefined') sessionStorage.setItem('portfolio_lead_source', customSource);
+    return customSource;
   }
 
   if (referrer) {
     const refLower = referrer.trim().toLowerCase();
     for (const source of KNOWN_LEAD_SOURCES) {
       if (source.aliases.some((alias) => refLower.includes(alias))) {
+        if (typeof sessionStorage !== 'undefined') sessionStorage.setItem('portfolio_lead_source', source.name);
         return source.name;
       }
     }
+  }
+
+  // Fallback to previously stored session source if they navigated away from landing page
+  if (typeof sessionStorage !== 'undefined') {
+    const stored = sessionStorage.getItem('portfolio_lead_source');
+    if (stored) return stored;
   }
 
   return 'Direct / Organic';

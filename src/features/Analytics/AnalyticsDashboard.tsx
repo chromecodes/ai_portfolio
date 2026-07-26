@@ -48,6 +48,7 @@ export default function AnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState<'sessions' | 'leads' | 'selections' | 'navigation' | 'devices'>('sessions');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedSession, setSelectedSession] = useState<VisitorSession | null>(null);
+  const [selectedLead, setSelectedLead] = useState<any | null>(null);
   const [isClearing, setIsClearing] = useState<boolean>(false);
 
   const fetchLeads = async () => {
@@ -138,6 +139,8 @@ export default function AnalyticsDashboard() {
       } else if (res.status === 401) {
         setIsAuthenticated(false);
       }
+      // Also refresh leads
+      await fetchLeads();
     } catch (e) {
       console.error('Error fetching analytics:', e);
     } finally {
@@ -444,7 +447,7 @@ export default function AnalyticsDashboard() {
         />
       )}
 
-      {activeTab === 'leads' && <LeadsTab leads={leads} />}
+      {activeTab === 'leads' && <LeadsTab leads={leads} onInspect={(lead) => setSelectedLead(lead)} />}
 
       {activeTab === 'selections' && <WordSelectionsTab events={textSelectionEvents} />}
 
@@ -460,6 +463,17 @@ export default function AnalyticsDashboard() {
           pageviews={data.pageviews.filter((p) => p.session_id === selectedSession.id)}
           events={data.events.filter((e) => e.session_id === selectedSession.id)}
           onClose={() => setSelectedSession(null)}
+        />
+      )}
+
+      {/* Lead Details Drawer / Modal */}
+      {selectedLead && (
+        <LeadDetailModal
+          lead={selectedLead}
+          sessions={data.sessions.filter((s) => s.cookie_id === selectedLead.cookie_id || s.visitor_email === selectedLead.email)}
+          pageviews={data.pageviews}
+          events={data.events}
+          onClose={() => setSelectedLead(null)}
         />
       )}
     </div>
@@ -546,7 +560,7 @@ function TabButton({
 // Tab: Permanent Collected Leads & Emails
 // --------------------------------------------------
 
-function LeadsTab({ leads }: { leads: any[] }) {
+function LeadsTab({ leads, onInspect }: { leads: any[]; onInspect: (lead: any) => void }) {
   if (leads.length === 0) {
     return (
       <div className="p-12 text-center rounded-2xl bg-neutral-900/40 border border-neutral-800 text-neutral-400 flex flex-col items-center gap-3">
@@ -570,6 +584,7 @@ function LeadsTab({ leads }: { leads: any[] }) {
             <th className="px-4 py-3">IP Address</th>
             <th className="px-4 py-3">Lead Source</th>
             <th className="px-4 py-3">Date Submitted</th>
+            <th className="px-4 py-3 text-right">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-800/60">
@@ -596,6 +611,14 @@ function LeadsTab({ leads }: { leads: any[] }) {
               <td className="px-4 py-3 text-neutral-300">{lead.source || 'Direct / Organic'}</td>
               <td className="px-4 py-3 text-neutral-400">
                 {new Date(lead.created_at).toLocaleString()}
+              </td>
+              <td className="px-4 py-3 text-right">
+                <button
+                  onClick={() => onInspect(lead)}
+                  className="px-3 py-1 rounded bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/20 transition text-xs font-medium"
+                >
+                  Inspect
+                </button>
               </td>
             </tr>
           ))}
@@ -997,7 +1020,16 @@ function SessionDetailModal({
             </div>
             <div>
               <span className="text-neutral-400">Language</span>
-              <p className="font-medium text-neutral-200">{session.language}</p>
+              <p className="font-medium text-neutral-200">
+                {(() => {
+                  try {
+                    if (!session.language) return 'Unknown';
+                    return new Intl.DisplayNames(['en'], { type: 'language' }).of(session.language) || session.language;
+                  } catch {
+                    return session.language;
+                  }
+                })()}
+              </p>
             </div>
             <div>
               <span className="text-neutral-400">First Seen</span>
@@ -1028,16 +1060,22 @@ function SessionDetailModal({
             </div>
           </div>
 
-          {/* Text Selections */}
+          {/* Interaction Events */}
           {events.length > 0 && (
             <div>
               <h4 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-3">
-                Selected Words in Session ({events.length})
+                Interaction Events ({events.length})
               </h4>
               <div className="space-y-2">
                 {events.map((e, i) => (
                   <div key={i} className="p-3 rounded-lg bg-purple-950/20 border border-purple-800/40 text-xs">
-                    <p className="font-mono text-purple-200">"{e.selected_text}"</p>
+                    <div className="flex justify-between items-start mb-1">
+                      <span className="font-semibold text-purple-300 capitalize">{e.event_type.replace('_', ' ')}</span>
+                      <span className="text-[10px] text-neutral-500">{new Date(e.created_at).toLocaleTimeString()}</span>
+                    </div>
+                    <p className="font-mono text-purple-200">
+                      {e.event_type === 'text_selection' ? `"${e.selected_text}"` : e.selected_text}
+                    </p>
                     <div className="mt-1 text-[10px] text-neutral-400 flex justify-between">
                       <span>Path: {e.path}</span>
                       <span>Context: {e.selected_context}</span>
@@ -1047,6 +1085,134 @@ function SessionDetailModal({
               </div>
             </div>
           )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --------------------------------------------------
+// Lead Inspector Modal
+// --------------------------------------------------
+
+function LeadDetailModal({
+  lead,
+  sessions,
+  pageviews,
+  events,
+  onClose,
+}: {
+  lead: any;
+  sessions: VisitorSession[];
+  pageviews: PageviewEvent[];
+  events: InteractionEvent[];
+  onClose: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+      <div className="w-full max-w-3xl bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        {/* Modal Header */}
+        <div className="p-4 border-b border-neutral-800 flex items-center justify-between bg-neutral-950/60">
+          <div>
+            <h3 className="text-base font-bold text-emerald-400 flex items-center gap-2">
+              <UserCheck className="w-4 h-4 text-emerald-400" /> Lead: {lead.name || lead.email}
+            </h3>
+            <p className="text-xs text-neutral-400 font-mono mt-0.5">Email: {lead.email}</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="px-3 py-1 text-xs rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700"
+          >
+            Close
+          </button>
+        </div>
+
+        {/* Modal Content */}
+        <div className="p-6 overflow-y-auto space-y-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-xl bg-neutral-950/50 border border-neutral-800 text-xs">
+            <div>
+              <span className="text-neutral-400">Total Sessions</span>
+              <p className="font-medium text-indigo-400">{sessions.length}</p>
+            </div>
+            <div>
+              <span className="text-neutral-400">Reason</span>
+              <p className="font-medium text-neutral-200">{lead.reason}</p>
+            </div>
+            <div>
+              <span className="text-neutral-400">Primary Source</span>
+              <p className="font-medium text-emerald-400">{lead.source || 'Direct'}</p>
+            </div>
+            <div>
+              <span className="text-neutral-400">Location</span>
+              <p className="font-medium text-neutral-200">{lead.location}</p>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider mb-3">
+              Session History
+            </h4>
+            {sessions.length === 0 && (
+              <p className="text-xs text-neutral-500 italic">No tracking sessions found for this lead.</p>
+            )}
+            <div className="space-y-4">
+              {sessions.map((session, i) => {
+                const sessionPageviews = pageviews.filter((p) => p.session_id === session.id);
+                const sessionEvents = events.filter((e) => e.session_id === session.id);
+                
+                return (
+                  <div key={session.id} className="p-4 rounded-lg bg-neutral-950/40 border border-neutral-800">
+                    <div className="flex justify-between items-center mb-3">
+                      <div>
+                        <span className="text-xs font-medium text-neutral-200">Session {sessions.length - i}</span>
+                        <span className="text-[10px] text-neutral-500 ml-2">{new Date(session.started_at).toLocaleString()}</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2 justify-end">
+                         <span className="px-2 py-0.5 rounded bg-neutral-800 text-[10px] text-neutral-400 border border-neutral-700/50">{session.os}</span>
+                         <span className="px-2 py-0.5 rounded bg-neutral-800 text-[10px] text-neutral-400 border border-neutral-700/50">{session.browser}</span>
+                         <span className="px-2 py-0.5 rounded bg-neutral-800 text-[10px] text-neutral-400 border border-neutral-700/50">{session.device_type}</span>
+                         <span className="px-2 py-0.5 rounded bg-neutral-800 text-[10px] text-neutral-400 border border-neutral-700/50" title="Screen Resolution">{session.screen_resolution}</span>
+                         <span className="px-2 py-0.5 rounded bg-neutral-800 text-[10px] text-neutral-400 border border-neutral-700/50" title="Language">
+                           {(() => {
+                             if (!session.language) return 'Unknown';
+                             try {
+                               return new Intl.DisplayNames(['en'], { type: 'language' }).of(session.language) || session.language;
+                             } catch {
+                               return session.language;
+                             }
+                           })()}
+                         </span>
+                         <span className="px-2 py-0.5 rounded bg-neutral-800/50 text-[10px] text-neutral-500 font-mono border border-neutral-800">{session.ip_address}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-1 mt-2">
+                      {sessionPageviews.map((pv, j) => (
+                        <div key={j} className="flex items-center justify-between text-[11px]">
+                          <div className="flex items-center gap-1.5 text-neutral-300">
+                            <ChevronRight className="w-3 h-3 text-indigo-500" />
+                            <span className="font-mono">{pv.path}</span>
+                          </div>
+                          <span className="text-neutral-500">Stay: {pv.stay_duration}s, Scroll: {pv.max_scroll_percentage}%</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {sessionEvents.length > 0 && (
+                      <div className="mt-3 pt-3 border-t border-neutral-800/50 space-y-1">
+                        <span className="text-[10px] text-neutral-500 uppercase">Text Selections ({sessionEvents.length})</span>
+                        {sessionEvents.map((e, j) => (
+                          <div key={j} className="text-[11px] text-purple-300 font-mono italic">
+                            "{e.selected_text}" <span className="text-neutral-500 non-italic text-[10px] ml-1">- {e.path}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </div>

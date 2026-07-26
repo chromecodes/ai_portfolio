@@ -1,17 +1,17 @@
-import fs from 'fs';
-import path from 'path';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-let supabase: ReturnType<typeof createClient> | null = null;
+let supabase: SupabaseClient<any, "public", any> | null = null;
 if (supabaseUrl && supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
   } catch (e) {
-    console.warn('Supabase client initialization fallback:', e);
+    console.warn('Supabase client initialization failed:', e);
   }
+} else {
+  console.error('Supabase URL or Key is missing. Analytics will not be saved.');
 }
 
 export interface VisitorSession {
@@ -34,7 +34,6 @@ export interface VisitorSession {
   last_seen_at: string;
 }
 
-
 export interface PageviewEvent {
   id?: string;
   session_id: string;
@@ -50,144 +49,12 @@ export interface InteractionEvent {
   id?: string;
   session_id: string;
   path: string;
-  event_type: 'text_selection' | 'scroll' | 'click' | 'route_change';
+  event_type: 'text_selection' | 'scroll' | 'click' | 'route_change' | 'language_change';
   selected_text?: string;
   selected_context?: string;
   scroll_depth?: number;
   metadata?: Record<string, any>;
   created_at: string;
-}
-
-interface LocalAnalyticsData {
-  sessions: Record<string, VisitorSession>;
-  pageviews: PageviewEvent[];
-  events: InteractionEvent[];
-}
-
-const LOCAL_DB_PATH = path.join(process.cwd(), '.data', 'analytics.json');
-
-function ensureLocalFile(): LocalAnalyticsData {
-  try {
-    const dir = path.dirname(LOCAL_DB_PATH);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    if (!fs.existsSync(LOCAL_DB_PATH)) {
-      const initial: LocalAnalyticsData = { sessions: {}, pageviews: [], events: [] };
-      fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(initial, null, 2), 'utf-8');
-      return initial;
-    }
-    const content = fs.readFileSync(LOCAL_DB_PATH, 'utf-8');
-    return JSON.parse(content);
-  } catch {
-    return { sessions: {}, pageviews: [], events: [] };
-  }
-}
-
-function writeLocalFile(data: LocalAnalyticsData) {
-  try {
-    const dir = path.dirname(LOCAL_DB_PATH);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
-  } catch (e) {
-    console.error('Failed to write local analytics fallback:', e);
-  }
-}
-
-export async function saveSession(session: VisitorSession): Promise<void> {
-  if (supabase) {
-    try {
-      const { error } = await (supabase as any)
-        .from('analytics_sessions')
-        .upsert(session, { onConflict: 'id' });
-      if (!error) return;
-      console.warn('Supabase upsert session error, using fallback:', error.message);
-    } catch (err) {
-      console.warn('Supabase exception, using fallback:', err);
-    }
-  }
-
-  // Local fallback
-  const db = ensureLocalFile();
-  db.sessions[session.id] = {
-    ...db.sessions[session.id],
-    ...session,
-    last_seen_at: new Date().toISOString(),
-  };
-  writeLocalFile(db);
-}
-
-export async function savePageview(pageview: PageviewEvent): Promise<void> {
-  if (supabase) {
-    try {
-      const { error } = await (supabase as any).from('analytics_pageviews').insert([pageview]);
-      if (!error) return;
-      console.warn('Supabase insert pageview error, using fallback:', error.message);
-    } catch (err) {
-      console.warn('Supabase pageview exception:', err);
-    }
-  }
-
-  // Local fallback
-  const db = ensureLocalFile();
-  db.pageviews.unshift(pageview);
-  // Cap at last 2000 pageviews
-  if (db.pageviews.length > 2000) db.pageviews = db.pageviews.slice(0, 2000);
-  writeLocalFile(db);
-}
-
-export async function saveEvent(event: InteractionEvent): Promise<void> {
-  if (supabase) {
-    try {
-      const { error } = await (supabase as any).from('analytics_events').insert([event]);
-      if (!error) return;
-      console.warn('Supabase insert event error, using fallback:', error.message);
-    } catch (err) {
-      console.warn('Supabase event exception:', err);
-    }
-  }
-
-  // Local fallback
-  const db = ensureLocalFile();
-  db.events.unshift(event);
-  if (db.events.length > 5000) db.events = db.events.slice(0, 5000);
-  writeLocalFile(db);
-}
-
-export async function getAnalyticsData() {
-  if (supabase) {
-    try {
-      const [sessionsRes, pageviewsRes, eventsRes] = await Promise.all([
-        (supabase as any).from('analytics_sessions').select('*').order('last_seen_at', { ascending: false }).limit(100),
-        (supabase as any).from('analytics_pageviews').select('*').order('created_at', { ascending: false }).limit(300),
-        (supabase as any).from('analytics_events').select('*').order('created_at', { ascending: false }).limit(500),
-      ]);
-
-      if (!sessionsRes.error && !pageviewsRes.error && !eventsRes.error) {
-        return {
-          sessions: sessionsRes.data || [],
-          pageviews: pageviewsRes.data || [],
-          events: eventsRes.data || [],
-        };
-      }
-    } catch (err) {
-      console.warn('Error querying Supabase analytics data, using fallback:', err);
-    }
-  }
-
-  // Fallback
-  const db = ensureLocalFile();
-  const sessionList = Object.values(db.sessions).sort(
-    (a, b) => new Date(b.last_seen_at).getTime() - new Date(a.last_seen_at).getTime()
-  );
-
-  return {
-    sessions: sessionList,
-    pageviews: db.pageviews,
-    events: db.events,
-  };
 }
 
 export interface LeadSubmission {
@@ -203,119 +70,134 @@ export interface LeadSubmission {
   created_at: string;
 }
 
+export async function saveSession(session: VisitorSession): Promise<void> {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase.from('analytics_sessions').upsert([session], { onConflict: 'id' });
+    if (error) console.error('Supabase saveSession error:', error.message);
+  } catch (err) {
+    console.error('Supabase saveSession exception:', err);
+  }
+}
+
+export async function savePageview(pageview: PageviewEvent): Promise<void> {
+  if (!supabase) return;
+  if (!pageview.id) {
+    pageview.id = 'pv_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+  }
+  try {
+    const { error } = await supabase.from('analytics_pageviews').insert([pageview]);
+    if (error) console.error('Supabase savePageview error:', error.message);
+  } catch (err) {
+    console.error('Supabase savePageview exception:', err);
+  }
+}
+
+export async function saveEvent(event: InteractionEvent): Promise<void> {
+  if (!supabase) return;
+  if (!event.id) {
+    event.id = 'evt_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+  }
+  try {
+    const { error } = await supabase.from('analytics_events').insert([event]);
+    if (error) console.error('Supabase saveEvent error:', error.message);
+  } catch (err) {
+    console.error('Supabase saveEvent exception:', err);
+  }
+}
+
+export async function getAnalyticsData() {
+  if (!supabase) return { sessions: [], pageviews: [], events: [] };
+  try {
+    const [sessionsRes, pageviewsRes, eventsRes] = await Promise.all([
+      supabase.from('analytics_sessions').select('*').order('last_seen_at', { ascending: false }).limit(100),
+      supabase.from('analytics_pageviews').select('*').order('created_at', { ascending: false }).limit(300),
+      supabase.from('analytics_events').select('*').order('created_at', { ascending: false }).limit(500),
+    ]);
+
+    return {
+      sessions: sessionsRes.data || [],
+      pageviews: pageviewsRes.data || [],
+      events: eventsRes.data || [],
+    };
+  } catch (err) {
+    console.error('Error querying Supabase analytics data:', err);
+    return { sessions: [], pageviews: [], events: [] };
+  }
+}
+
 export async function findLeadByEmail(email: string): Promise<LeadSubmission | null> {
+  if (!supabase) return null;
   const normalizedEmail = email.trim().toLowerCase();
-  if (supabase) {
-    try {
-      const { data, error } = await (supabase as any)
-        .from('lead_submissions')
-        .select('*')
-        .eq('email', normalizedEmail)
-        .limit(1);
-
-      if (!error && data && data.length > 0) {
-        return data[0];
-      }
-    } catch (e) {
-      console.warn('Supabase findLeadByEmail fallback:', e);
-    }
-  }
-
-  const emails = ensureEmailsFile();
-  const found = emails.find((e) => e.email.toLowerCase() === normalizedEmail);
-  return found || null;
-}
-
-
-const EMAILS_DB_PATH = path.join(process.cwd(), '.data', 'emails.json');
-
-function ensureEmailsFile(): LeadSubmission[] {
   try {
-    const dir = path.dirname(EMAILS_DB_PATH);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    if (!fs.existsSync(EMAILS_DB_PATH)) {
-      fs.writeFileSync(EMAILS_DB_PATH, JSON.stringify([], null, 2), 'utf-8');
-      return [];
-    }
-    const content = fs.readFileSync(EMAILS_DB_PATH, 'utf-8');
-    return JSON.parse(content);
-  } catch {
-    return [];
-  }
-}
+    const { data, error } = await supabase
+      .from('lead_submissions')
+      .select('*')
+      .eq('email', normalizedEmail)
+      .limit(1);
 
-function writeEmailsFile(emails: LeadSubmission[]) {
-  try {
-    const dir = path.dirname(EMAILS_DB_PATH);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    if (!error && data && data.length > 0) {
+      return data[0];
     }
-    fs.writeFileSync(EMAILS_DB_PATH, JSON.stringify(emails, null, 2), 'utf-8');
   } catch (e) {
-    console.error('Failed to write emails local file:', e);
+    console.error('Supabase findLeadByEmail exception:', e);
   }
+  return null;
 }
 
-export async function saveLeadSubmission(lead: LeadSubmission): Promise<void> {
-  if (supabase) {
-    try {
-      const { error } = await (supabase as any)
-        .from('lead_submissions')
-        .upsert([lead], { onConflict: 'id' });
-      if (!error) return;
-      console.warn('Supabase upsert lead error, using local fallback:', error.message);
-    } catch (err) {
-      console.warn('Supabase lead exception:', err);
+export async function saveLeadSubmission(lead: LeadSubmission, sessionId?: string): Promise<void> {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase
+      .from('lead_submissions')
+      .upsert([lead], { onConflict: 'email' });
+    if (error) console.error('Supabase saveLeadSubmission error:', error.message);
+
+    if (sessionId && lead.cookie_id) {
+      // If we have the exact session ID from the browser, update it directly
+      await supabase
+        .from('analytics_sessions')
+        .update({ visitor_name: lead.name, visitor_email: lead.email, cookie_id: lead.cookie_id })
+        .eq('id', sessionId);
+    } else if (lead.cookie_id) {
+      // Fallback: Retroactively attach this identity to any anonymous sessions sharing this cookie
+      const { error: sessionUpdateError } = await supabase
+        .from('analytics_sessions')
+        .update({ visitor_name: lead.name, visitor_email: lead.email })
+        .eq('cookie_id', lead.cookie_id);
+      if (sessionUpdateError) console.error('Failed to retroactively attach lead to session:', sessionUpdateError.message);
     }
+  } catch (err) {
+    console.error('Supabase saveLeadSubmission exception:', err);
   }
-
-  // Permanent local fallback (never cleared by clearAnalyticsData)
-  const emails = ensureEmailsFile();
-  const index = emails.findIndex((e) => e.id === lead.id || e.email.toLowerCase() === lead.email.toLowerCase());
-  if (index >= 0) {
-    emails[index] = { ...emails[index], ...lead };
-  } else {
-    emails.unshift(lead);
-  }
-  writeEmailsFile(emails);
 }
-
 
 export async function getLeadSubmissions(): Promise<LeadSubmission[]> {
-  if (supabase) {
-    try {
-      const { data, error } = await (supabase as any)
-        .from('lead_submissions')
-        .select('*')
-        .order('created_at', { ascending: false });
+  if (!supabase) return [];
+  try {
+    const { data, error } = await supabase
+      .from('lead_submissions')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-      if (!error && data) {
-        return data;
-      }
-    } catch (err) {
-      console.warn('Error querying Supabase leads, using local fallback:', err);
+    if (!error && data) {
+      return data;
     }
+  } catch (err) {
+    console.error('Error querying Supabase leads:', err);
   }
-
-  const emails = ensureEmailsFile();
-  return emails.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  return [];
 }
 
 export async function clearAnalyticsData() {
-  if (supabase) {
-    try {
-      await Promise.all([
-        (supabase as any).from('analytics_events').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
-        (supabase as any).from('analytics_pageviews').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
-        (supabase as any).from('analytics_sessions').delete().neq('id', '0'),
-      ]);
-    } catch (e) {
-      console.warn('Supabase clear failed:', e);
-    }
+  if (!supabase) return;
+  try {
+    await Promise.all([
+      supabase.from('analytics_events').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
+      supabase.from('analytics_pageviews').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
+      supabase.from('analytics_sessions').delete().neq('id', '0'),
+    ]);
+  } catch (e) {
+    console.error('Supabase clearAnalyticsData failed:', e);
   }
-
-  writeLocalFile({ sessions: {}, pageviews: [], events: [] });
 }
-

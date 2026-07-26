@@ -205,6 +205,15 @@ export async function POST(req: NextRequest) {
         selected_context: selectedContext || 'Tab Hidden',
         created_at: now,
       });
+    } else if (type === 'language_change') {
+      await saveEvent({
+        session_id: sessionId,
+        path: routePath || '/',
+        event_type: 'language_change',
+        selected_text: selectedText || 'Unknown Language',
+        selected_context: 'Language Switcher',
+        created_at: now,
+      });
     }
 
 

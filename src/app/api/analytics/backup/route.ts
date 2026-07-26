@@ -9,10 +9,18 @@ export async function GET(req: NextRequest) {
 
   try {
     const data = await getAnalyticsData();
+    const { getLeadSubmissions } = await import('@/lib/analyticsDb');
+    const leads = await getLeadSubmissions();
+    
+    const exportData = {
+      ...data,
+      leads
+    };
+
     const dateStr = new Date().toISOString().split('T')[0];
     const filename = `portfolio_analytics_backup_${dateStr}.json`;
 
-    return new NextResponse(JSON.stringify(data, null, 2), {
+    return new NextResponse(JSON.stringify(exportData, null, 2), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
