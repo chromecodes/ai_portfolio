@@ -39,25 +39,18 @@ export default function AnalyticsTracker() {
     return match ? decodeURIComponent(match[1]) : undefined;
   };
 
-  // Send payload non-blockingly using sendBeacon or keepalive fetch
+  // Send payload non-blockingly using keepalive fetch
   const sendTelemetry = (payload: Record<string, any>) => {
     if (typeof window === 'undefined') return;
     const cookieId = getLeadCookieId();
     const body = JSON.stringify({ ...payload, cookieId });
-    if (navigator.sendBeacon) {
-      const blob = new Blob([body], { type: 'application/json' });
-      navigator.sendBeacon('/api/analytics/track', blob);
-    } else {
-      fetch('/api/analytics/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body,
-        keepalive: true,
-      }).catch(() => { });
-    }
+    fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      keepalive: true,
+    }).catch(() => { });
   };
-
-
 
   // 1. Route Change & Pageview tracking (Batched on exit/route switch to save Vercel requests)
   useEffect(() => {
