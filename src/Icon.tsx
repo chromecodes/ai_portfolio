@@ -4,6 +4,7 @@ import {
     Moon,
     Sun,
     ExternalLink,
+    FileDown,
 } from "lucide-react";
 
 import {
@@ -25,4 +26,5 @@ export const Icons = {
     graduationCap: FaGraduationCap,
     formspree: SiFormspree,
     terminal: FaTerminal,
+    fileDown: FileDown,
 };

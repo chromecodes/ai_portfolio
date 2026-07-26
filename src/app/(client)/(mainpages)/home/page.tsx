@@ -1,11 +1,13 @@
 "use client";
 import PulseBackground from "@/features/Home/PulseBackground";
+import FloatingResumeButton from "@/features/Home/FloatingResumeButton";
 import useLanguageStore from "@/utils/i18n/useLanguageStore";
 
 export default function HomePage() {
     const strings = useLanguageStore((state) => state.strings as Record<string, string>);
     return (
-        <main className="flex flex-1 justify-center">
+        <main className="flex flex-1 justify-center relative">
+            <FloatingResumeButton />
             <section className="relative w-full flex items-center justify-center p-6">
                 {/* Pulse Background */}
                 <PulseBackground />
@@ -21,6 +23,5 @@ export default function HomePage() {
                 </div>
             </section>
         </main>
-
     );
 }
