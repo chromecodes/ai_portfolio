@@ -136,15 +136,35 @@ export async function saveEvent(event: InteractionEvent): Promise<void> {
   }
 }
 
-export async function getAnalyticsData() {
+export async function getAnalyticsData(): Promise<{
+  sessions: VisitorSession[];
+  pageviews: PageviewEvent[];
+  events: InteractionEvent[];
+  error?: string;
+}> {
   const supabase = getSupabaseClient();
-  if (!supabase) return { sessions: [], pageviews: [], events: [] };
+  if (!supabase) {
+    return {
+      sessions: [],
+      pageviews: [],
+      events: [],
+      error:
+        'Database connection not initialized. Verify that SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set in Vercel Environment Variables.',
+    };
+  }
+
   try {
     const [sessionsRes, pageviewsRes, eventsRes] = await Promise.all([
       supabase.from('analytics_sessions').select('*').order('last_seen_at', { ascending: false }).limit(100),
       supabase.from('analytics_pageviews').select('*').order('created_at', { ascending: false }).limit(300),
       supabase.from('analytics_events').select('*').order('created_at', { ascending: false }).limit(500),
     ]);
+
+    const errorMsg =
+      sessionsRes.error?.message ||
+      pageviewsRes.error?.message ||
+      eventsRes.error?.message ||
+      undefined;
 
     if (sessionsRes.error) {
       console.error('[Supabase getAnalyticsData sessions error]:', sessionsRes.error.message);
@@ -160,12 +180,19 @@ export async function getAnalyticsData() {
       sessions: sessionsRes.data || [],
       pageviews: pageviewsRes.data || [],
       events: eventsRes.data || [],
+      error: errorMsg,
     };
-  } catch (err) {
+  } catch (err: any) {
     console.error('[Supabase getAnalyticsData exception]:', err);
-    return { sessions: [], pageviews: [], events: [] };
+    return {
+      sessions: [],
+      pageviews: [],
+      events: [],
+      error: err.message || 'Failed to query analytics data from database.',
+    };
   }
 }
+
 
 export async function findLeadByEmail(email: string): Promise<LeadSubmission | null> {
   const supabase = getSupabaseClient();

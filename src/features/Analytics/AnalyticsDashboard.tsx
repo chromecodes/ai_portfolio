@@ -50,6 +50,25 @@ export default function AnalyticsDashboard() {
   const [selectedSession, setSelectedSession] = useState<VisitorSession | null>(null);
   const [selectedLead, setSelectedLead] = useState<any | null>(null);
   const [isClearing, setIsClearing] = useState<boolean>(false);
+  const [dbError, setDbError] = useState<string>('');
+
+  const getStoredToken = (): string => {
+    if (typeof window === 'undefined') return '';
+    try {
+      return (
+        sessionStorage.getItem('portfolio_analytics_token') ||
+        localStorage.getItem('portfolio_analytics_token') ||
+        ''
+      );
+    } catch {
+      return '';
+    }
+  };
+
+  const getAuthHeaders = (): Record<string, string> => {
+    const token = getStoredToken();
+    return token ? { 'x-analytics-auth': token } : {};
+  };
 
   const fetchLeads = async () => {
     try {
@@ -72,7 +91,10 @@ export default function AnalyticsDashboard() {
 
   const checkAuthStatus = async () => {
     try {
-      const res = await fetch('/api/analytics/auth', { cache: 'no-store' });
+      const res = await fetch('/api/analytics/auth', {
+        cache: 'no-store',
+        headers: getAuthHeaders(),
+      });
       if (res.ok) {
         const json = await res.json();
         setIsAuthenticated(json.authenticated);
@@ -89,7 +111,8 @@ export default function AnalyticsDashboard() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!passcode.trim()) return;
+    const cleanInput = passcode.trim();
+    if (!cleanInput) return;
     setIsAuthenticating(true);
     setAuthError('');
 
@@ -97,10 +120,17 @@ export default function AnalyticsDashboard() {
       const res = await fetch('/api/analytics/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: passcode }),
+        body: JSON.stringify({ password: cleanInput }),
       });
 
       if (res.ok) {
+        const json = await res.json();
+        const token = json.token || cleanInput;
+        try {
+          sessionStorage.setItem('portfolio_analytics_token', token);
+          localStorage.setItem('portfolio_analytics_token', token);
+        } catch {}
+
         setIsAuthenticated(true);
         setPasscode('');
         fetchAnalytics();
@@ -117,7 +147,15 @@ export default function AnalyticsDashboard() {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/analytics/auth', { method: 'DELETE' });
+      try {
+        sessionStorage.removeItem('portfolio_analytics_token');
+        localStorage.removeItem('portfolio_analytics_token');
+      } catch {}
+
+      await fetch('/api/analytics/auth', {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
       setIsAuthenticated(false);
       setData({ sessions: [], pageviews: [], events: [] });
     } catch (e) {
@@ -128,9 +166,17 @@ export default function AnalyticsDashboard() {
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/analytics/data', { cache: 'no-store' });
+      const res = await fetch('/api/analytics/data', {
+        cache: 'no-store',
+        headers: getAuthHeaders(),
+      });
       if (res.ok) {
         const json = await res.json();
+        if (json.error) {
+          setDbError(json.error);
+        } else {
+          setDbError('');
+        }
         setData({
           sessions: json.sessions || [],
           pageviews: json.pageviews || [],
@@ -158,15 +204,21 @@ export default function AnalyticsDashboard() {
     return () => clearInterval(interval);
   }, [isAuthenticated]);
 
+
   const handleBackup = () => {
-    window.open('/api/analytics/backup', '_blank');
+    const token = getStoredToken();
+    const url = token ? `/api/analytics/backup?token=${encodeURIComponent(token)}` : '/api/analytics/backup';
+    window.open(url, '_blank');
   };
 
   const handleClearData = async () => {
     if (!confirm('Are you sure you want to clear all recorded analytics logs?')) return;
     setIsClearing(true);
     try {
-      await fetch('/api/analytics/data', { method: 'DELETE' });
+      await fetch('/api/analytics/data', {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
       await fetchAnalytics();
     } catch (e) {
       console.error(e);
@@ -174,6 +226,7 @@ export default function AnalyticsDashboard() {
       setIsClearing(false);
     }
   };
+
 
   // Aggregated Stats (Calculated at top level before early returns)
   const totalVisitors = data.sessions.length;
@@ -339,7 +392,18 @@ export default function AnalyticsDashboard() {
         </div>
       </div>
 
+      {dbError && (
+        <div className="w-full p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex items-start gap-3">
+          <ShieldAlert className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+          <div className="flex flex-col gap-1">
+            <span className="font-semibold text-red-200">Database Connection Notice</span>
+            <span>{dbError}</span>
+          </div>
+        </div>
+      )}
+
       {/* Overview Stat Cards */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <StatCard
           title="Total Visitors"

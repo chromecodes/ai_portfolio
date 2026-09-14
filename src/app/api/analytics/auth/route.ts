@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminPassword, verifyAuth } from '@/lib/analyticsAuth';
+import { getAdminPassword, verifyAuth, cleanPassword } from '@/lib/analyticsAuth';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,12 +11,17 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { password } = await req.json();
+    const body = await req.json();
+    const password = cleanPassword(body.password);
     const adminPassword = getAdminPassword();
 
-    if (password === adminPassword) {
-      const response = NextResponse.json({ success: true, message: 'Authenticated successfully' });
-      
+    if (password && password === adminPassword) {
+      const response = NextResponse.json({
+        success: true,
+        message: 'Authenticated successfully',
+        token: adminPassword,
+      });
+
       // Set secure HTTP-only cookie valid for 7 days
       response.cookies.set('analytics_auth', adminPassword, {
         httpOnly: true,
@@ -34,6 +39,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message || 'Authentication error' }, { status: 500 });
   }
 }
+
 
 export async function DELETE() {
   const response = NextResponse.json({ success: true, message: 'Logged out' });
