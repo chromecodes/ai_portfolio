@@ -1,11 +1,15 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
+function sanitizeEnv(val?: string | null): string {
+  if (!val) return '';
+  return val.trim().replace(/^["']|["']$/g, '').trim();
+}
 
 export const createClient = (request: NextRequest) => {
+  const supabaseUrl = sanitizeEnv(process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL).replace(/\/+$/, '');
+  const supabaseKey = sanitizeEnv(process.env.SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+
   // Create an unmodified response
   let supabaseResponse = NextResponse.next({
     request: {
@@ -16,6 +20,7 @@ export const createClient = (request: NextRequest) => {
   const supabase = createServerClient(
     supabaseUrl!,
     supabaseKey!,
+
     {
       cookies: {
         getAll() {
