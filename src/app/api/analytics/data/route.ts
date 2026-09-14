@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAnalyticsData, clearAnalyticsData } from '@/lib/analyticsDb';
 import { verifyAuth } from '@/lib/analyticsAuth';
 
+export const dynamic = 'force-dynamic';
+
+
 export async function GET(req: NextRequest) {
   if (!verifyAuth(req)) {
     return NextResponse.json({ error: 'Unauthorized access to analytics data' }, { status: 401 });

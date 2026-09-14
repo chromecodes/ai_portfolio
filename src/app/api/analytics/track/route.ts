@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { saveSession, savePageview, saveEvent, VisitorSession } from '@/lib/analyticsDb';
 
+export const dynamic = 'force-dynamic';
+
 function getIpAddress(req: NextRequest): string {
   const forwarded = req.headers.get('x-forwarded-for');
   let ip = '';
@@ -41,24 +43,33 @@ function parseUserAgent(uaString: string) {
 async function resolveGeoLocation(rawIp: string, reqHeaders: Headers) {
   // 1. Check production CDN headers (Vercel, Cloudflare, Fastly, AWS)
   const headerCountry = reqHeaders.get('x-vercel-ip-country') || reqHeaders.get('cf-ipcountry');
-  const headerCity = reqHeaders.get('x-vercel-ip-city') || reqHeaders.get('cf-ipcity');
+  const rawCity = reqHeaders.get('x-vercel-ip-city') || reqHeaders.get('cf-ipcity');
   const headerRegion = reqHeaders.get('x-vercel-ip-country-region');
 
-  if (headerCountry && headerCity) {
+  let decodedCity: string | null = null;
+  if (rawCity) {
+    try {
+      decodedCity = decodeURIComponent(rawCity);
+    } catch {
+      decodedCity = rawCity;
+    }
+  }
+
+  if (headerCountry) {
     return {
       country: headerCountry,
-      city: headerCity,
+      city: decodedCity || headerRegion || 'Unknown',
       region: headerRegion || 'Standard',
     };
   }
 
-  // 2. Fetch IP Geolocation from ip-api.com API
+  // 2. Fetch IP Geolocation from ip-api.com API (only if not on CDN)
   try {
     const isLocal = rawIp.includes('Localhost') || rawIp === '127.0.0.1' || rawIp === '::1';
     // For local dev, calling http://ip-api.com/json/ queries the machine's external public IP
     const url = isLocal ? 'http://ip-api.com/json/' : `http://ip-api.com/json/${rawIp}`;
     
-    const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(url, { signal: AbortSignal.timeout(2000) });
     if (res.ok) {
       const geo = await res.json();
       if (geo.status === 'success') {
@@ -79,6 +90,7 @@ async function resolveGeoLocation(rawIp: string, reqHeaders: Headers) {
     region: 'Local',
   };
 }
+
 
 export async function POST(req: NextRequest) {
   try {

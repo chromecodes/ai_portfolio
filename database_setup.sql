@@ -89,14 +89,15 @@ ALTER TABLE analytics_pageviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analytics_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE lead_submissions ENABLE ROW LEVEL SECURITY;
 
--- Allow anonymous inserts (Upsert is basically an insert/update in this context, so we allow update too for sessions)
+-- Allow anonymous inserts and updates (Upsert requires both INSERT and UPDATE with WITH CHECK)
 CREATE POLICY "Allow anonymous inserts for sessions" ON analytics_sessions FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "Allow anonymous updates for sessions" ON analytics_sessions FOR UPDATE TO anon USING (true);
+CREATE POLICY "Allow anonymous updates for sessions" ON analytics_sessions FOR UPDATE TO anon USING (true) WITH CHECK (true);
 
 CREATE POLICY "Allow anonymous inserts for pageviews" ON analytics_pageviews FOR INSERT TO anon WITH CHECK (true);
 CREATE POLICY "Allow anonymous inserts for events" ON analytics_events FOR INSERT TO anon WITH CHECK (true);
 
 CREATE POLICY "Allow anonymous inserts for leads" ON lead_submissions FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "Allow anonymous updates for leads" ON lead_submissions FOR UPDATE TO anon USING (true);
+CREATE POLICY "Allow anonymous updates for leads" ON lead_submissions FOR UPDATE TO anon USING (true) WITH CHECK (true);
+
 
 -- Setup Complete!

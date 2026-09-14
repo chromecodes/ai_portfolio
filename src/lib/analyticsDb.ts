@@ -1,18 +1,39 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.SUPABASE_URL || '';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || '';
+export function getSupabaseClient(): SupabaseClient<any, "public", any> | null {
+  const supabaseUrl =
+    process.env.SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    '';
 
-let supabase: SupabaseClient<any, "public", any> | null = null;
-if (supabaseUrl && supabaseKey) {
-  try {
-    supabase = createClient(supabaseUrl, supabaseKey);
-  } catch (e) {
-    console.warn('Supabase client initialization failed:', e);
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY ||
+    process.env.SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    '';
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error(
+      '[Supabase Analytics] Missing database credentials on runtime. Ensure SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set in Vercel Environment Variables.'
+    );
+    return null;
   }
-} else {
-  console.error('Supabase URL or Key is missing. Analytics will not be saved.');
+
+  try {
+    return createClient(supabaseUrl, supabaseKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  } catch (e) {
+    console.error('[Supabase Analytics] Client initialization failed:', e);
+    return null;
+  }
 }
+
 
 export interface VisitorSession {
   id: string;
@@ -71,42 +92,52 @@ export interface LeadSubmission {
 }
 
 export async function saveSession(session: VisitorSession): Promise<void> {
+  const supabase = getSupabaseClient();
   if (!supabase) return;
   try {
     const { error } = await supabase.from('analytics_sessions').upsert([session], { onConflict: 'id' });
-    if (error) console.error('Supabase saveSession error:', error.message);
+    if (error) {
+      console.error('[Supabase saveSession error]:', error.message, error.details || '');
+    }
   } catch (err) {
-    console.error('Supabase saveSession exception:', err);
+    console.error('[Supabase saveSession exception]:', err);
   }
 }
 
 export async function savePageview(pageview: PageviewEvent): Promise<void> {
+  const supabase = getSupabaseClient();
   if (!supabase) return;
   if (!pageview.id) {
     pageview.id = 'pv_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
   }
   try {
     const { error } = await supabase.from('analytics_pageviews').insert([pageview]);
-    if (error) console.error('Supabase savePageview error:', error.message);
+    if (error) {
+      console.error('[Supabase savePageview error]:', error.message, error.details || '');
+    }
   } catch (err) {
-    console.error('Supabase savePageview exception:', err);
+    console.error('[Supabase savePageview exception]:', err);
   }
 }
 
 export async function saveEvent(event: InteractionEvent): Promise<void> {
+  const supabase = getSupabaseClient();
   if (!supabase) return;
   if (!event.id) {
     event.id = 'evt_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
   }
   try {
     const { error } = await supabase.from('analytics_events').insert([event]);
-    if (error) console.error('Supabase saveEvent error:', error.message);
+    if (error) {
+      console.error('[Supabase saveEvent error]:', error.message, error.details || '');
+    }
   } catch (err) {
-    console.error('Supabase saveEvent exception:', err);
+    console.error('[Supabase saveEvent exception]:', err);
   }
 }
 
 export async function getAnalyticsData() {
+  const supabase = getSupabaseClient();
   if (!supabase) return { sessions: [], pageviews: [], events: [] };
   try {
     const [sessionsRes, pageviewsRes, eventsRes] = await Promise.all([
@@ -115,18 +146,29 @@ export async function getAnalyticsData() {
       supabase.from('analytics_events').select('*').order('created_at', { ascending: false }).limit(500),
     ]);
 
+    if (sessionsRes.error) {
+      console.error('[Supabase getAnalyticsData sessions error]:', sessionsRes.error.message);
+    }
+    if (pageviewsRes.error) {
+      console.error('[Supabase getAnalyticsData pageviews error]:', pageviewsRes.error.message);
+    }
+    if (eventsRes.error) {
+      console.error('[Supabase getAnalyticsData events error]:', eventsRes.error.message);
+    }
+
     return {
       sessions: sessionsRes.data || [],
       pageviews: pageviewsRes.data || [],
       events: eventsRes.data || [],
     };
   } catch (err) {
-    console.error('Error querying Supabase analytics data:', err);
+    console.error('[Supabase getAnalyticsData exception]:', err);
     return { sessions: [], pageviews: [], events: [] };
   }
 }
 
 export async function findLeadByEmail(email: string): Promise<LeadSubmission | null> {
+  const supabase = getSupabaseClient();
   if (!supabase) return null;
   const normalizedEmail = email.trim().toLowerCase();
   try {
@@ -136,22 +178,29 @@ export async function findLeadByEmail(email: string): Promise<LeadSubmission | n
       .eq('email', normalizedEmail)
       .limit(1);
 
+    if (error) {
+      console.error('[Supabase findLeadByEmail error]:', error.message);
+    }
+
     if (!error && data && data.length > 0) {
       return data[0];
     }
   } catch (e) {
-    console.error('Supabase findLeadByEmail exception:', e);
+    console.error('[Supabase findLeadByEmail exception]:', e);
   }
   return null;
 }
 
 export async function saveLeadSubmission(lead: LeadSubmission, sessionId?: string): Promise<void> {
+  const supabase = getSupabaseClient();
   if (!supabase) return;
   try {
     const { error } = await supabase
       .from('lead_submissions')
       .upsert([lead], { onConflict: 'email' });
-    if (error) console.error('Supabase saveLeadSubmission error:', error.message);
+    if (error) {
+      console.error('[Supabase saveLeadSubmission error]:', error.message);
+    }
 
     if (sessionId && lead.cookie_id) {
       // If we have the exact session ID from the browser, update it directly
@@ -165,14 +214,17 @@ export async function saveLeadSubmission(lead: LeadSubmission, sessionId?: strin
         .from('analytics_sessions')
         .update({ visitor_name: lead.name, visitor_email: lead.email })
         .eq('cookie_id', lead.cookie_id);
-      if (sessionUpdateError) console.error('Failed to retroactively attach lead to session:', sessionUpdateError.message);
+      if (sessionUpdateError) {
+        console.error('[Supabase saveLeadSubmission session update error]:', sessionUpdateError.message);
+      }
     }
   } catch (err) {
-    console.error('Supabase saveLeadSubmission exception:', err);
+    console.error('[Supabase saveLeadSubmission exception]:', err);
   }
 }
 
 export async function getLeadSubmissions(): Promise<LeadSubmission[]> {
+  const supabase = getSupabaseClient();
   if (!supabase) return [];
   try {
     const { data, error } = await supabase
@@ -180,16 +232,21 @@ export async function getLeadSubmissions(): Promise<LeadSubmission[]> {
       .select('*')
       .order('created_at', { ascending: false });
 
+    if (error) {
+      console.error('[Supabase getLeadSubmissions error]:', error.message);
+    }
+
     if (!error && data) {
       return data;
     }
   } catch (err) {
-    console.error('Error querying Supabase leads:', err);
+    console.error('[Supabase getLeadSubmissions exception]:', err);
   }
   return [];
 }
 
 export async function clearAnalyticsData() {
+  const supabase = getSupabaseClient();
   if (!supabase) return;
   try {
     await Promise.all([
@@ -198,6 +255,7 @@ export async function clearAnalyticsData() {
       supabase.from('analytics_sessions').delete().neq('id', '0'),
     ]);
   } catch (e) {
-    console.error('Supabase clearAnalyticsData failed:', e);
+    console.error('[Supabase clearAnalyticsData failed]:', e);
   }
 }
+
