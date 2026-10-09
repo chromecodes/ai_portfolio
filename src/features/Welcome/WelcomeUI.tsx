@@ -1,8 +1,15 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import dynamic from "next/dynamic";
+import {
+    motion,
+    useScroll,
+    useTransform,
+    useMotionValue,
+    useSpring,
+    useMotionTemplate,
+    useReducedMotion,
+} from "framer-motion";
 import Link from "next/link";
 import {
     Briefcase,
@@ -19,14 +26,11 @@ import useLanguageStore from "@/utils/i18n/useLanguageStore";
 import { getProjectsData } from "@/data/projectsData";
 import { getCareerGraphData } from "@/features/Career/Graph/data/careerData";
 import { Project } from "@/types/project";
-import TiltCard from "./TiltCard";
+import SpotlightCard from "./SpotlightCard";
 import MagneticButton from "./MagneticButton";
 import Marquee from "./Marquee";
 import CountUp from "./CountUp";
 import "./welcome.css";
-
-// Full-page cinematic 3D world — fixed viewport-filling canvas behind the content
-const PageScene = dynamic(() => import("./PageScene"), { ssr: false, loading: () => null });
 
 // Theme styles for featured project tiles (mirrors ProjectTileHeader)
 const projectThemeStyles: Record<Project["themeColor"], { glow: string; iconBg: string }> = {
@@ -84,8 +88,7 @@ export default function WelcomeUI() {
     const projects = getProjectsData(lang);
     const featuredProjects = projects.slice(0, FEATURED_COUNT);
 
-    const careerNodes = getCareerGraphData(lang);
-    const totalMonths = careerNodes
+    const totalMonths = getCareerGraphData(lang)
         .filter((n) => n.id !== "future")
         .reduce((sum, n) => sum + (n.time_period || 0), 0);
     const years = Math.max(1, Math.round(totalMonths / 12));
@@ -107,7 +110,7 @@ export default function WelcomeUI() {
         { id: "future", href: "/future", icon: Telescope, titleKey: "future", descKey: "welcomeFutureDesc" },
     ];
 
-    // --- Scroll-driven parallax (main is the scroll container; drives the 3D dolly too) ---
+    // --- Scroll-driven parallax (main is the scroll container) ---
     const { scrollYProgress } = useScroll({
         container: mainRef,
         target: heroRef,
@@ -115,6 +118,20 @@ export default function WelcomeUI() {
     });
     const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
     const heroY = useTransform(scrollYProgress, [0, 1], [0, -70]);
+
+    // --- Mouse spotlight — soft accent glow that follows the cursor over the hero ---
+    const pointerX = useMotionValue(50);
+    const pointerY = useMotionValue(40);
+    const smoothX = useSpring(pointerX, { stiffness: 120, damping: 20, mass: 0.5 });
+    const smoothY = useSpring(pointerY, { stiffness: 120, damping: 20, mass: 0.5 });
+    const spotlight = useMotionTemplate`radial-gradient(640px circle at ${smoothX}% ${smoothY}%, rgba(var(--accent), 0.08), transparent 70%)`;
+
+    const onHeroMouseMove = (e: React.MouseEvent) => {
+        if (reduced || !heroRef.current) return;
+        const rect = heroRef.current.getBoundingClientRect();
+        pointerX.set(((e.clientX - rect.left) / rect.width) * 100);
+        pointerY.set(((e.clientY - rect.top) / rect.height) * 100);
+    };
 
     // --- Framer motion variants ---
     const containerVariants = {
@@ -166,17 +183,6 @@ export default function WelcomeUI() {
 
     return (
         <>
-            {/* Cinematic 3D world — the career graph as a flyable constellation */}
-            <PageScene
-                scrollContainerRef={mainRef}
-                careerNodes={careerNodes.map((n) => ({
-                    id: n.id,
-                    label: n.company_name,
-                    time: n.time_period,
-                    projects: n.projects,
-                }))}
-            />
-
             <main
                 ref={mainRef}
                 className="relative min-h-0 flex-1 overflow-y-auto scrollbar-mac text-font-color selection:bg-accent-color/20 selection:text-accent-color"
@@ -188,7 +194,11 @@ export default function WelcomeUI() {
                 className="max-w-6xl mx-auto px-6 pb-16"
             >
                 {/* 1. HERO — text floating over the 3D world */}
-                <motion.section ref={heroRef} className="relative flex items-center justify-center min-h-[92vh]">
+                <motion.section
+                    ref={heroRef}
+                    onMouseMove={onHeroMouseMove}
+                    className="relative flex items-center justify-center min-h-[92vh]"
+                >
                     {/* Animated aurora blobs + grid overlay */}
                     <div className="absolute inset-0 overflow-hidden" aria-hidden>
                         <div className="aurora-blob aurora-blob-1" />
@@ -197,10 +207,12 @@ export default function WelcomeUI() {
                         <div className="welcome-grid absolute inset-0" />
                     </div>
 
-                    {/* Soft backdrop for readability over the 3D world */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
-                        <div className="w-[42rem] h-[42rem] max-w-full rounded-full bg-primary-background/40 blur-3xl" />
-                    </div>
+                    {/* Mouse spotlight — follows the cursor */}
+                    <motion.div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{ background: spotlight }}
+                        aria-hidden
+                    />
 
                     <motion.div
                         style={heroContentStyle}
@@ -324,7 +336,7 @@ export default function WelcomeUI() {
                     ))}
                 </motion.section>
 
-                {/* 4. EXPLORE — 3D tilt destination cards */}
+                {/* 4. EXPLORE — spotlight destination cards */}
                 <motion.section
                     ref={exploreRef}
                     variants={sectionReveal}
@@ -334,7 +346,7 @@ export default function WelcomeUI() {
                     className="space-y-10 scroll-mt-6 mt-24"
                 >
                     <div className="space-y-2 text-center">
-                        <h2 className="text-3xl font-extrabold tracking-tight float-text">{strings.welcomeExploreTitle}</h2>
+                        <h2 className="text-3xl font-extrabold tracking-tight">{strings.welcomeExploreTitle}</h2>
                         <p className="text-muted-foreground text-sm max-w-2xl mx-auto">
                             {strings.welcomeExploreSubtitle}
                         </p>
@@ -343,7 +355,7 @@ export default function WelcomeUI() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {destinations.map((dest) => (
                             <motion.div key={dest.id} variants={itemReveal} className="h-full">
-                                <TiltCard>
+                                <SpotlightCard>
                                     <Link
                                         href={dest.href}
                                         className="relative flex flex-col h-full bg-secondary-background/40 backdrop-blur-md rounded-3xl border border-borderColor p-6 space-y-4 overflow-hidden group transition-colors duration-300 hover:border-accent-color/40"
@@ -365,13 +377,13 @@ export default function WelcomeUI() {
                                             <ArrowRight className="w-3.5 h-3.5 transform transition-transform duration-300 ease-out group-hover:translate-x-1.5 rtl:rotate-180 rtl:group-hover:-translate-x-1.5" />
                                         </span>
                                     </Link>
-                                </TiltCard>
+                                </SpotlightCard>
                             </motion.div>
                         ))}
                     </div>
                 </motion.section>
 
-                {/* 5. FEATURED WORK — 3D tilt project cards */}
+                {/* 5. FEATURED WORK — spotlight project cards */}
                 <motion.section
                     variants={sectionReveal}
                     initial="hidden"
@@ -380,7 +392,7 @@ export default function WelcomeUI() {
                     className="space-y-10 mt-24"
                 >
                     <div className="space-y-2">
-                        <h2 className="text-3xl font-extrabold tracking-tight float-text">{strings.welcomeFeaturedTitle}</h2>
+                        <h2 className="text-3xl font-extrabold tracking-tight">{strings.welcomeFeaturedTitle}</h2>
                         <p className="text-muted-foreground text-sm max-w-2xl">
                             {strings.welcomeFeaturedSubtitle}
                         </p>
@@ -392,7 +404,7 @@ export default function WelcomeUI() {
                             const theme = projectThemeStyles[project.themeColor] ?? projectThemeStyles.zinc;
                             return (
                                 <motion.div key={project.id} variants={itemReveal} className="h-full">
-                                    <TiltCard maxTilt={8}>
+                                    <SpotlightCard>
                                         <Link
                                             href={`/projects/${project.path}`}
                                             className="relative flex flex-col h-full bg-secondary-background/40 border border-borderColor hover:border-accent-color/40 rounded-3xl overflow-hidden group transition-colors duration-300"
@@ -436,7 +448,7 @@ export default function WelcomeUI() {
                                                 </span>
                                             </div>
                                         </Link>
-                                    </TiltCard>
+                                    </SpotlightCard>
                                 </motion.div>
                             );
                         })}
@@ -465,7 +477,7 @@ export default function WelcomeUI() {
                         <div className="relative bg-primary-background rounded-[22px] p-8 md:p-12 text-center space-y-6 overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-r from-accent-color/5 via-secondary-accent-color/5 to-accent-color/10 pointer-events-none" />
                             <motion.div variants={itemReveal} className="relative space-y-2 max-w-xl mx-auto">
-                                <h2 className="text-3xl font-extrabold tracking-tight float-text">{strings.welcomeCtaTitle}</h2>
+                                <h2 className="text-3xl font-extrabold tracking-tight">{strings.welcomeCtaTitle}</h2>
                                 <p className="text-muted-foreground text-sm">{strings.welcomeCtaSubtitle}</p>
                             </motion.div>
 

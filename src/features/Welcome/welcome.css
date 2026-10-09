@@ -159,13 +159,6 @@
     to { background-position: 200% center; }
 }
 
-/* --- Floating text over the 3D world (readability) --- */
-.float-text {
-    text-shadow:
-        0 2px 18px hsl(var(--primary-background) / 0.95),
-        0 0 8px hsl(var(--primary-background) / 0.85);
-}
-
 /* --- Reduced motion: switch everything off --- */
 @media (prefers-reduced-motion: reduce) {
     .aurora-blob,

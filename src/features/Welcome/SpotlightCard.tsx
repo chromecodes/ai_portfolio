@@ -1,22 +1,19 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
-import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useMotionValue, useTransform, useReducedMotion } from "framer-motion";
 
 /**
- * Mouse-tracked 3D perspective tilt card with a cursor-following glare —
- * the trending Vercel/Linear-style interactive card.
+ * Cursor-following spotlight card — pure 2D. A soft accent glow tracks the
+ * cursor across the card surface, with a gentle hover lift. No 3D transforms,
+ * no WebGL — cheap to render and calm to look at.
  */
-export default function TiltCard({
+export default function SpotlightCard({
     children,
     className = "",
-    maxTilt = 10,
-    glare = true,
 }: {
     children: React.ReactNode;
     className?: string;
-    maxTilt?: number;
-    glare?: boolean;
 }) {
     const ref = useRef<HTMLDivElement>(null);
     const reduced = useReducedMotion();
@@ -25,24 +22,13 @@ export default function TiltCard({
     const px = useMotionValue(0.5);
     const py = useMotionValue(0.5);
 
-    const rotateX = useSpring(useTransform(py, [0, 1], [maxTilt, -maxTilt]), {
-        stiffness: 260,
-        damping: 22,
-        mass: 0.6,
-    });
-    const rotateY = useSpring(useTransform(px, [0, 1], [-maxTilt, maxTilt]), {
-        stiffness: 260,
-        damping: 22,
-        mass: 0.6,
-    });
-
-    // Glare position follows the cursor
-    const glareX = useTransform(px, (v) => `${v * 100}%`);
-    const glareY = useTransform(py, (v) => `${v * 100}%`);
-    const glareBg = useTransform(
-        [glareX, glareY],
+    // Spotlight position follows the cursor
+    const spotX = useTransform(px, (v) => `${v * 100}%`);
+    const spotY = useTransform(py, (v) => `${v * 100}%`);
+    const spotBg = useTransform(
+        [spotX, spotY],
         ([x, y]: string[]) =>
-            `radial-gradient(420px circle at ${x} ${y}, rgba(var(--accent), 0.10), transparent 65%)`
+            `radial-gradient(420px circle at ${x} ${y}, rgba(var(--accent), 0.09), transparent 65%)`
     );
 
     const onMouseMove = useCallback(
@@ -68,20 +54,15 @@ export default function TiltCard({
             onMouseMove={onMouseMove}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            whileHover={reduced ? undefined : { y: -6 }}
-            style={
-                reduced
-                    ? undefined
-                    : { rotateX, rotateY, transformPerspective: 1000, transformStyle: "preserve-3d" }
-            }
+            whileHover={reduced ? undefined : { y: -5 }}
             className={`relative h-full ${className}`}
         >
             {children}
-            {glare && !reduced && (
+            {!reduced && (
                 <motion.div
                     aria-hidden
                     className="pointer-events-none absolute inset-0 rounded-3xl z-20"
-                    style={{ background: glareBg }}
+                    style={{ background: spotBg }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: hovering ? 1 : 0 }}
                 />
