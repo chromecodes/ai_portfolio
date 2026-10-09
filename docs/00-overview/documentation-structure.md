@@ -1,3 +1,10 @@
+# Documentation Structure (Template Reference)
+
+> Last Updated: 2026-02-19 · Filename corrected (was `Doumentation_structure.md`). This is the
+canonical enterprise template the trimmed `docs/` tree of this repo is based on. For the actual
+live index see [docs/README.md](../README.md).
+
+
 ## 📁 Documentation Structure
 
 ```

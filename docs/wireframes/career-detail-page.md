@@ -1,3 +1,8 @@
+# Career Detail Page — Wireframe (ASCII)
+
+> Last Updated: 2026-02-19 · Originally sketched in `markedit.md`; moved into docs.
+
+
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                            CAREER DETAIL PAGE                            │
 │                         (Technical Deep-Dive View)                       │
