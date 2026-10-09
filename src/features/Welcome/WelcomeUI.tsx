@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
     Briefcase,
@@ -24,9 +23,6 @@ import MagneticButton from "./MagneticButton";
 import Marquee from "./Marquee";
 import CountUp from "./CountUp";
 import "./welcome.css";
-
-// Scroll-driven 3D intro — blank at first, a cube builds a card grid on scroll
-const PageScene = dynamic(() => import("./PageScene"), { ssr: false, loading: () => null });
 
 // Theme styles for featured project tiles (mirrors ProjectTileHeader)
 const projectThemeStyles: Record<Project["themeColor"], { glow: string; iconBg: string }> = {
@@ -114,9 +110,9 @@ export default function WelcomeUI() {
         target: heroRef,
         offset: ["start start", "end start"],
     });
-    const heroContentOpacity = useTransform(scrollYProgress, [0.34, 0.58], [0, 1]);
-    const heroContentY = useTransform(scrollYProgress, [0.34, 0.58], [36, 0]);
-    const hintOpacity = useTransform(scrollYProgress, [0.02, 0.12], [1, 0]);
+    const heroContentOpacity = useTransform(scrollYProgress, [0.12, 0.42], [0, 1]);
+    const heroContentY = useTransform(scrollYProgress, [0.12, 0.42], [48, 0]);
+    const hintOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
 
     // --- Framer motion variants ---
     const containerVariants = {
@@ -130,12 +126,17 @@ export default function WelcomeUI() {
         visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
     } as const;
 
+    // 3D card cascade — cards rise from the bottom and settle into the grid;
+    // the stagger from the parent section flows left-to-right in DOM order
     const itemReveal = {
-        hidden: { opacity: 0, y: 40 },
+        hidden: { opacity: 0, y: 90, rotateX: 12, scale: 0.96, transformPerspective: 900 },
         visible: {
             opacity: 1,
             y: 0,
-            transition: { type: "spring", stiffness: 90, damping: 18 },
+            rotateX: 0,
+            scale: 1,
+            transformPerspective: 900,
+            transition: { type: "spring", stiffness: 80, damping: 20 },
         },
     } as const;
 
@@ -148,9 +149,6 @@ export default function WelcomeUI() {
 
     return (
         <>
-            {/* Scroll-driven 3D intro — blank at first, cube builds a card grid on scroll */}
-            {!reduced && <PageScene scrollContainerRef={mainRef} heroRef={heroRef} />}
-
             <main
                 ref={mainRef}
                 className="relative min-h-0 flex-1 overflow-y-auto scrollbar-mac text-font-color selection:bg-accent-color/20 selection:text-accent-color"
@@ -167,7 +165,7 @@ export default function WelcomeUI() {
                     className={
                         reduced
                             ? "relative flex items-center justify-center min-h-[92vh]"
-                            : "relative min-h-[210vh]"
+                            : "relative min-h-[150vh]"
                     }
                 >
                     <div
