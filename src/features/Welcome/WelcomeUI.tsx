@@ -1,15 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import {
-    motion,
-    useScroll,
-    useTransform,
-    useMotionValue,
-    useSpring,
-    useMotionTemplate,
-    useReducedMotion,
-} from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
     Briefcase,
@@ -31,6 +24,9 @@ import MagneticButton from "./MagneticButton";
 import Marquee from "./Marquee";
 import CountUp from "./CountUp";
 import "./welcome.css";
+
+// Scroll-driven 3D intro — blank at first, a cube builds a card grid on scroll
+const PageScene = dynamic(() => import("./PageScene"), { ssr: false, loading: () => null });
 
 // Theme styles for featured project tiles (mirrors ProjectTileHeader)
 const projectThemeStyles: Record<Project["themeColor"], { glow: string; iconBg: string }> = {
@@ -110,49 +106,22 @@ export default function WelcomeUI() {
         { id: "future", href: "/future", icon: Telescope, titleKey: "future", descKey: "welcomeFutureDesc" },
     ];
 
-    // --- Scroll-driven parallax (main is the scroll container) ---
+    // --- Scroll-driven intro (main is the scroll container) ---
+    // The hero starts blank; the 3D cube→grid build and the hero text are
+    // revealed by the same scroll progress.
     const { scrollYProgress } = useScroll({
         container: mainRef,
         target: heroRef,
         offset: ["start start", "end start"],
     });
-    const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
-    const heroY = useTransform(scrollYProgress, [0, 1], [0, -70]);
-
-    // --- Mouse spotlight — soft accent glow that follows the cursor over the hero ---
-    const pointerX = useMotionValue(50);
-    const pointerY = useMotionValue(40);
-    const smoothX = useSpring(pointerX, { stiffness: 120, damping: 20, mass: 0.5 });
-    const smoothY = useSpring(pointerY, { stiffness: 120, damping: 20, mass: 0.5 });
-    const spotlight = useMotionTemplate`radial-gradient(640px circle at ${smoothX}% ${smoothY}%, rgba(var(--accent), 0.08), transparent 70%)`;
-
-    const onHeroMouseMove = (e: React.MouseEvent) => {
-        if (reduced || !heroRef.current) return;
-        const rect = heroRef.current.getBoundingClientRect();
-        pointerX.set(((e.clientX - rect.left) / rect.width) * 100);
-        pointerY.set(((e.clientY - rect.top) / rect.height) * 100);
-    };
+    const heroContentOpacity = useTransform(scrollYProgress, [0.34, 0.58], [0, 1]);
+    const heroContentY = useTransform(scrollYProgress, [0.34, 0.58], [36, 0]);
+    const hintOpacity = useTransform(scrollYProgress, [0.02, 0.12], [1, 0]);
 
     // --- Framer motion variants ---
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: { opacity: 1 },
-    } as const;
-
-    // Kinetic word-by-word headline
-    const wordContainer = {
-        hidden: {},
-        visible: { transition: { staggerChildren: 0.09, delayChildren: 0.15 } },
-    } as const;
-
-    const wordVariant = {
-        hidden: { opacity: 0, y: 34, filter: "blur(10px)" },
-        visible: {
-            opacity: 1,
-            y: 0,
-            filter: "blur(0px)",
-            transition: { type: "spring", stiffness: 110, damping: 16 },
-        },
     } as const;
 
     // Scroll-reveal sections (stagger flows from parent)
@@ -170,19 +139,18 @@ export default function WelcomeUI() {
         },
     } as const;
 
-    const fadeUp = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-    } as const;
-
     const scrollToExplore = () => {
         exploreRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
-    const heroContentStyle = reduced ? undefined : { opacity: heroOpacity, y: heroY };
+    const heroContentStyle = reduced ? undefined : { opacity: heroContentOpacity, y: heroContentY };
+    const hintStyle = reduced ? undefined : { opacity: hintOpacity };
 
     return (
         <>
+            {/* Scroll-driven 3D intro — blank at first, cube builds a card grid on scroll */}
+            {!reduced && <PageScene scrollContainerRef={mainRef} heroRef={heroRef} />}
+
             <main
                 ref={mainRef}
                 className="relative min-h-0 flex-1 overflow-y-auto scrollbar-mac text-font-color selection:bg-accent-color/20 selection:text-accent-color"
@@ -193,34 +161,28 @@ export default function WelcomeUI() {
                 animate="visible"
                 className="max-w-6xl mx-auto px-6 pb-16"
             >
-                {/* 1. HERO — text floating over the 3D world */}
+                {/* 1. HERO — blank at first; the 3D build + text reveal on scroll */}
                 <motion.section
                     ref={heroRef}
-                    onMouseMove={onHeroMouseMove}
-                    className="relative flex items-center justify-center min-h-[92vh]"
+                    className={
+                        reduced
+                            ? "relative flex items-center justify-center min-h-[92vh]"
+                            : "relative min-h-[210vh]"
+                    }
                 >
-                    {/* Animated aurora blobs + grid overlay */}
-                    <div className="absolute inset-0 overflow-hidden" aria-hidden>
-                        <div className="aurora-blob aurora-blob-1" />
-                        <div className="aurora-blob aurora-blob-2" />
-                        <div className="aurora-blob aurora-blob-3" />
-                        <div className="welcome-grid absolute inset-0" />
-                    </div>
-
-                    {/* Mouse spotlight — follows the cursor */}
-                    <motion.div
-                        className="absolute inset-0 pointer-events-none"
-                        style={{ background: spotlight }}
-                        aria-hidden
-                    />
-
+                    <div
+                        className={
+                            reduced
+                                ? "w-full"
+                                : "sticky top-0 flex h-screen w-full items-center justify-center"
+                        }
+                    >
                     <motion.div
                         style={heroContentStyle}
-                        className="relative z-10 w-full max-w-3xl mx-auto text-center space-y-6 py-24"
+                        className="relative z-10 w-full max-w-3xl mx-auto text-center space-y-6 px-6"
                     >
                         <div className="space-y-6">
-                            <motion.span
-                                variants={fadeUp}
+                            <span
                                 className="inline-flex items-center gap-2.5 rounded-full border border-borderColor bg-secondary-background/60 backdrop-blur-md px-4 py-1.5 text-xs uppercase tracking-widest font-extrabold text-accent-color"
                             >
                                 <span className="relative flex h-2 w-2">
@@ -228,41 +190,25 @@ export default function WelcomeUI() {
                                     <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-color" />
                                 </span>
                                 {strings.welcomeTag}
-                            </motion.span>
+                            </span>
 
-                            <motion.h1
-                                variants={wordContainer}
-                                initial="hidden"
-                                animate="visible"
-                                className="text-5xl md:text-6xl xl:text-7xl font-black tracking-tight leading-[1.05] bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-accent-color)] via-[var(--color-secondary-accent-color)] to-[var(--color-accent-color)] text-shimmer pb-2"
-                            >
-                                {strings.homePageName.split(" ").map((word, i) => (
-                                    <motion.span
-                                        key={i}
-                                        variants={wordVariant}
-                                        className="inline-block will-change-transform"
-                                    >
-                                        {word}{"\u00A0"}
-                                    </motion.span>
-                                ))}
-                            </motion.h1>
+                            <h1 className="text-5xl md:text-6xl xl:text-7xl font-black tracking-tight leading-[1.05] bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-accent-color)] via-[var(--color-secondary-accent-color)] to-[var(--color-accent-color)] text-shimmer pb-2">
+                                {strings.homePageName}
+                            </h1>
 
-                            <motion.p
-                                variants={fadeUp}
+                            <p
                                 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-accent-color to-secondary-accent-color"
                             >
                                 {strings.homePageTitle}
-                            </motion.p>
+                            </p>
 
-                            <motion.p
-                                variants={fadeUp}
+                            <p
                                 className="max-w-xl mx-auto leading-relaxed text-muted-foreground"
                             >
                                 {strings.welcomeSubtitle}
-                            </motion.p>
+                            </p>
 
-                            <motion.div
-                                variants={fadeUp}
+                            <div
                                 className="flex flex-col sm:flex-row gap-3 justify-center items-center pt-2"
                             >
                                 <MagneticButton>
@@ -286,22 +232,21 @@ export default function WelcomeUI() {
                                         {strings.welcomeCtaProjects}
                                     </Link>
                                 </MagneticButton>
-                            </motion.div>
+                            </div>
                         </div>
                     </motion.div>
 
-                    {/* Scroll hint */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 1.4, duration: 0.8 }}
-                        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
-                        aria-hidden
-                    >
-                        <div className="scroll-hint-wheel">
-                            <span />
-                        </div>
-                    </motion.div>
+                        {/* Scroll hint — the only thing visible while the page is blank */}
+                        <motion.div
+                            style={hintStyle}
+                            className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+                            aria-hidden
+                        >
+                            <div className="scroll-hint-wheel">
+                                <span />
+                            </div>
+                        </motion.div>
+                    </div>
                 </motion.section>
 
                 {/* 2. TECH MARQUEE — infinite scrolling ribbon */}

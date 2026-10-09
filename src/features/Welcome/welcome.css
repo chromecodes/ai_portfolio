@@ -1,76 +1,7 @@
 /* ============================================
-   Welcome page (" / ") — trending animation CSS
+   Welcome page (" / ") — animation CSS
    Scoped to the Welcome feature only.
    ============================================ */
-
-/* --- Aurora blobs (hero background) --- */
-.aurora-blob {
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(90px);
-    pointer-events: none;
-    will-change: transform;
-}
-
-.aurora-blob-1 {
-    width: 34rem;
-    height: 34rem;
-    top: -12%;
-    left: -8%;
-    background: radial-gradient(circle, rgba(var(--accent), 0.35), transparent 70%);
-    animation: aurora-drift-1 18s ease-in-out infinite alternate;
-}
-
-.aurora-blob-2 {
-    width: 30rem;
-    height: 30rem;
-    top: 10%;
-    right: -10%;
-    background: radial-gradient(circle, rgba(var(--secondary-accent), 0.32), transparent 70%);
-    animation: aurora-drift-2 22s ease-in-out infinite alternate;
-}
-
-.aurora-blob-3 {
-    width: 26rem;
-    height: 26rem;
-    bottom: -18%;
-    left: 28%;
-    background: radial-gradient(circle, rgba(var(--success), 0.22), transparent 70%);
-    animation: aurora-drift-3 26s ease-in-out infinite alternate;
-}
-
-/* Tone the aurora down in light mode so it stays classy */
-:root:not(.dark) .aurora-blob {
-    opacity: 0.55;
-}
-
-@keyframes aurora-drift-1 {
-    0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(14%, 10%) scale(1.12); }
-    100% { transform: translate(-6%, 18%) scale(0.95); }
-}
-
-@keyframes aurora-drift-2 {
-    0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-12%, -8%) scale(1.08); }
-    100% { transform: translate(8%, -16%) scale(1.15); }
-}
-
-@keyframes aurora-drift-3 {
-    0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-10%, -12%) scale(1.1); }
-    100% { transform: translate(12%, 6%) scale(0.92); }
-}
-
-/* --- Grid overlay --- */
-.welcome-grid {
-    background-image:
-        linear-gradient(to right, rgba(var(--primary-foreground), 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(var(--primary-foreground), 0.05) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 75%);
-}
 
 /* --- Marquee --- */
 .marquee-track {
@@ -161,7 +92,6 @@
 
 /* --- Reduced motion: switch everything off --- */
 @media (prefers-reduced-motion: reduce) {
-    .aurora-blob,
     .marquee-track,
     .border-spin::before,
     .scroll-hint-wheel span,
