@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminPassword, verifyAuth, cleanPassword } from '@/lib/analyticsAuth';
+import { verifyAuth, cleanPassword, verifyAdminPassword, issueToken, TOKEN_TTL_MS } from '@/lib/analyticsAuth';
+import { getClientIp, rateLimit, tooManyRequests } from '@/lib/apiSecurity';
 
 export const dynamic = 'force-dynamic';
+
+// Brute-force protection: max 10 login attempts per 15 minutes per IP
+const LOGIN_RATE_LIMIT = 10;
+const LOGIN_RATE_WINDOW_MS = 15 * 60_000;
 
 
 export async function GET(req: NextRequest) {
@@ -10,24 +15,32 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const rl = rateLimit(`auth:${getClientIp(req)}`, LOGIN_RATE_LIMIT, LOGIN_RATE_WINDOW_MS);
+  if (!rl.ok) {
+    return tooManyRequests(rl.retryAfterSec);
+  }
+
   try {
     const body = await req.json();
     const password = cleanPassword(body.password);
-    const adminPassword = getAdminPassword();
 
-    if (password && password === adminPassword) {
+    if (password && verifyAdminPassword(password)) {
+      // Mint a stateless signed token. The password itself is NEVER returned
+      // to the client or stored in cookies.
+      const token = issueToken();
+
       const response = NextResponse.json({
         success: true,
         message: 'Authenticated successfully',
-        token: adminPassword,
+        token,
       });
 
-      // Set secure HTTP-only cookie valid for 7 days
-      response.cookies.set('analytics_auth', adminPassword, {
+      // Set secure HTTP-only cookie holding the signed token (7-day expiry)
+      response.cookies.set('analytics_auth', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 7 * 24 * 60 * 60, // 7 days
+        maxAge: Math.floor(TOKEN_TTL_MS / 1000),
         path: '/',
       });
 
@@ -35,8 +48,8 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ error: 'Invalid admin passcode' }, { status: 401 });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message || 'Authentication error' }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: 'Authentication error' }, { status: 500 });
   }
 }
 

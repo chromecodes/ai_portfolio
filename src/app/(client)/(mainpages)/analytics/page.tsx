@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function AnalyticsPage() {
   return (
-    <main className="w-full min-h-screen bg-primary-background">
+    <main className="w-full min-h-0 flex-1 overflow-y-auto overscroll-contain scrollbar-mac bg-neutral-950 text-neutral-100">
       <AnalyticsDashboard />
     </main>
   );

@@ -156,7 +156,16 @@
   "welcomeExploreLabel": "Explore",
   "welcomeStatsYears": "Years of Engineering",
   "welcomeStatsProjects": "Documented Projects",
+  "welcomeStatsProducts": "Deployed Products",
   "welcomeStatsLangs": "Languages Supported",
   "welcomeCtaTitle": "Like what you see?",
-  "welcomeCtaSubtitle": "There's plenty more inside — reach out anytime, or keep exploring."
+  "welcomeCtaSubtitle": "There's plenty more inside — reach out anytime, or keep exploring.",
+  "welcomeCareerTitle": "Career Path",
+  "welcomeCareerSubtitle": "The road so far — every stop leveled the stack up.",
+  "welcomeViewCareer": "View the career map",
+  "welcomeNowTitle": "Right Now",
+  "welcomeNowSubtitle": "Live status from the lab — what I'm building, exploring and researching today.",
+  "welcomePillarsLabel": "Vision Pillars",
+  "welcomeViewFuture": "View the full roadmap",
+  "welcomeMonthsShort": "mo"
 }

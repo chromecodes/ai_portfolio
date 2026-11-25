@@ -155,7 +155,16 @@
   "welcomeExploreLabel": "استكشاف",
   "welcomeStatsYears": "سنوات من الهندسة",
   "welcomeStatsProjects": "مشاريع موثقة",
+  "welcomeStatsProducts": "المنتجات المنشورة",
   "welcomeStatsLangs": "لغات مدعومة",
   "welcomeCtaTitle": "أعجبك ما تراه؟",
-  "welcomeCtaSubtitle": "المزيد من الداخل — تواصل معي في أي وقت، أو استمر في الاستكشاف."
+  "welcomeCtaSubtitle": "المزيد من الداخل — تواصل معي في أي وقت، أو استمر في الاستكشاف.",
+  "welcomeCareerTitle": "المسار المهني",
+  "welcomeCareerSubtitle": "الطريق حتى الآن — كل محطة رفعت المستوى.",
+  "welcomeViewCareer": "عرض خريطة المسيرة المهنية",
+  "welcomeNowTitle": "الآن",
+  "welcomeNowSubtitle": "حالة مباشرة من المختبر — ما أعمل على بنائه واستكشافه والبحث فيه اليوم.",
+  "welcomePillarsLabel": "ركائز الرؤية",
+  "welcomeViewFuture": "عرض خارطة الطريق الكاملة",
+  "welcomeMonthsShort": "شهر"
 }

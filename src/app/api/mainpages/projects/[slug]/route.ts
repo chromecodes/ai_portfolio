@@ -22,12 +22,12 @@ export async function GET(
       success: true,
       data,
     });
-  } catch (error) {
+  } catch {
+    // No raw error details — avoids leaking server internals
     return NextResponse.json(
       {
         success: false,
         message: "Project data not found",
-        error,
       },
       {
         status: 404,

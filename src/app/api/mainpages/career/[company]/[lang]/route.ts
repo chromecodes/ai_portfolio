@@ -22,12 +22,12 @@ export async function GET(
       data,
     });
 
-  } catch (error) {
+  } catch {
+    // No raw error details — avoids leaking server internals
     return NextResponse.json(
       {
         success: false,
         message: "Career data not found",
-        error,
       },
       {
         status: 404,

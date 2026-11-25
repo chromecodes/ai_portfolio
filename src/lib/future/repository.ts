@@ -12,6 +12,11 @@ const staticMap: Record<string, FuturePageData> = {
 };
 
 export async function getFuture(lang: string): Promise<FuturePageData> {
+    // Only allow safe filename segments — blocks path traversal (../, ..\, absolute paths)
+    if (!/^[A-Za-z]{2,8}(-[A-Za-z0-9]{2,8})?$/.test(lang)) {
+        return getFutureStatic("en");
+    }
+
     try {
         const filePath = path.join(
             process.cwd(),

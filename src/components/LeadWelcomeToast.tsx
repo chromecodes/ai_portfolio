@@ -44,6 +44,23 @@ interface LeadWelcomeToastProps {
   categories?: ToastCategoryOption[];
 }
 
+/**
+ * Read the analytics session id, lazily creating one with the SAME format and
+ * 1h expiry as AnalyticsTracker. The toast can fire its telemetry before
+ * AnalyticsTracker has ever run; an empty id would be rejected by the API
+ * (400) and the drop-off/step events silently lost.
+ */
+function getOrInitSessionId(): string {
+  if (typeof window === 'undefined') return '';
+  const existing = localStorage.getItem('portfolio_analytics_sid');
+  if (existing) return existing;
+
+  const newId = 'sess_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+  localStorage.setItem('portfolio_analytics_sid', newId);
+  localStorage.setItem('portfolio_analytics_sid_exp', (Date.now() + 60 * 60 * 1000).toString());
+  return newId;
+}
+
 export default function LeadWelcomeToast({
   delayMs = 5000,
   categories = DEFAULT_CATEGORIES,
@@ -111,12 +128,11 @@ export default function LeadWelcomeToast({
 
     // Report drop-off telemetry (ghost user who closed without submitting email)
     if (typeof window !== 'undefined') {
-      const storedSid = localStorage.getItem('portfolio_analytics_sid') || '';
       fetch('/api/analytics/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          sessionId: storedSid,
+          sessionId: getOrInitSessionId(),
           type: 'toast_dropoff',
           selectedContext: selectedCategory ? `Selected: ${selectedCategory.label}` : 'Closed before selection',
         }),
@@ -130,12 +146,11 @@ export default function LeadWelcomeToast({
 
     // Report category selection step
     if (typeof window !== 'undefined') {
-      const storedSid = localStorage.getItem('portfolio_analytics_sid') || '';
       fetch('/api/analytics/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          sessionId: storedSid,
+          sessionId: getOrInitSessionId(),
           type: 'toast_step',
           selectedText: cat.label,
         }),

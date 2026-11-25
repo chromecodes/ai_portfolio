@@ -116,7 +116,16 @@
   "welcomeExploreLabel": "Explorar",
   "welcomeStatsYears": "Años de Ingeniería",
   "welcomeStatsProjects": "Proyectos Documentados",
+  "welcomeStatsProducts": "Productos Desplegados",
   "welcomeStatsLangs": "Idiomas Soportados",
   "welcomeCtaTitle": "¿Te gusta lo que ves?",
-  "welcomeCtaSubtitle": "Hay mucho más dentro — escríbeme cuando quieras, o sigue explorando."
+  "welcomeCtaSubtitle": "Hay mucho más dentro — escríbeme cuando quieras, o sigue explorando.",
+  "welcomeCareerTitle": "Trayectoria Profesional",
+  "welcomeCareerSubtitle": "El camino hasta ahora — cada parada elevó el nivel.",
+  "welcomeViewCareer": "Ver el mapa de carrera",
+  "welcomeNowTitle": "Ahora Mismo",
+  "welcomeNowSubtitle": "Estado en vivo desde el laboratorio — lo que estoy construyendo, explorando e investigando hoy.",
+  "welcomePillarsLabel": "Pilares de Visión",
+  "welcomeViewFuture": "Ver la hoja de ruta completa",
+  "welcomeMonthsShort": "mes"
 }

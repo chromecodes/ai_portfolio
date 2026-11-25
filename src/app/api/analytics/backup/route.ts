@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
         'Content-Disposition': `attachment; filename="${filename}"`,
       },
     });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message || 'Failed to create backup' }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: 'Failed to create backup' }, { status: 500 });
   }
 }

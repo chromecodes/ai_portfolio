@@ -13,8 +13,8 @@ export async function GET(req: NextRequest) {
   try {
     const data = await getAnalyticsData();
     return NextResponse.json(data);
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message || 'Failed to fetch analytics' }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: 'Failed to fetch analytics' }, { status: 500 });
   }
 }
 
@@ -26,7 +26,7 @@ export async function DELETE(req: NextRequest) {
   try {
     await clearAnalyticsData();
     return NextResponse.json({ success: true, message: 'Analytics data cleared' });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message || 'Failed to clear analytics' }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: 'Failed to clear analytics' }, { status: 500 });
   }
 }

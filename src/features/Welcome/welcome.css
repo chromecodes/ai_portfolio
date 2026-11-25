@@ -1,61 +1,219 @@
 /* ============================================
-   Welcome page (" / ") — animation CSS
-   Scoped to the Welcome feature only.
+   Welcome page (" / ") — scoped styles
+   Motion lives in WelcomeUI.tsx (framer-motion
+   whileInView scroll reveals) plus keyframe
+   animations here (gradient backdrop, circuit
+   backdrop, tech ribbon).
    ============================================ */
 
-/* --- Marquee --- */
-.marquee-track {
-    animation: marquee-scroll 42s linear infinite;
-}
+/* --- Accent aurora gradient backdrop ---
+   Layered radial glows using the theme HSL vars, so it adapts
+   to light/dark automatically. Spans the full page height
+   (inset-0 of the content wrapper) and sits at z -1, behind the
+   glass cards so backdrop-blur picks it up.
 
-.marquee-mask:hover .marquee-track {
-    animation-play-state: paused;
-}
+   Motion system (all transform/opacity — compositor friendly):
+   • static base stack (anchor)
+   • .welcome-gradient-flow(-wrap) — huge conic aurora: slow CSS
+     rotation + scroll-linked rotate/scale (WelcomeGradient.tsx)
+   • .welcome-gradient-blob(-a/-b) — drifting glows that swell
+     with scroll velocity (framer-motion on the wrapper)
+   • .welcome-gradient-shimmer — soft light band sweeping across */
+.welcome-gradient {
+    /* glow alphas (raised slightly in .dark below) */
+    --wg-hero: 0.13;
+    --wg-cyan-top: 0.09;
+    --wg-green-mid: 0.06;
+    --wg-violet-mid: 0.07;
+    --wg-cyan-bottom: 0.08;
+    --wg-wash-top: 0.035;
+    --wg-wash-bottom: 0.045;
+    /* flow + shimmer alphas */
+    --wg-flow-a: 0.09;
+    --wg-flow-b: 0.07;
+    --wg-flow-c: 0.05;
+    --wg-shimmer-a: 0.05;
+    --wg-shimmer-b: 0.07;
 
-[dir="rtl"] .marquee-track {
-    animation-direction: reverse;
-}
-
-@keyframes marquee-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-}
-
-/* Fade the marquee edges */
-.marquee-mask {
-    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-}
-
-/* --- Spinning gradient border (CTA panel) --- */
-.border-spin {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-}
-
-.border-spin::before {
-    content: "";
     position: absolute;
-    inset: -60%;
+    inset: 0;
     z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background:
+        /* hero aurora — violet bloom behind the hero */
+        radial-gradient(52rem 26rem at 50% 2rem, hsl(var(--accent), var(--wg-hero)), transparent 70%),
+        /* top-left cyan bloom */
+        radial-gradient(36rem 22rem at 10% 8%, hsl(var(--secondary-accent), var(--wg-cyan-top)), transparent 70%),
+        /* right-mid green tint */
+        radial-gradient(40rem 26rem at 94% 30%, hsl(var(--success), var(--wg-green-mid)), transparent 72%),
+        /* left-mid violet */
+        radial-gradient(46rem 30rem at 0% 58%, hsl(var(--accent), var(--wg-violet-mid)), transparent 72%),
+        /* bottom cyan wash */
+        radial-gradient(52rem 26rem at 80% 97%, hsl(var(--secondary-accent), var(--wg-cyan-bottom)), transparent 74%),
+        /* vertical base wash — cyan at the top, violet at the bottom */
+        linear-gradient(180deg, hsl(var(--secondary-accent), var(--wg-wash-top)) 0%, transparent 14%, transparent 86%, hsl(var(--accent), var(--wg-wash-bottom)) 100%);
+}
+
+.dark .welcome-gradient {
+    --wg-hero: 0.17;
+    --wg-cyan-top: 0.12;
+    --wg-green-mid: 0.08;
+    --wg-violet-mid: 0.10;
+    --wg-cyan-bottom: 0.11;
+    --wg-wash-top: 0.05;
+    --wg-wash-bottom: 0.06;
+    --wg-flow-a: 0.12;
+    --wg-flow-b: 0.10;
+    --wg-flow-c: 0.07;
+    --wg-shimmer-a: 0.07;
+    --wg-shimmer-b: 0.10;
+}
+
+/* FLOW — huge conic aurora rotating like a slow lighthouse sweep.
+   A circular element keeps the rotation seamless; first and last
+   conic stops are transparent so there is no visible seam.
+   Two nested layers compose transforms without conflict:
+   • .welcome-gradient-flow-wrap — scroll-linked rotate/scale (framer-motion)
+   • .welcome-gradient-flow      — time-based rotation (CSS keyframes) */
+.welcome-gradient-flow-wrap {
+    position: absolute;
+    top: -40rem;
+    left: 50%;
+    width: 190vmax;
+    height: 190vmax;
+    margin-left: -95vmax; /* center the spin on the hero area */
+    will-change: transform;
+}
+
+.welcome-gradient-flow {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
     background: conic-gradient(
         from 0deg,
         transparent 0deg,
-        rgba(var(--accent), 0.7) 60deg,
-        rgba(var(--secondary-accent), 0.7) 120deg,
-        transparent 180deg,
-        transparent 360deg
+        hsl(var(--accent), var(--wg-flow-a)) 55deg,
+        transparent 120deg,
+        hsl(var(--secondary-accent), var(--wg-flow-b)) 185deg,
+        transparent 250deg,
+        hsl(var(--success), var(--wg-flow-c)) 300deg,
+        transparent 340deg
     );
-    animation: border-rotate 7s linear infinite;
+    filter: blur(70px);
+    animation: welcome-flow 110s linear infinite;
+    will-change: transform;
 }
 
-@keyframes border-rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+@keyframes welcome-flow {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-/* --- Scroll hint mouse --- */
+/* SHIMMER — a soft diagonal light band that sweeps across the
+   page roughly every 22s, then rests off-screen. Fades in/out at
+   both ends so the sweep never pops. */
+.welcome-gradient-shimmer {
+    position: absolute;
+    top: -6rem;
+    bottom: -6rem;
+    left: 0;
+    width: 60rem;
+    background: linear-gradient(
+        100deg,
+        transparent 6%,
+        hsl(var(--accent), var(--wg-shimmer-a)) 40%,
+        hsl(var(--secondary-accent), var(--wg-shimmer-b)) 50%,
+        hsl(var(--accent), var(--wg-shimmer-a)) 60%,
+        transparent 94%
+    );
+    filter: blur(28px);
+    transform: translateX(-115%);
+    animation: welcome-shimmer 22s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes welcome-shimmer {
+    0% {
+        transform: translateX(-115%);
+        opacity: 0;
+    }
+    6% {
+        opacity: 1;
+    }
+    40% {
+        transform: translateX(340%);
+        opacity: 1;
+    }
+    48%,
+    100% {
+        transform: translateX(340%);
+        opacity: 0;
+    }
+}
+
+/* two blurred blobs drifting very slowly — gentle undertone.
+   Same nesting pattern as the flow: the wrapper's transform is
+   owned by framer-motion (velocity swell), the ::after pseudo
+   owns the CSS translate drift. */
+.welcome-gradient-blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(90px);
+    will-change: transform;
+}
+
+.welcome-gradient-blob::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+}
+
+.welcome-gradient-blob-a {
+    width: 44rem;
+    height: 44rem;
+    left: -12rem;
+    top: 6rem;
+}
+
+.welcome-gradient-blob-a::after {
+    background: radial-gradient(circle, hsl(var(--accent), 0.12), transparent 65%);
+    animation: welcome-glow-a 38s ease-in-out infinite alternate;
+}
+
+.welcome-gradient-blob-b {
+    width: 40rem;
+    height: 40rem;
+    right: -14rem;
+    top: 55%;
+}
+
+.welcome-gradient-blob-b::after {
+    background: radial-gradient(circle, hsl(var(--secondary-accent), 0.10), transparent 65%);
+    animation: welcome-glow-b 46s ease-in-out infinite alternate;
+}
+
+@keyframes welcome-glow-a {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(6rem, 4rem, 0);
+    }
+}
+
+@keyframes welcome-glow-b {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(-7rem, -5rem, 0);
+    }
+}
+
+/* --- Scroll hint mouse (static) --- */
 .scroll-hint-wheel {
     width: 1.5rem;
     height: 2.5rem;
@@ -71,31 +229,71 @@
     height: 0.5rem;
     border-radius: 9999px;
     background: rgba(var(--accent), 0.9);
-    animation: scroll-wheel 1.8s ease-in-out infinite;
 }
 
-@keyframes scroll-wheel {
-    0% { transform: translateY(0); opacity: 1; }
-    70% { transform: translateY(0.6rem); opacity: 0; }
-    100% { transform: translateY(0); opacity: 0; }
+/* --- Circuit backdrop --- */
+.circuit-pulse {
+    /* pathLength normalized to 100 — one wandering pulse dash */
+    stroke-dasharray: 7 93;
 }
 
-/* --- Shimmering headline gradient --- */
-.text-shimmer {
-    background-size: 200% auto;
-    animation: text-shine 6s linear infinite;
+/* infinite current — every trace flows continuously (time-based) */
+.circuit-flow {
+    /* pathLength normalized to 100; one full traversal = -100 offset */
+    stroke-dasharray: 10 90;
+    animation: circuit-current 9s linear infinite;
 }
 
-@keyframes text-shine {
-    to { background-position: 200% center; }
+@keyframes circuit-current {
+    to {
+        stroke-dashoffset: -100; /* one full pattern period → seamless loop */
+    }
 }
 
-/* --- Reduced motion: switch everything off --- */
+.circuit-node-live {
+    animation: circuit-node 3.2s ease-in-out infinite;
+}
+
+@keyframes circuit-node {
+    0%,
+    100% {
+        opacity: 0.15;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* --- Tech ribbon marquee (infinite flow) ---
+   The track holds two identical halves; sliding
+   exactly -50% loops seamlessly. Each half carries
+   pr-2 so the wrap gap matches the inter-chip gap. */
+.tech-marquee-track {
+    --marquee-duration: 45s;
+    animation: tech-marquee var(--marquee-duration) linear infinite;
+    will-change: transform;
+}
+
+.tech-marquee:hover .tech-marquee-track {
+    animation-play-state: paused;
+}
+
+@keyframes tech-marquee {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .marquee-track,
-    .border-spin::before,
-    .scroll-hint-wheel span,
-    .text-shimmer {
-        animation: none !important;
+    .circuit-flow,
+    .circuit-node-live,
+    .tech-marquee-track,
+    .welcome-gradient-flow,
+    .welcome-gradient-shimmer,
+    .welcome-gradient-blob::after {
+        animation: none;
     }
 }

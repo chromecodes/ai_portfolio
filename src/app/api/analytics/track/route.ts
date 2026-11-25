@@ -1,22 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { saveSession, savePageview, saveEvent, VisitorSession } from '@/lib/analyticsDb';
+import { getClientIp, isSameOrigin, rateLimit, tooManyRequests, normalizeIp } from '@/lib/apiSecurity';
+import { resolveGeo } from '@/lib/geo';
 
 export const dynamic = 'force-dynamic';
 
-function getIpAddress(req: NextRequest): string {
-  const forwarded = req.headers.get('x-forwarded-for');
-  let ip = '';
-  if (forwarded) {
-    ip = forwarded.split(',')[0].trim();
-  } else {
-    ip = req.headers.get('x-real-ip') || req.headers.get('cf-connecting-ip') || '';
-  }
+// Telemetry is chatty (pageviews, selections, clicks, visibility) but 120/min
+// per IP is far above legitimate usage — floods get cut off here.
+const TRACK_RATE_LIMIT = 120;
+const TRACK_RATE_WINDOW_MS = 60_000;
 
-  // Normalize IPv6 loopback (::1) and IPv4 loopback (127.0.0.1)
-  if (!ip || ip === '::1' || ip === '127.0.0.1' || ip === '::ffff:127.0.0.1') {
-    return '127.0.0.1 (Localhost)';
-  }
-  return ip;
+const SESSION_ID_RE = /^[A-Za-z0-9_-]{6,64}$/;
+const COOKIE_ID_RE = /^[\w-]{1,64}$/;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Trim + cap any incoming string field. Returns undefined for empty/non-string. */
+function safeStr(v: unknown, max: number): string | undefined {
+  if (typeof v !== 'string') return undefined;
+  const s = v.trim();
+  return s ? s.slice(0, max) : undefined;
+}
+
+/** Clamp any incoming number into [min, max]; non-numbers become `fallback`. */
+function safeNum(v: unknown, min: number, max: number, fallback: number): number {
+  const n = typeof v === 'number' ? v : Number(v);
+  if (!Number.isFinite(n)) return fallback;
+  return Math.max(min, Math.min(n, max));
 }
 
 function parseUserAgent(uaString: string) {
@@ -40,93 +49,57 @@ function parseUserAgent(uaString: string) {
   return { deviceType, browser, os };
 }
 
-async function resolveGeoLocation(rawIp: string, reqHeaders: Headers) {
-  // 1. Check production CDN headers (Vercel, Cloudflare, Fastly, AWS)
-  const headerCountry = reqHeaders.get('x-vercel-ip-country') || reqHeaders.get('cf-ipcountry');
-  const rawCity = reqHeaders.get('x-vercel-ip-city') || reqHeaders.get('cf-ipcity');
-  const headerRegion = reqHeaders.get('x-vercel-ip-country-region');
-
-  let decodedCity: string | null = null;
-  if (rawCity) {
-    try {
-      decodedCity = decodeURIComponent(rawCity);
-    } catch {
-      decodedCity = rawCity;
-    }
-  }
-
-  if (headerCountry) {
-    return {
-      country: headerCountry,
-      city: decodedCity || headerRegion || 'Unknown',
-      region: headerRegion || 'Standard',
-    };
-  }
-
-  // 2. Fetch IP Geolocation from ip-api.com API (only if not on CDN)
-  try {
-    const isLocal = rawIp.includes('Localhost') || rawIp === '127.0.0.1' || rawIp === '::1';
-    // For local dev, calling http://ip-api.com/json/ queries the machine's external public IP
-    const url = isLocal ? 'http://ip-api.com/json/' : `http://ip-api.com/json/${rawIp}`;
-    
-    const res = await fetch(url, { signal: AbortSignal.timeout(2000) });
-    if (res.ok) {
-      const geo = await res.json();
-      if (geo.status === 'success') {
-        return {
-          country: geo.country || 'Unknown',
-          city: geo.city || 'Unknown',
-          region: geo.regionName || geo.region || 'Unknown',
-        };
-      }
-    }
-  } catch (err) {
-    console.warn('Geo IP lookup fallback failed:', err);
-  }
-
-  return {
-    country: 'Local / Development',
-    city: 'Developer Studio',
-    region: 'Local',
-  };
-}
-
-
 export async function POST(req: NextRequest) {
+  // Rate limit FIRST — protects the database before any parsing/persistence
+  const rl = rateLimit(`track:${getClientIp(req)}`, TRACK_RATE_LIMIT, TRACK_RATE_WINDOW_MS);
+  if (!rl.ok) {
+    return tooManyRequests(rl.retryAfterSec);
+  }
+
+  // Block cross-site browser requests (CSRF); non-browser clients (no Origin) pass
+  if (!isSameOrigin(req)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   try {
     const body = await req.json();
-    const {
-      sessionId,
-      type, // 'session_init' | 'pageview' | 'text_selection' | 'scroll'
-      path: routePath,
-      title,
-      referrer,
-      leadSource,
-      visitorEmail,
-      visitorName,
-      stayDuration,
-      maxScrollPercentage,
-      selectedText,
-      selectedContext,
-      scrollDepth,
-      screenResolution,
-      language,
-    } = body;
 
-    if (!sessionId) {
-      return NextResponse.json({ error: 'Session ID is required' }, { status: 400 });
+    const sessionId = typeof body.sessionId === 'string' ? body.sessionId : '';
+    if (!SESSION_ID_RE.test(sessionId)) {
+      return NextResponse.json({ error: 'Valid session ID is required' }, { status: 400 });
     }
 
-    const rawIp = getIpAddress(req);
+    // ---- Sanitize all payload fields (length caps, charsets, ranges) ----
+    const eventType = safeStr(body.type, 40) || '';
+    const routePath = safeStr(body.path, 200) || '/';
+    const title = safeStr(body.title, 200);
+    const referrer = safeStr(body.referrer, 500) || '';
+    const leadSource = safeStr(body.leadSource, 100) || 'Direct / Organic';
+    const visitorEmailRaw = safeStr(body.visitorEmail, 254);
+    const visitorEmail = visitorEmailRaw && EMAIL_RE.test(visitorEmailRaw) ? visitorEmailRaw : undefined;
+    const visitorName = safeStr(body.visitorName, 100);
+    const stayDuration = safeNum(body.stayDuration, 0, 172_800, 0); // ≤ 48h
+    const maxScrollPercentage = safeNum(body.maxScrollPercentage, 0, 100, 0);
+    const selectedText = safeStr(body.selectedText, 500);
+    const selectedContext = safeStr(body.selectedContext, 200) || '';
+    const screenResolution = safeStr(body.screenResolution, 20) || 'Unknown';
+    const language = safeStr(body.language, 10) || 'en';
+
+    const cookieIdRaw = req.cookies.get('portfolio_lead_cookie')?.value || body.cookieId;
+    const cookieId = typeof cookieIdRaw === 'string' && COOKIE_ID_RE.test(cookieIdRaw) ? cookieIdRaw : undefined;
+
+    const rawIp = normalizeIp(getClientIp(req));
     const ua = req.headers.get('user-agent') || '';
     const { deviceType, browser, os } = parseUserAgent(ua);
     const now = new Date().toISOString();
 
-    // Resolve Location via CDN headers or IP Geolocation API
-    const { country, city, region } = await resolveGeoLocation(rawIp, req.headers);
+    // Resolve Location via CDN headers or cached IP Geolocation lookup
+    const { country, city, region } = (await resolveGeo(rawIp, req.headers)) ?? {
+      country: 'Local / Development',
+      city: 'Developer Studio',
+      region: 'Local',
+    };
 
-    // Read cookie_id from incoming HTTP cookies or payload
-    const cookieId = req.cookies.get('portfolio_lead_cookie')?.value || body.cookieId || undefined;
     let cookieExpiry: string | undefined = undefined;
     if (cookieId) {
       // Calculate 90 days expiry string for database mapping
@@ -147,12 +120,12 @@ export async function POST(req: NextRequest) {
       device_type: deviceType,
       browser,
       os,
-      screen_resolution: screenResolution || 'Unknown',
-      language: language || 'en',
-      lead_source: leadSource || 'Direct / Organic',
+      screen_resolution: screenResolution,
+      language,
+      lead_source: leadSource,
       ...(visitorName ? { visitor_name: visitorName } : {}),
       ...(visitorEmail ? { visitor_email: visitorEmail } : {}),
-      started_at: now,
+      // started_at intentionally omitted — see saveSession() integrity fix
       last_seen_at: now,
     };
 
@@ -160,67 +133,67 @@ export async function POST(req: NextRequest) {
     await saveSession(sessionObj);
 
     // 2. Process event type
-    if (type === 'pageview') {
+    if (eventType === 'pageview') {
       await savePageview({
         session_id: sessionId,
-        path: routePath || '/',
+        path: routePath,
         title: title || 'Portfolio',
-        referrer: referrer || '',
-        stay_duration: stayDuration || 0,
-        max_scroll_percentage: maxScrollPercentage || 0,
+        referrer,
+        stay_duration: stayDuration,
+        max_scroll_percentage: maxScrollPercentage,
         created_at: now,
       });
-    } else if (type === 'text_selection') {
-      if (selectedText && selectedText.trim().length > 0) {
+    } else if (eventType === 'text_selection') {
+      if (selectedText) {
         await saveEvent({
           session_id: sessionId,
-          path: routePath || '/',
+          path: routePath,
           event_type: 'text_selection',
-          selected_text: selectedText.trim().slice(0, 500),
-          selected_context: selectedContext || '',
+          selected_text: selectedText,
+          selected_context: selectedContext,
           created_at: now,
         });
       }
-    } else if (type === 'outbound_click') {
+    } else if (eventType === 'outbound_click') {
       await saveEvent({
         session_id: sessionId,
-        path: routePath || '/',
+        path: routePath,
         event_type: 'click',
         selected_text: selectedText || 'Outbound Link',
-        selected_context: selectedContext || '',
+        selected_context: selectedContext,
         created_at: now,
       });
-    } else if (type === 'toast_dropoff') {
+    } else if (eventType === 'toast_dropoff') {
       await saveEvent({
         session_id: sessionId,
-        path: routePath || '/',
+        path: routePath,
         event_type: 'click',
         selected_text: 'Toast Dismissed (Drop-off)',
         selected_context: selectedContext || 'Toast Closed',
         created_at: now,
       });
-    } else if (type === 'toast_step') {
+    } else if (eventType === 'toast_step') {
       await saveEvent({
         session_id: sessionId,
-        path: routePath || '/',
+        path: routePath,
         event_type: 'click',
-        selected_text: `Toast Category Selected: ${selectedText}`,
+        selected_text: `Toast Category Selected: ${selectedText || 'Unknown'}`,
         selected_context: 'Toast Flow Step',
         created_at: now,
       });
-    } else if (type === 'inactivity_event') {
+    } else if (eventType === 'inactivity_event') {
       await saveEvent({
         session_id: sessionId,
-        path: routePath || '/',
+        path: routePath,
         event_type: 'route_change',
         selected_text: 'Tab Inactive / Hidden',
         selected_context: selectedContext || 'Tab Hidden',
         created_at: now,
       });
-    } else if (type === 'language_change') {
+    } else if (eventType === 'language_change') {
       await saveEvent({
         session_id: sessionId,
-        path: routePath || '/',
+        path: routePath,
         event_type: 'language_change',
         selected_text: selectedText || 'Unknown Language',
         selected_context: 'Language Switcher',
@@ -230,8 +203,8 @@ export async function POST(req: NextRequest) {
 
 
     return NextResponse.json({ success: true });
-  } catch (err: any) {
+  } catch (err) {
     console.error('Error in /api/analytics/track:', err);
-    return NextResponse.json({ error: err.message || 'Server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }

@@ -77,27 +77,31 @@ CREATE TABLE lead_submissions (
 );
 
 
--- 6. SECURITY: ENABLE ROW LEVEL SECURITY (RLS) & POLICIES
--- To pass Supabase's Security Advisor checks, we enable RLS.
--- We only allow the "anon" role (your frontend/publishable key) to INSERT data, 
--- but completely block it from SELECT (reading) data to protect privacy.
--- For reading data (the analytics dashboard), your Next.js backend will use the 
--- SUPABASE_SERVICE_ROLE_KEY which automatically bypasses these restrictions!
+-- 6. SECURITY: ENABLE ROW LEVEL SECURITY (RLS) — LOCKED DOWN
+-- ALL database reads/writes go through the Next.js server using the
+-- SUPABASE_SERVICE_ROLE_KEY, which bypasses RLS entirely.
+-- Therefore NO policies are granted to anon/authenticated: nobody holding the
+-- public publishable key can read, insert, or tamper with analytics/lead data.
 
 ALTER TABLE analytics_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analytics_pageviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analytics_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE lead_submissions ENABLE ROW LEVEL SECURITY;
 
--- Allow anonymous inserts and updates (Upsert requires both INSERT and UPDATE with WITH CHECK)
-CREATE POLICY "Allow anonymous inserts for sessions" ON analytics_sessions FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "Allow anonymous updates for sessions" ON analytics_sessions FOR UPDATE TO anon USING (true) WITH CHECK (true);
+-- Defense in depth: explicitly revoke direct table access from client roles
+REVOKE ALL ON analytics_sessions FROM anon, authenticated;
+REVOKE ALL ON analytics_pageviews FROM anon, authenticated;
+REVOKE ALL ON analytics_events FROM anon, authenticated;
+REVOKE ALL ON lead_submissions FROM anon, authenticated;
 
-CREATE POLICY "Allow anonymous inserts for pageviews" ON analytics_pageviews FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "Allow anonymous inserts for events" ON analytics_events FOR INSERT TO anon WITH CHECK (true);
-
-CREATE POLICY "Allow anonymous inserts for leads" ON lead_submissions FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "Allow anonymous updates for leads" ON lead_submissions FOR UPDATE TO anon USING (true) WITH CHECK (true);
+-- If you are upgrading an existing database WITHOUT wiping it, also drop the
+-- old permissive policies manually:
+--   DROP POLICY IF EXISTS "Allow anonymous inserts for sessions" ON analytics_sessions;
+--   DROP POLICY IF EXISTS "Allow anonymous updates for sessions" ON analytics_sessions;
+--   DROP POLICY IF EXISTS "Allow anonymous inserts for pageviews" ON analytics_pageviews;
+--   DROP POLICY IF EXISTS "Allow anonymous inserts for events" ON analytics_events;
+--   DROP POLICY IF EXISTS "Allow anonymous inserts for leads" ON lead_submissions;
+--   DROP POLICY IF EXISTS "Allow anonymous updates for leads" ON lead_submissions;
 
 
 -- Setup Complete!

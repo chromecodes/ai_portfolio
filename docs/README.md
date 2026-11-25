@@ -1,46 +1,47 @@
-# Documentation Index — AI Portfolio
+# AI Portfolio Documentation
 
-> Last Updated: 2026-02-19 · Owner: hameed
-
-Single source of truth for everything about this project. Docs live in-repo so they
-version-control alongside code.
+This documentation describes the **current implementation**, not an aspirational design. It was rebuilt from the application source, API routes, content repositories, and database setup after the previous documentation set was removed.
 
 ## Start here
 
-| Doc | What it covers |
-| :--- | :--- |
-| [Project Overview](00-overview/project-overview.md) | What this app is, key features, tech stack |
-| [System Architecture](01-architecture/system-architecture.md) | Component map, data flow, request lifecycle, diagrams |
-| [Feature Catalog](02-features/feature-catalog.md) | Every page, feature module, and shared component |
-| [Database Schema](03-database/database-schema.md) | Tables, columns, relationships, RLS policies, setup SQL |
+| Document | Purpose |
+| --- | --- |
+| [Codebase breakdown](00-overview/codebase-breakdown.md) | Stack, routes, rendering model, state, content flow, analytics, leads, authentication, and database design |
+| [Next update implementation plan](IMPLEMENTATION_PLAN.md) | Prioritized tasks, file targets, dependencies, acceptance criteria, and release gates |
 
-## Reference
+Recommended reading order:
 
-| Doc | What it covers |
-| :--- | :--- |
-| [API Reference](04-api/api-reference.md) | All `/api` routes: methods, auth, contracts |
-| [Local Setup](05-setup/local-setup.md) | Clone → install → configure → run |
-| [Environment Variables](05-setup/environment-variables.md) | Every env var: scope, consumer, required |
-| [Telemetry Guide](06-analytics/telemetry-guide.md) | How visitor tracking, sessions, events & leads work |
-| [i18n Guide](07-i18n/i18n-guide.md) | Languages (en/es/ar), RTL, adding new languages |
-| [Deployment](08-operations/deployment.md) | Vercel deployment, DB provisioning, rollback |
-| [Roadmap](09-roadmap/roadmap.md) | Planned work + known tech-debt cleanup items |
-| [CHANGELOG](09-roadmap/CHANGELOG.md) | Notable changes per release |
+1. Read the **Executive summary** and **High-level architecture** in the codebase breakdown.
+2. Trace the content, telemetry, lead, and dashboard dataflows.
+3. Use the implementation plan to understand what should change next and what is intentionally deferred.
 
-## Decisions & design
+## Current system in one paragraph
 
-- [ADR-001 — Supabase as backend](01-architecture/adr/adr-001-supabase-as-backend.md)
-- [ADR-002 — Client-side telemetry ingestion with RLS](01-architecture/adr/adr-002-client-side-telemetry-ingestion.md)
-- [ADR-003 — Analytics dashboard password auth](01-architecture/adr/adr-003-analytics-dashboard-auth.md)
-- [ADR-004 — i18n via Zustand + JSON dictionaries](01-architecture/adr/adr-004-i18n-zustand-json.md)
-- [ADR-005 — Framer Motion route transitions](01-architecture/adr/adr-005-framer-motion-transitions.md)
+The project is a Next.js 16 and React 19 portfolio whose public content is stored in local TypeScript/JSON files. Most experiences are client-rendered and localized with Zustand. A separate custom telemetry pipeline sends browser events through Next.js API routes into Supabase PostgreSQL. Leads use the same server-side persistence layer, while a shared-password/HMAC-token flow protects the analytics dashboard. There is no active LLM or chat backend.
 
-## Wireframes
+## Source-of-truth rules
 
-- [Career Detail Page](wireframes/career-detail-page.md) — ASCII mockup of the technical deep-dive view
+When documentation and implementation disagree:
 
-## Conventions
+1. The current source code is authoritative for existing behavior.
+2. `database_setup.sql` is authoritative for the intended database schema and RLS setup.
+3. `.env.example` documents required configuration; real `.env*` files must never be copied into documentation.
+4. The implementation plan describes proposed behavior and must not be presented as already shipped.
+5. Update the relevant document in the same change that alters routes, payload contracts, tables, authentication, or deployment requirements.
 
-- Each doc header carries `Last Updated` + owner — keep them current when you edit.
-- Diagrams are Mermaid (text) so they diff cleanly.
-- Link between docs instead of duplicating content.
+## Important boundaries
+
+- **Portfolio content:** local files under `src/data`, not Supabase.
+- **Analytics and leads:** Supabase, accessed only by server code using the service-role key.
+- **Public APIs:** telemetry ingestion and lead submission are intentionally anonymous but validated and rate-limited.
+- **Admin APIs:** analytics reads/deletion, backups, and lead listing require a valid signed token.
+- **Experimental code:** the repository contains unused A*, chat, Supabase browser, and animation code; presence in the tree does not mean it is active.
+
+## Verification commands
+
+```bash
+npm run lint
+npm run build
+```
+
+The repository currently has no automated test suite. Adding and running regression tests is part of the next update plan.

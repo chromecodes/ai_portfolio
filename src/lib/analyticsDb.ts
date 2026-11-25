@@ -5,27 +5,34 @@ export function sanitizeEnv(val?: string | null): string {
   return val.trim().replace(/^["']|["']$/g, '').trim();
 }
 
-export function getSupabaseClient(): SupabaseClient<any, "public", any> | null {
+// Warn once instead of spamming the logs on every request
+let warnedMissingCreds = false;
+
+export function getSupabaseClient(): SupabaseClient | null {
   const rawUrl =
     process.env.SUPABASE_URL ||
     process.env.NEXT_PUBLIC_SUPABASE_URL ||
     '';
 
+  // SECURITY: server-side writes REQUIRE the service role key (it bypasses the
+  // locked-down RLS policies). Never fall back to the public anon/publishable
+  // key — under the current RLS setup it cannot read or write, and silently
+  // using it would hide total data loss behind a healthy-looking response.
   const rawKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_SERVICE_KEY ||
-    process.env.SUPABASE_PUBLISHABLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
     '';
 
   const supabaseUrl = sanitizeEnv(rawUrl).replace(/\/+$/, '');
   const supabaseKey = sanitizeEnv(rawKey);
 
   if (!supabaseUrl || !supabaseKey) {
-    console.error(
-      '[Supabase Analytics] Missing database credentials on runtime. Ensure SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set in Vercel Environment Variables.'
-    );
+    if (!warnedMissingCreds) {
+      warnedMissingCreds = true;
+      console.error(
+        '[Supabase Analytics] SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are not set — analytics and lead persistence are DISABLED. Set them in your environment variables.'
+      );
+    }
     return null;
   }
 
@@ -60,7 +67,9 @@ export interface VisitorSession {
   lead_source?: string;
   visitor_name?: string;
   visitor_email?: string;
-  started_at: string;
+  // Optional: never sent on upsert. On INSERT the DB default (NOW()) applies;
+  // on UPDATE the original first-seen value is preserved. See saveSession().
+  started_at?: string;
   last_seen_at: string;
 }
 
@@ -83,7 +92,7 @@ export interface InteractionEvent {
   selected_text?: string;
   selected_context?: string;
   scroll_depth?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   created_at: string;
 }
 
@@ -104,7 +113,14 @@ export async function saveSession(session: VisitorSession): Promise<void> {
   const supabase = getSupabaseClient();
   if (!supabase) return;
   try {
-    const { error } = await supabase.from('analytics_sessions').upsert([session], { onConflict: 'id' });
+    // INTEGRITY FIX: strip started_at from the upsert payload. Sending it would
+    // overwrite the original first-seen timestamp on EVERY event (making
+    // started_at === last_seen_at and corrupting all duration metrics).
+    // Omitted columns: DB default NOW() on INSERT, untouched on UPDATE.
+    const upsertPayload = { ...session };
+    delete upsertPayload.started_at;
+
+    const { error } = await supabase.from('analytics_sessions').upsert([upsertPayload], { onConflict: 'id' });
     if (error) {
       console.error('[Supabase saveSession error]:', error.message, error.details || '');
     }
@@ -169,11 +185,10 @@ export async function getAnalyticsData(): Promise<{
       supabase.from('analytics_events').select('*').order('created_at', { ascending: false }).limit(500),
     ]);
 
-    const errorMsg =
-      sessionsRes.error?.message ||
-      pageviewsRes.error?.message ||
-      eventsRes.error?.message ||
-      undefined;
+    // Generic message for the admin UI — raw Supabase errors (table names,
+    // SQL details) are logged server-side only, never returned to the client.
+    const hasError = Boolean(sessionsRes.error || pageviewsRes.error || eventsRes.error);
+    const errorMsg = hasError ? 'Failed to query some analytics data. Check server logs for details.' : undefined;
 
     if (sessionsRes.error) {
       console.error('[Supabase getAnalyticsData sessions error]:', sessionsRes.error.message);
@@ -191,13 +206,13 @@ export async function getAnalyticsData(): Promise<{
       events: eventsRes.data || [],
       error: errorMsg,
     };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[Supabase getAnalyticsData exception]:', err);
     return {
       sessions: [],
       pageviews: [],
       events: [],
-      error: err.message || 'Failed to query analytics data from database.',
+      error: 'Failed to query analytics data from database. Check server logs for details.',
     };
   }
 }

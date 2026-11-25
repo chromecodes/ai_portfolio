@@ -28,7 +28,7 @@ export default function Topbar() {
     };
 
     return (
-        <header className="relative flex items-center justify-between border-b border-borderColor px-4 sm:px-6 py-3 bg-primary-background z-50">
+        <header className="relative flex items-center justify-between border-b border-borderColor px-4 sm:px-6 py-3 z-50">
             <div className="flex items-center gap-3">
                 <LogoViewer />
             </div>
@@ -47,7 +47,7 @@ export default function Topbar() {
 
             <div className="flex items-center gap-2 sm:gap-4">
                 <ToolBar />
-                
+
                 {/* Mobile Menu Trigger */}
                 <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -67,11 +67,10 @@ export default function Topbar() {
                             <button
                                 key={page}
                                 onClick={() => handleNavigate(page)}
-                                className={`w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-all ${
-                                    isActive
-                                        ? "bg-secondary-background text-accent font-semibold"
-                                        : "text-primary-foreground/80 hover:bg-secondary-background/50 hover:text-primary-foreground"
-                                }`}
+                                className={`w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-all ${isActive
+                                    ? "bg-secondary-background text-accent font-semibold"
+                                    : "text-primary-foreground/80 hover:bg-secondary-background/50 hover:text-primary-foreground"
+                                    }`}
                             >
                                 {strings[page as keyof typeof strings] || page}
                             </button>

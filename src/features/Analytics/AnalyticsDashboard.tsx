@@ -31,6 +31,19 @@ import {
 } from 'lucide-react';
 import { VisitorSession, PageviewEvent, InteractionEvent } from '@/lib/analyticsDb';
 
+/** Consistent date + time formatting across the dashboard (e.g. "Jan 5, 2026, 14:32:07") */
+const formatDateTime = (value?: string | Date): string =>
+  value
+    ? new Date(value).toLocaleString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
+    : '—';
+
 export default function AnalyticsDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [passcode, setPasscode] = useState<string>('');
@@ -72,7 +85,8 @@ export default function AnalyticsDashboard() {
 
   const fetchLeads = async () => {
     try {
-      const res = await fetch('/api/leads', { cache: 'no-store' });
+      // Leads endpoint is admin-only — send the signed token
+      const res = await fetch('/api/leads', { cache: 'no-store', headers: getAuthHeaders() });
       if (res.ok) {
         const json = await res.json();
         setLeads(json.leads || []);
@@ -125,11 +139,13 @@ export default function AnalyticsDashboard() {
 
       if (res.ok) {
         const json = await res.json();
-        const token = json.token || cleanInput;
-        try {
-          sessionStorage.setItem('portfolio_analytics_token', token);
-          localStorage.setItem('portfolio_analytics_token', token);
-        } catch {}
+        const token = json.token; // signed token — never the password
+        if (token) {
+          try {
+            sessionStorage.setItem('portfolio_analytics_token', token);
+            localStorage.setItem('portfolio_analytics_token', token);
+          } catch {}
+        }
 
         setIsAuthenticated(true);
         setPasscode('');
@@ -283,8 +299,8 @@ export default function AnalyticsDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <div className="w-full max-w-md mx-auto px-4 py-16 text-neutral-100 flex flex-col items-center">
-        <div className="w-full p-8 rounded-2xl bg-neutral-900/80 border border-neutral-800 shadow-2xl backdrop-blur-xl flex flex-col items-center gap-6">
+      <div className="w-full max-w-md mx-auto px-3 py-8 sm:px-4 sm:py-16 text-neutral-100 flex flex-col items-center">
+        <div className="w-full p-5 sm:p-8 rounded-2xl bg-neutral-900/80 border border-neutral-800 shadow-2xl backdrop-blur-xl flex flex-col items-center gap-6">
           <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 text-indigo-400">
             <Lock className="w-8 h-8" />
           </div>
@@ -331,7 +347,7 @@ export default function AnalyticsDashboard() {
           </form>
 
           <div className="text-[11px] text-neutral-400 text-center border-t border-neutral-800/80 pt-4 w-full">
-            Tip: Passcode defaults to <code className="text-neutral-300">admin123</code>. Set <code className="text-neutral-300">ANALYTICS_PASSWORD</code> in <code className="text-neutral-300">.env.local</code> to customize.
+            Access is restricted to the site administrator.
           </div>
         </div>
       </div>
@@ -339,9 +355,9 @@ export default function AnalyticsDashboard() {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8 text-neutral-100 flex flex-col gap-8">
+    <div className="w-full min-h-full max-w-7xl mx-auto px-3 py-4 sm:px-4 sm:py-8 text-neutral-100 flex flex-col gap-5 sm:gap-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-800 pb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-800 pb-4 sm:pb-6">
         <div>
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 text-indigo-400">
@@ -358,18 +374,18 @@ export default function AnalyticsDashboard() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-3 w-full md:w-auto">
           <button
             onClick={fetchAnalytics}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 transition duration-150 disabled:opacity-50"
+            className="flex items-center justify-center gap-2 min-h-9 px-3 sm:px-4 py-2 text-xs font-medium rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 transition duration-150 disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
           <button
             onClick={handleBackup}
-            className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 transition duration-150"
+            className="flex items-center justify-center gap-2 min-h-9 px-3 sm:px-4 py-2 text-xs font-medium rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 transition duration-150"
           >
             <Download className="w-3.5 h-3.5 text-indigo-400" />
             Create Backup
@@ -377,14 +393,14 @@ export default function AnalyticsDashboard() {
           <button
             onClick={handleClearData}
             disabled={isClearing}
-            className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition duration-150 disabled:opacity-50"
+            className="flex items-center justify-center gap-2 min-h-9 px-3 sm:px-4 py-2 text-xs font-medium rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition duration-150 disabled:opacity-50"
           >
             <Trash2 className="w-3.5 h-3.5" />
             Clear Logs
           </button>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700 transition duration-150"
+            className="flex items-center justify-center gap-2 min-h-9 px-3 sm:px-4 py-2 text-xs font-medium rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700 transition duration-150"
           >
             <Lock className="w-3.5 h-3.5 text-neutral-400" />
             Lock
@@ -404,7 +420,7 @@ export default function AnalyticsDashboard() {
 
       {/* Overview Stat Cards */}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
         <StatCard
           title="Total Visitors"
           value={totalVisitors}
@@ -445,12 +461,13 @@ export default function AnalyticsDashboard() {
           icon={<Globe className="w-5 h-5 text-cyan-400" />}
           gradient="from-cyan-500/10 to-blue-500/10"
           borderColor="border-cyan-500/20"
+          className="col-span-2 lg:col-span-1"
         />
       </div>
 
       {/* Filter & Tabs Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-800 pb-3">
-        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1 sm:pb-0">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-neutral-800 pb-3">
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0 pb-2 lg:pb-0">
           <TabButton
             active={activeTab === 'sessions'}
             onClick={() => setActiveTab('sessions')}
@@ -489,7 +506,7 @@ export default function AnalyticsDashboard() {
         </div>
 
         {/* Search */}
-        <div className="relative w-full sm:w-64">
+        <div className="relative w-full lg:w-64 shrink-0">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
           <input
             type="text"
@@ -556,6 +573,7 @@ function StatCard({
   gradient,
   borderColor,
   isCode,
+  className = '',
 }: {
   title: string;
   value: string | number;
@@ -564,10 +582,11 @@ function StatCard({
   gradient: string;
   borderColor: string;
   isCode?: boolean;
+  className?: string;
 }) {
   return (
     <div
-      className={`p-4 rounded-xl bg-neutral-900/60 backdrop-blur-md border ${borderColor} bg-gradient-to-br ${gradient} flex flex-col justify-between gap-3`}
+      className={`min-w-0 p-3 sm:p-4 rounded-xl bg-neutral-900/60 backdrop-blur-md border ${borderColor} bg-gradient-to-br ${gradient} flex flex-col justify-between gap-3 ${className}`}
     >
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs font-medium text-neutral-400">{title}</span>
@@ -624,10 +643,27 @@ function TabButton({
 // Tab: Permanent Collected Leads & Emails
 // --------------------------------------------------
 
+function MobileCard({ children }: { children: React.ReactNode }) {
+  return (
+    <article className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-4 space-y-3">
+      {children}
+    </article>
+  );
+}
+
+function MobileField({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex items-start justify-between gap-4 text-xs">
+      <span className="shrink-0 text-neutral-500">{label}</span>
+      <div className="min-w-0 text-right text-neutral-300 break-words">{children}</div>
+    </div>
+  );
+}
+
 function LeadsTab({ leads, onInspect }: { leads: any[]; onInspect: (lead: any) => void }) {
   if (leads.length === 0) {
     return (
-      <div className="p-12 text-center rounded-2xl bg-neutral-900/40 border border-neutral-800 text-neutral-400 flex flex-col items-center gap-3">
+      <div className="p-6 sm:p-12 text-center rounded-2xl bg-neutral-900/40 border border-neutral-800 text-neutral-400 flex flex-col items-center gap-3">
         <UserCheck className="w-10 h-10 text-emerald-500 animate-pulse" />
         <p className="text-sm font-medium text-neutral-200">No email leads collected yet.</p>
         <p className="text-xs text-neutral-400">
@@ -638,57 +674,89 @@ function LeadsTab({ leads, onInspect }: { leads: any[]; onInspect: (lead: any) =
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-neutral-800 bg-neutral-900/40">
-      <table className="w-full text-left text-xs text-neutral-300">
-        <thead className="bg-neutral-900/80 text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
-          <tr>
-            <th className="px-4 py-3">Visitor / Email</th>
-            <th className="px-4 py-3">Reason / Category</th>
-            <th className="px-4 py-3">Location</th>
-            <th className="px-4 py-3">IP Address</th>
-            <th className="px-4 py-3">Lead Source</th>
-            <th className="px-4 py-3">Date Submitted</th>
-            <th className="px-4 py-3 text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-neutral-800/60">
-          {leads.map((lead, idx) => (
-            <tr key={lead.id || idx} className="hover:bg-neutral-800/40 transition duration-150">
-              <td className="px-4 py-3">
-                <div className="flex flex-col">
-                  <span className="font-semibold text-emerald-300">{lead.email}</span>
-                  {lead.name && <span className="text-[11px] text-neutral-400">Name: {lead.name}</span>}
-                </div>
-              </td>
-              <td className="px-4 py-3">
-                <span className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-purple-500/10 text-purple-300 border border-purple-500/20">
-                  {lead.reason}
-                </span>
-              </td>
-              <td className="px-4 py-3 text-neutral-300">
-                <div className="flex items-center gap-1">
-                  <MapPin className="w-3 h-3 text-indigo-400" />
-                  <span>{lead.location || 'Unknown'}</span>
-                </div>
-              </td>
-              <td className="px-4 py-3 font-mono text-neutral-400">{lead.ip_address}</td>
-              <td className="px-4 py-3 text-neutral-300">{lead.source || 'Direct / Organic'}</td>
-              <td className="px-4 py-3 text-neutral-400">
-                {new Date(lead.created_at).toLocaleString()}
-              </td>
-              <td className="px-4 py-3 text-right">
-                <button
-                  onClick={() => onInspect(lead)}
-                  className="px-3 py-1 rounded bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/20 transition text-xs font-medium"
-                >
-                  Inspect
-                </button>
-              </td>
+    <>
+      <div className="space-y-3 md:hidden">
+        {leads.map((lead, idx) => (
+          <MobileCard key={lead.id || idx}>
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="font-semibold text-sm text-emerald-300 break-all">{lead.email}</p>
+                {lead.name && <p className="mt-1 text-xs text-neutral-400">{lead.name}</p>}
+              </div>
+              <button
+                onClick={() => onInspect(lead)}
+                className="shrink-0 min-h-9 px-3 rounded-lg bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 text-xs font-medium"
+              >
+                Inspect
+              </button>
+            </div>
+            <div className="space-y-2 border-t border-neutral-800/70 pt-3">
+              <MobileField label="Reason">
+                <span className="text-purple-300">{lead.reason}</span>
+              </MobileField>
+              <MobileField label="Source">{lead.source || 'Direct / Organic'}</MobileField>
+              <MobileField label="Location">{lead.location || 'Unknown'}</MobileField>
+              <MobileField label="IP address">
+                <span className="font-mono text-[11px] text-neutral-400 break-all">{lead.ip_address}</span>
+              </MobileField>
+              <MobileField label="Submitted">{formatDateTime(lead.created_at)}</MobileField>
+            </div>
+          </MobileCard>
+        ))}
+      </div>
+
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-neutral-800 bg-neutral-900/40">
+        <table className="w-full text-left text-xs text-neutral-300">
+          <thead className="bg-neutral-900/80 text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
+            <tr>
+              <th className="px-4 py-3">Visitor / Email</th>
+              <th className="px-4 py-3">Reason / Category</th>
+              <th className="px-4 py-3">Location</th>
+              <th className="px-4 py-3">IP Address</th>
+              <th className="px-4 py-3">Lead Source</th>
+              <th className="px-4 py-3">Date Submitted</th>
+              <th className="px-4 py-3 text-right">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody className="divide-y divide-neutral-800/60">
+            {leads.map((lead, idx) => (
+              <tr key={lead.id || idx} className="hover:bg-neutral-800/40 transition duration-150">
+                <td className="px-4 py-3">
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-emerald-300">{lead.email}</span>
+                    {lead.name && <span className="text-[11px] text-neutral-400">Name: {lead.name}</span>}
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <span className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                    {lead.reason}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-neutral-300">
+                  <div className="flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-indigo-400" />
+                    <span>{lead.location || 'Unknown'}</span>
+                  </div>
+                </td>
+                <td className="px-4 py-3 font-mono text-neutral-400">{lead.ip_address}</td>
+                <td className="px-4 py-3 text-neutral-300">{lead.source || 'Direct / Organic'}</td>
+                <td className="px-4 py-3 text-neutral-400">
+                  {formatDateTime(lead.created_at)}
+                </td>
+                <td className="px-4 py-3 text-right">
+                  <button
+                    onClick={() => onInspect(lead)}
+                    className="px-3 py-1 rounded bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/20 transition text-xs font-medium"
+                  >
+                    Inspect
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }
 
@@ -710,7 +778,7 @@ function SessionsTab({
 }) {
   if (sessions.length === 0) {
     return (
-      <div className="p-12 text-center rounded-2xl bg-neutral-900/40 border border-neutral-800 text-neutral-400 flex flex-col items-center gap-3">
+      <div className="p-6 sm:p-12 text-center rounded-2xl bg-neutral-900/40 border border-neutral-800 text-neutral-400 flex flex-col items-center gap-3">
         <Globe className="w-10 h-10 text-neutral-600 animate-pulse" />
         <p className="text-sm">No visitor sessions recorded yet.</p>
         <p className="text-xs text-neutral-400">
@@ -721,7 +789,62 @@ function SessionsTab({
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-neutral-800 bg-neutral-900/40">
+    <>
+      <div className="space-y-3 md:hidden">
+        {sessions.map((session) => {
+          const sPageviews = pageviews.filter((p) => p.session_id === session.id);
+          const sSelections = events.filter((e) => e.session_id === session.id && e.event_type === 'text_selection');
+          const maxScroll = Math.max(0, ...sPageviews.map((p) => p.max_scroll_percentage || 0));
+
+          return (
+            <MobileCard key={session.id}>
+              <div className="min-w-0">
+                {session.visitor_name || session.visitor_email ? (
+                  <div className="flex items-start gap-2 text-indigo-300">
+                    <UserCheck className="w-4 h-4 mt-0.5 shrink-0 text-indigo-400" />
+                    <div className="min-w-0">
+                      <p className="font-semibold text-sm break-words">{session.visitor_name || session.visitor_email}</p>
+                      {session.visitor_email && session.visitor_name && (
+                        <p className="mt-1 text-[11px] font-mono text-neutral-400 break-all">{session.visitor_email}</p>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="font-mono text-sm font-medium text-neutral-100 break-all">{session.ip_address}</p>
+                )}
+                <div className="flex items-start gap-1.5 text-[11px] text-neutral-400 mt-2">
+                  <MapPin className="w-3.5 h-3.5 mt-0.5 shrink-0 text-indigo-400" />
+                  <span>{session.city || 'Unknown'}, {session.country || 'Unknown'}</span>
+                </div>
+              </div>
+
+              <div className="space-y-2 border-t border-neutral-800/70 pt-3">
+                <MobileField label="Source">
+                  <span className="text-emerald-300">{session.lead_source || 'Direct / Organic'}</span>
+                </MobileField>
+                <MobileField label="Device">{session.device_type || 'Desktop'}</MobileField>
+                <MobileField label="Browser / OS">{session.browser} on {session.os}</MobileField>
+                <MobileField label="IP address">
+                  <span className="font-mono text-[11px] text-neutral-400 break-all">{session.ip_address}</span>
+                </MobileField>
+                <MobileField label="Pageviews">{sPageviews.length} views · {maxScroll}% max scroll</MobileField>
+                <MobileField label="Selections">{sSelections.length}</MobileField>
+                <MobileField label="Last active">{formatDateTime(session.last_seen_at)}</MobileField>
+              </div>
+
+              <button
+                onClick={() => onSelectSession(session)}
+                className="w-full min-h-10 inline-flex items-center justify-center gap-2 rounded-lg bg-neutral-800 text-neutral-200 border border-neutral-700 text-xs font-medium"
+              >
+                <Eye className="w-4 h-4 text-indigo-400" />
+                Inspect session
+              </button>
+            </MobileCard>
+          );
+        })}
+      </div>
+
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-neutral-800 bg-neutral-900/40">
       <table className="w-full text-left text-xs text-neutral-300">
         <thead className="bg-neutral-900/80 text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
           <tr>
@@ -814,7 +937,7 @@ function SessionsTab({
                 <td className="px-4 py-3 text-neutral-400">
                   <div className="flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-neutral-400" />
-                    <span>{new Date(session.last_seen_at).toLocaleTimeString()}</span>
+                    <span>{formatDateTime(session.last_seen_at)}</span>
                   </div>
                 </td>
 
@@ -833,7 +956,8 @@ function SessionsTab({
           })}
         </tbody>
       </table>
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -868,7 +992,7 @@ function WordSelectionsTab({ events }: { events: InteractionEvent[] }) {
                   {event.path}
                 </span>
                 <span className="text-[11px] text-neutral-400">
-                  {new Date(event.created_at).toLocaleTimeString()}
+                  {formatDateTime(event.created_at)}
                 </span>
               </div>
 
@@ -897,8 +1021,44 @@ function WordSelectionsTab({ events }: { events: InteractionEvent[] }) {
 // --------------------------------------------------
 
 function NavigationTab({ pageviews }: { pageviews: PageviewEvent[] }) {
+  if (pageviews.length === 0) {
+    return (
+      <div className="p-6 sm:p-12 text-center rounded-2xl bg-neutral-900/40 border border-neutral-800 text-neutral-400">
+        <p className="text-sm text-neutral-200">No pageviews recorded yet.</p>
+        <p className="mt-2 text-xs">Navigation and scroll engagement will appear here.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="overflow-x-auto rounded-xl border border-neutral-800 bg-neutral-900/40">
+    <>
+      <div className="space-y-3 md:hidden">
+        {pageviews.map((pv, idx) => (
+          <MobileCard key={pv.id || idx}>
+            <div>
+              <p className="font-mono text-sm font-medium text-indigo-300 break-all">{pv.path}</p>
+              <p className="mt-1 text-[11px] text-neutral-500">{formatDateTime(pv.created_at)}</p>
+            </div>
+            <div className="space-y-3 border-t border-neutral-800/70 pt-3">
+              <MobileField label="Stay duration">{pv.stay_duration ? `${pv.stay_duration}s` : '< 1s'}</MobileField>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-4 text-xs">
+                  <span className="text-neutral-500">Max scroll depth</span>
+                  <span className="text-neutral-300">{pv.max_scroll_percentage || 0}%</span>
+                </div>
+                <div className="h-2 bg-neutral-800 rounded-full overflow-hidden border border-neutral-700">
+                  <div
+                    className="bg-emerald-400 h-full rounded-full"
+                    style={{ width: `${pv.max_scroll_percentage || 0}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          </MobileCard>
+        ))}
+      </div>
+
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-neutral-800 bg-neutral-900/40">
       <table className="w-full text-left text-xs text-neutral-300">
         <thead className="bg-neutral-900/80 text-neutral-400 uppercase tracking-wider font-semibold border-b border-neutral-800">
           <tr>
@@ -924,12 +1084,13 @@ function NavigationTab({ pageviews }: { pageviews: PageviewEvent[] }) {
                   <span className="text-[11px] text-neutral-400">{pv.max_scroll_percentage || 0}%</span>
                 </div>
               </td>
-              <td className="px-4 py-3 text-neutral-400">{new Date(pv.created_at).toLocaleString()}</td>
+              <td className="px-4 py-3 text-neutral-400">{formatDateTime(pv.created_at)}</td>
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -1034,8 +1195,8 @@ function SessionDetailModal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-2xl bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm">
+      <div className="w-full max-w-2xl bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92dvh]">
         {/* Modal Header */}
         <div className="p-4 border-b border-neutral-800 flex items-center justify-between bg-neutral-950/60">
           <div>
@@ -1053,9 +1214,9 @@ function SessionDetailModal({
         </div>
 
         {/* Modal Content */}
-        <div className="p-6 overflow-y-auto space-y-6">
+        <div className="p-4 sm:p-6 overflow-y-auto overscroll-contain space-y-6">
           {/* Metadata Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-neutral-950/50 border border-neutral-800 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-3 sm:p-4 rounded-xl bg-neutral-950/50 border border-neutral-800 text-xs">
             <div>
               <span className="text-neutral-400">Lead Source</span>
               <p className="font-medium text-emerald-400">
@@ -1098,7 +1259,7 @@ function SessionDetailModal({
             <div>
               <span className="text-neutral-400">First Seen</span>
               <p className="font-medium text-neutral-200">
-                {new Date(session.started_at).toLocaleTimeString()}
+                {formatDateTime(session.started_at)}
               </p>
             </div>
           </div>
@@ -1110,10 +1271,10 @@ function SessionDetailModal({
             </h4>
             <div className="space-y-2">
               {pageviews.map((pv, i) => (
-                <div key={i} className="p-3 rounded-lg bg-neutral-950/40 border border-neutral-800 text-xs flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <ChevronRight className="w-3.5 h-3.5 text-indigo-400" />
-                    <span className="font-mono text-indigo-300 font-medium">{pv.path}</span>
+                <div key={i} className="p-3 rounded-lg bg-neutral-950/40 border border-neutral-800 text-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div className="flex items-start gap-2 min-w-0">
+                    <ChevronRight className="w-3.5 h-3.5 mt-0.5 shrink-0 text-indigo-400" />
+                    <span className="font-mono font-medium text-indigo-300 break-all">{pv.path}</span>
                   </div>
                   <div className="flex items-center gap-3 text-[11px] text-neutral-400">
                     <span>Stay: {pv.stay_duration}s</span>
@@ -1135,12 +1296,12 @@ function SessionDetailModal({
                   <div key={i} className="p-3 rounded-lg bg-purple-950/20 border border-purple-800/40 text-xs">
                     <div className="flex justify-between items-start mb-1">
                       <span className="font-semibold text-purple-300 capitalize">{e.event_type.replace('_', ' ')}</span>
-                      <span className="text-[10px] text-neutral-500">{new Date(e.created_at).toLocaleTimeString()}</span>
+                      <span className="text-[10px] text-neutral-500">{formatDateTime(e.created_at)}</span>
                     </div>
                     <p className="font-mono text-purple-200">
                       {e.event_type === 'text_selection' ? `"${e.selected_text}"` : e.selected_text}
                     </p>
-                    <div className="mt-1 text-[10px] text-neutral-400 flex justify-between">
+                    <div className="mt-1 text-[10px] text-neutral-400 flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                       <span>Path: {e.path}</span>
                       <span>Context: {e.selected_context}</span>
                     </div>
@@ -1173,8 +1334,8 @@ function LeadDetailModal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-3xl bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm">
+      <div className="w-full max-w-3xl bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92dvh]">
         {/* Modal Header */}
         <div className="p-4 border-b border-neutral-800 flex items-center justify-between bg-neutral-950/60">
           <div>
@@ -1192,8 +1353,8 @@ function LeadDetailModal({
         </div>
 
         {/* Modal Content */}
-        <div className="p-6 overflow-y-auto space-y-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-xl bg-neutral-950/50 border border-neutral-800 text-xs">
+        <div className="p-4 sm:p-6 overflow-y-auto overscroll-contain space-y-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 sm:p-4 rounded-xl bg-neutral-950/50 border border-neutral-800 text-xs">
             <div>
               <span className="text-neutral-400">Total Sessions</span>
               <p className="font-medium text-indigo-400">{sessions.length}</p>
@@ -1226,10 +1387,10 @@ function LeadDetailModal({
                 
                 return (
                   <div key={session.id} className="p-4 rounded-lg bg-neutral-950/40 border border-neutral-800">
-                    <div className="flex justify-between items-center mb-3">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-3">
                       <div>
                         <span className="text-xs font-medium text-neutral-200">Session {sessions.length - i}</span>
-                        <span className="text-[10px] text-neutral-500 ml-2">{new Date(session.started_at).toLocaleString()}</span>
+                        <span className="text-[10px] text-neutral-500 ml-2">{formatDateTime(session.started_at)}</span>
                       </div>
                       <div className="flex flex-wrap gap-2 justify-end">
                          <span className="px-2 py-0.5 rounded bg-neutral-800 text-[10px] text-neutral-400 border border-neutral-700/50">{session.os}</span>
@@ -1252,10 +1413,10 @@ function LeadDetailModal({
                     
                     <div className="space-y-1 mt-2">
                       {sessionPageviews.map((pv, j) => (
-                        <div key={j} className="flex items-center justify-between text-[11px]">
-                          <div className="flex items-center gap-1.5 text-neutral-300">
-                            <ChevronRight className="w-3 h-3 text-indigo-500" />
-                            <span className="font-mono">{pv.path}</span>
+                        <div key={j} className="flex flex-col min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between gap-1 text-[11px]">
+                          <div className="flex items-start gap-1.5 min-w-0 text-neutral-300">
+                            <ChevronRight className="w-3 h-3 mt-0.5 shrink-0 text-indigo-500" />
+                            <span className="font-mono break-all">{pv.path}</span>
                           </div>
                           <span className="text-neutral-500">Stay: {pv.stay_duration}s, Scroll: {pv.max_scroll_percentage}%</span>
                         </div>

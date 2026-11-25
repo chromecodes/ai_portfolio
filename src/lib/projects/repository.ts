@@ -2,10 +2,18 @@ import fs from "fs/promises";
 import path from "path";
 import { ProjectDetail } from "@/types/projectDetail";
 
+// Only allow safe filename segments — blocks path traversal (../, ..\, absolute paths)
+const SAFE_SLUG = /^[A-Za-z0-9_-]+$/;
+const SAFE_LANG = /^[A-Za-z]{2,8}(-[A-Za-z0-9]{2,8})?$/;
+
 export async function getProject(
   slug: string,
   lang: string = "en"
 ): Promise<ProjectDetail> {
+  if (!SAFE_SLUG.test(slug) || !SAFE_LANG.test(lang)) {
+    throw new Error(`Project "${slug}" not found`);
+  }
+
   const candidateSlugs = Array.from(
     new Set([slug, slug.replace(/-/g, ""), slug.toLowerCase()])
   );
